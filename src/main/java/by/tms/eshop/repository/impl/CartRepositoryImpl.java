@@ -3,12 +3,12 @@ package by.tms.eshop.repository.impl;
 import by.tms.eshop.domain.Cart;
 import by.tms.eshop.dto.LocationDto;
 import by.tms.eshop.dto.ProductDto;
-import by.tms.eshop.repository.CartRepository;
+import by.tms.eshop.repository.CartCustomizedRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -25,15 +25,18 @@ import static by.tms.eshop.utils.RepositoryJdbcUtils.isProductNotIncluded;
 
 @Repository
 @RequiredArgsConstructor
-public class CartRepositoryImpl implements CartRepository {
+public class CartRepositoryImpl implements CartCustomizedRepository {
+//public class CartRepositoryImpl implements CartRepository {
 
-    private final SessionFactory sessionFactory;
+    @PersistenceContext
+    private final EntityManager entityManager;
+//    private final SessionFactory sessionFactory;
 
     private static final String GET_CART_PRODUCTS_BY_USER_ID = "FROM Cart WHERE user.id = :userId AND cart = true";
     private static final String GET_FAVORITE_PRODUCTS_BY_USER_ID = "FROM Cart WHERE user.id = :userId AND favorite = true";
     private static final String GET_CURRENT_CART = "FROM Cart WHERE user.id = :userId AND product.id = :productId AND cart = true";
     private static final String GET_CURRENT_FAVORITE = "FROM Cart WHERE user.id = :userId AND product.id = :productId AND favorite = true";
-    private static final String GET_BUYING_PRODUCT = "FROM Cart WHERE user.id = :userId AND cart = true";
+//    private static final String GET_BUYING_PRODUCT = "FROM Cart WHERE user.id = :userId AND cart = true";
 
     @Override
     public void addSelectedProduct(Long userId, Long productId, LocationDto locationDto) {
@@ -67,8 +70,9 @@ public class CartRepositoryImpl implements CartRepository {
     @Override
     public List<ImmutablePair<ProductDto, Integer>> getSelectedProducts(Long userId, LocationDto locationDto) {
         String query = locationDto.isCart() ? GET_CART_PRODUCTS_BY_USER_ID : GET_FAVORITE_PRODUCTS_BY_USER_ID;
-        Session session = sessionFactory.getCurrentSession();
-        List<Cart> carts = session.createQuery(query, Cart.class)
+//        Session session = entityManager.getCurrentSession();
+        List<Cart> carts = entityManager.createQuery(query, Cart.class)
+//        List<Cart> carts = session.createQuery(query, Cart.class)
                 .setParameter(USER_ID, userId)
                 .getResultList();
         return getImmutablePairsProductDtoCount(carts);
@@ -82,20 +86,21 @@ public class CartRepositoryImpl implements CartRepository {
 
     @Override
     public Integer getCartProductCount(Long userId, Long productId) {
-        Session session = sessionFactory.getCurrentSession();
-        return getCarts(userId, productId, GET_CURRENT_CART, session).stream()
+//        Session session = entityManager.getCurrentSession();
+        return getCarts(userId, productId, GET_CURRENT_CART, entityManager).stream()
+//        return getCarts(userId, productId, GET_CURRENT_CART, session).stream()
                 .map(Cart::getCount)
                 .findAny()
                 .orElse(0);
     }
 
-    @Override
-    public void deleteCartProductsAfterBuy(Long userId) {
-        Session session = sessionFactory.getCurrentSession();
-        session.createQuery(GET_BUYING_PRODUCT, Cart.class)
-                .setParameter(USER_ID, userId)
-                .getResultList().forEach(session::remove);
-    }
+//    @Override
+//    public void deleteCartProductsAfterBuy(Long userId) {
+//        Session session = sessionFactory.getCurrentSession();
+//        session.createQuery(GET_BUYING_PRODUCT, Cart.class)
+//                .setParameter(USER_ID, userId)
+//                .getResultList().forEach(session::remove);
+//    }
 
     @Override
     public List<ProductDto> getPurchasedProducts(Long userId, LocationDto locationDto) {
@@ -113,17 +118,20 @@ public class CartRepositoryImpl implements CartRepository {
 
     private void addProduct(Long userId, Long productId, LocationDto locationDto) {
         Cart cart = getCart(userId, productId, locationDto);
-        Session session = sessionFactory.getCurrentSession();
-        session.persist(cart);
+//        Session session = entityManager.getCurrentSession();
+        entityManager.persist(cart);
+//        session.persist(cart);
     }
 
     private void modifyProductCount(Long userId, Long productId, boolean up) {
         Integer productCount = getCartProductCount(userId, productId);
         productCount = getModifyCount(up, productCount);
-        Session session = sessionFactory.getCurrentSession();
-        Cart cart = getCurrentCart(userId, productId, GET_CURRENT_CART, session);
+//        Session session = entityManager.getCurrentSession();
+        Cart cart = getCurrentCart(userId, productId, GET_CURRENT_CART, entityManager);
+//        Cart cart = getCurrentCart(userId, productId, GET_CURRENT_CART, session);
         cart.setCount(productCount);
-        session.merge(cart);
+        entityManager.merge(cart);
+//        session.merge(cart);
     }
 
     private List<ProductDto> getProducts(Long userId, LocationDto locationDto) {
@@ -133,8 +141,10 @@ public class CartRepositoryImpl implements CartRepository {
     }
 
     private void deleteProductByMark(Long userId, Long productId, String query) {
-        Session session = sessionFactory.getCurrentSession();
-        Cart cart = getCurrentCart(userId, productId, query, session);
-        session.remove(cart);
+//        Session session = entityManager.getCurrentSession();
+        Cart cart = getCurrentCart(userId, productId, query, entityManager);
+//        Cart cart = getCurrentCart(userId, productId, query, session);
+        entityManager.remove(cart);
+//        session.remove(cart);
     }
 }

@@ -2,16 +2,19 @@ package by.tms.eshop.repository;
 
 import by.tms.eshop.domain.Order;
 import by.tms.eshop.domain.Product;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface OrderRepository {
+public interface OrderRepository extends JpaRepository<Order, Long>, OrderCustomizedRepository {
 
     Long createOrder(String order, Long id);
 
     void saveProductInOrderConfigurations(Long id, List<Product> products);
 
-    List<Order> getOrdersById(Long id);
+//    List<Order> getOrdersById(Long id);
+    List<Order> findOrderById(Long id);
 
-    boolean checkOrderNumber(String number);
+//    boolean checkOrderNumber(String number);
+    boolean existsByName(String number);
 }

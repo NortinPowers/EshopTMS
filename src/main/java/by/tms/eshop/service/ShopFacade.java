@@ -1,9 +1,9 @@
 package by.tms.eshop.service;
 
+import by.tms.eshop.domain.User;
 import by.tms.eshop.dto.ProductDto;
 import by.tms.eshop.dto.UserDto;
 import by.tms.eshop.dto.UserFormDto;
-import by.tms.eshop.domain.User;
 import by.tms.eshop.utils.DtoUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -69,7 +69,7 @@ public class ShopFacade {
             path = REDIRECT_TO_PRODUCT_WITH_PARAM + productId;
         } else {
             String productCategory = productService.getProductCategoryValue(productId);
-            path = REDIRECT_TO_PRODUCTS_PAGE_CATEGORY_WITH_PARAM + productCategory;
+            path = REDIRECT_TO_PRODUCTS_PAGE_CATEGORY_WITH_PARAM + productCategory + "&size=3";
         }
         return path;
     }
@@ -92,6 +92,13 @@ public class ShopFacade {
     public void returnProductsBySearchCondition(HttpSession session, String searchCondition) {
         if (!searchCondition.isEmpty()) {
             Set<ProductDto> products = productService.getFoundedProducts(searchCondition);
+//            Pageable pageable = PageRequest.of(0, 3);
+//            List<ProductDto> productsList =new ArrayList<>(products);
+//            PagedListHolder<ProductDto> pageHolder = new PagedListHolder<>(productsList);
+//            pageHolder.setPageSize(pageable.getPageSize());
+//            pageHolder.setPage(pageable.getPageNumber());
+//            Page<ProductDto> page = new PageImpl<>(pageHolder.getPageList(), pageable, products.size());
+//            session.setAttribute(FOUND_PRODUCTS, page);
             session.setAttribute(FOUND_PRODUCTS, products);
         }
     }

@@ -34,12 +34,14 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderDto> getOrdersById(Long id) {
-        return getOrdersDtosFromOrders(orderRepository.getOrdersById(id));
+        return getOrdersDtosFromOrders(orderRepository.findOrderById(id));
+//        return getOrdersDtosFromOrders(orderRepository.getOrdersById(id));
     }
 
     @Override
     public boolean checkOrderNumber(String number) {
-        return orderRepository.checkOrderNumber(number);
+        return orderRepository.existsByName(number);
+//        return orderRepository.checkOrderNumber(number);
     }
 
     @Override

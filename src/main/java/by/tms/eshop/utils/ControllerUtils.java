@@ -91,14 +91,14 @@ public class ControllerUtils {
         return products;
     }
 
-    public static String getPathFromAddFavoriteByParameters(Long productId, String location, String productType) {
+    public static String getPathFromAddFavoriteByParameters(Long productId, String location, String productCategory) {
         String path;
         if (Objects.equals(location, SEARCH)) {
             path = REDIRECT_TO_SEARCH_RESULT_SAVE;
         } else if (Objects.equals(location, PRODUCT_PAGE)) {
             path = REDIRECT_TO_PRODUCT_WITH_PARAM + productId;
         } else {
-            path = REDIRECT_TO_PRODUCTS_PAGE_CATEGORY_WITH_PARAM + productType;
+            path = REDIRECT_TO_PRODUCTS_PAGE_CATEGORY_WITH_PARAM + productCategory + "&size=3";
         }
         return path;
     }

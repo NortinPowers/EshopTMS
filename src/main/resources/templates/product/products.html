@@ -7,22 +7,6 @@
 </head>
 <body>
 <th:block th:insert="~{/include/navigate}"/>
-<header>
-    <div class="pagination justify-content-center mt-5 mb-3">
-        <ul class="pagination">
-            <li th:class="${page.number == 0 ? 'disabled' : ''}">
-                <a class="page-link" th:href="@{${url}(page=0)}">&laquo;</a>
-            </li>
-            <li th:each="pageNumber : ${#numbers.sequence(1, page.totalPages)}"
-                th:class="${pageNumber == page.number+1 ? 'active' : ''}">
-                <a class="page-link" th:href="@{${url}(page=${pageNumber-1})}" th:text="${pageNumber}"></a>
-            </li>
-            <li th:class="${page.number >= page.totalPages-1 ? 'disabled' : ''}">
-                <a class="page-link" th:href="@{${url}(page=${page.totalPages}-1)}">&raquo;</a>
-            </li>
-        </ul>
-    </div>
-</header>
 <div class="row row-cols-1 row-cols-md-5 g-4 mr-1 ml-1 mt-1">
     <div th:each="product : ${page.content}">
         <div class="card mr-4 ml-4 mt-4 shadow bg-body-tertiary rounded" style="max-width: 14rem; height: 34rem;">
@@ -63,5 +47,21 @@
         </div>
     </div>
 </div>
+<footer>
+    <div class="pagination justify-content-center mt-5 mb-3">
+        <ul class="pagination">
+            <li th:class="${page.number == 0 ? 'disabled' : ''}">
+                <a class="page-link" th:href="@{${url}(page=0)}">&laquo;</a>
+            </li>
+            <li th:each="pageNumber : ${#numbers.sequence(1, page.totalPages)}"
+                th:class="${pageNumber == page.number+1 ? 'active' : ''}">
+                <a class="page-link" th:href="@{${url}(page=${pageNumber-1})}" th:text="${pageNumber}"></a>
+            </li>
+            <li th:class="${page.number >= page.totalPages-1 ? 'disabled' : ''}">
+                <a class="page-link" th:href="@{${url}(page=${page.totalPages}-1)}">&raquo;</a>
+            </li>
+        </ul>
+    </div>
+</footer>
 </body>
 </html>

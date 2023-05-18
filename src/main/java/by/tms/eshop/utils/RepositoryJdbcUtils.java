@@ -6,9 +6,9 @@ import by.tms.eshop.domain.Product;
 import by.tms.eshop.domain.User;
 import by.tms.eshop.dto.LocationDto;
 import by.tms.eshop.dto.ProductDto;
+import jakarta.persistence.EntityManager;
 import lombok.experimental.UtilityClass;
 import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.hibernate.Session;
 import org.springframework.beans.support.PagedListHolder;
 import org.springframework.data.domain.Pageable;
 
@@ -73,28 +73,32 @@ public class RepositoryJdbcUtils {
                 .build();
     }
 
-    public static Cart getCurrentCart(Long userId, Long productId, String query, Session session) {
-        return session.createQuery(query, Cart.class)
+    public static Cart getCurrentCart(Long userId, Long productId, String query, EntityManager entityManager) {
+//    public static Cart getCurrentCart(Long userId, Long productId, String query, Session session) {
+        return entityManager.createQuery(query, Cart.class)
                 .setParameter(USER_ID, userId)
                 .setParameter(PRODUCT_ID, productId)
                 .getSingleResult();
     }
 
-    public static List<Cart> getCarts(Long userId, Long productId, String query, Session session) {
-        return session.createQuery(query, Cart.class)
+    public static List<Cart> getCarts(Long userId, Long productId, String query, EntityManager entityManager) {
+//    public static List<Cart> getCarts(Long userId, Long productId, String query, Session session) {
+        return entityManager.createQuery(query, Cart.class)
                 .setParameter(USER_ID, userId)
                 .setParameter(PRODUCT_ID, productId)
                 .getResultList();
     }
 
-    public static List<Product> getSearchProductsByCondition(String condition, String query, Session session) {
-        return session.createQuery(query, Product.class)
+    public static List<Product> getSearchProductsByCondition(String condition, String query, EntityManager entityManager) {
+//    public static List<Product> getSearchProductsByCondition(String condition, String query, Session session) {
+        return entityManager.createQuery(query, Product.class)
                 .setParameter(CONDITION, condition)
                 .getResultList();
     }
 
-    public static List<Product> getSearchProductsByPrice(BigDecimal minPrice, BigDecimal maxPrice, String query, Session session) {
-        return session.createQuery(query, Product.class)
+    public static List<Product> getSearchProductsByPrice(BigDecimal minPrice, BigDecimal maxPrice, String query, EntityManager entityManager) {
+//    public static List<Product> getSearchProductsByPrice(BigDecimal minPrice, BigDecimal maxPrice, String query, Session session) {
+        return entityManager.createQuery(query, Product.class)
                 .setParameter(MIN_PRICE, minPrice)
                 .setParameter(MAX_PRICE, maxPrice)
                 .getResultList();

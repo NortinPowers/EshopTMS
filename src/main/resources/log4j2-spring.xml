@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+    <Properties>
+        <Property name="LOG_DEFAULT_PATTERN">%highlight{%5p- %d{yy-MM-dd HH:mm:ss.SSS}}${CLR} %clr{${sys:PID}:[%X{conversation}]}{magenta}%clr{-}{faint}%clr{[%15.15t]}{faint} %clr{%15t{1.}}{cyan}  %highlight{: %m%n%xwEx}${CLR}</Property>
+        <Property name="LOG_WARN_PATTERN">%d{ISO8601} %-5p [%t] %X{conversation} [client:%X{username:--}] [extras:[%X{extras:--}]] [%logger{40}] : %m%n%ex</Property>
+        <Property name="CLR">{FATAL=bright red, ERROR=red, WARN=bright yellow, INFO=Normal, DEBUG=white, TRACE=black}</Property>
+    </Properties>
+    <Appenders>
+        <File name="FILE" fileName="logs/app.log" append="true">
+            <PatternLayout pattern="${LOG_DEFAULT_PATTERN}" />
+        </File>
+        <File name="WARN_FILE" fileName="logs/appWarn.log" append="true">
+            <PatternLayout pattern="${LOG_WARN_PATTERN}" />
+        </File>
+        <Console name="CONSOLE" target="SYSTEM_OUT" follow="true">
+            <PatternLayout pattern="${LOG_DEFAULT_PATTERN}" disableAnsi="false"/>
+        </Console>
+    </Appenders>
+    <Loggers>
+        <Logger name="by.tms.eshop.aspect" level="WARN" additivity="false">
+            <AppenderRef ref="WARN_FILE" />
+        </Logger>
+        <Logger name="by.tms.eshop.exception" level="WARN" additivity="false">
+            <AppenderRef ref="WARN_FILE" />
+        </Logger>
+        <Logger name="by.tms.eshop.interceptor" level="WARN" additivity="false">
+            <AppenderRef ref="WARN_FILE" />
+        </Logger>
+        <Root level="INFO">
+            <AppenderRef ref="CONSOLE" />
+            <AppenderRef ref="FILE" />
+        </Root>
+    </Loggers>
+</Configuration>

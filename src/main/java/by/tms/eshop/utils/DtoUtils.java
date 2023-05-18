@@ -68,6 +68,12 @@ public class DtoUtils {
                 .toList();
     }
 
+    public static List<ProductDto> getProductsDtosFromProducts(List<Product> products) {
+        return products.stream()
+                .map(DtoUtils::makeProductDtoModelTransfer)
+                .toList();
+    }
+
     public static LocationDto selectCart() {
         return LocationDto.builder()
                 .cart(true)
