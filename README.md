@@ -5,7 +5,7 @@
 <h2 align="center">[Full course](https://github.com/NortinPowers/c18onlTMS2022/) </h2>
 
 <p>Used Spring Boot, JPA, Validator, Thymeleaf, Bootstrap</p>
-<p>PostgresSQL DB</p>
+<p>PostgreSQL DB</p>
 
 [![GitHub Streak](https://streak-stats.demolab.com?user=NortinPowers&theme=dark&hide_border=true&border_radius=15)](https://git.io/streak-stats)
 
