@@ -1,0 +1,50 @@
+<th:block th:with="authorizedUser=${session.userAccessPermission}">
+    <nav class="navbar navbar-dark bg-dark">
+        <ul class="nav nav-pills ">
+            <li class="nav-item">
+                <a class="btn btn-outline-warning"
+                   href="/eshop">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="btn btn-outline-warning ml-2"
+                   href="/search">
+                    <div class="text-center">
+                        <i class="bi bi-search"></i>
+                    </div>
+                </a>
+            </li>
+            <th:block th:if="${authorizedUser != null}">
+                <li class="nav-item">
+                    <a class="btn btn-outline-info ml-2" href="/favorites">Favorites</a>
+                </li>
+                <li class="nav-item">
+                    <a class="btn btn-outline-info ml-2" href="/cart">Shopping cart</a>
+                </li>
+            </th:block>
+        </ul>
+        <th:block th:if="${authorizedUser == null}">
+            <a id="loginButton" class="form-inline my-2 my-lg-0" style="text-decoration: none"
+               href="/login">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Login</button>
+            </a>
+        </th:block>
+        <th:block th:if="${authorizedUser != null}">
+            <h2 style="text-align: center; color: #e5a0a4; margin-right: 11%; text-shadow: 1px 1px 2px red, 0 0 1em #ff004d, 0 0 0.2em #ff0062;">
+                Welcome [[${authorizedUser.name}]]</h2>
+            <ul class="nav nav-pills ">
+                <li class="nav-item">
+                    <a id="accountButton"
+                       href="/account">
+                        <button class="btn btn-outline-success mr-2" type="submit">Account</button>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a id="exitButton"
+                       href="/logout">
+                        <button class="btn btn-outline-success" type="submit">Exit</button>
+                    </a>
+                </li>
+            </ul>
+        </th:block>
+    </nav>
+</th:block>

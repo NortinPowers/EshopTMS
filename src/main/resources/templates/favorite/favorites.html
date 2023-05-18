@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Favorites</title>
+    <th:block th:insert="~{/include/bootstrap}"/>
+</head>
+<body>
+<th:block th:insert="~{/include/navigate}"/>
+<div class="row row-cols-1 row-cols-md-5 g-4 mr-1 ml-1 mt-1">
+    <div th:each="product : ${favoriteProducts}">
+        <div class="card mr-4 ml-4 mt-4 shadow bg-body-tertiary rounded" style="max-width: 14rem">
+            <a th:href="@{/product/__${product.id}__}">
+                <img class="card-img-top" style="max-height: 20rem"
+                     th:src="@{/images/__${#strings.toLowerCase(product.getCategory)}__/__${product.name}__.jpg}"
+                     th:alt="${product.name}">
+            </a>
+            <div class="card-body">
+                <h5 class="card-title text-nowrap" style="text-align: -webkit-center"
+                    th:text="${product.name}"></h5>
+                <p class="card-text font-italic" th:text="${product.info + '.'}"></p>
+            </div>
+            <div class="card-footer text-center">
+                <small class="text-muted" style="font-size: 20px" th:text="${product.price + '$'}"></small>
+            </div>
+            <th:block th:with="authorizedUser = ${session.userAccessPermission}">
+                <div th:if="${authorizedUser != null}">
+                    <div class="btn-group btn-group-fill">
+                        <a th:href="@{/add-cart(id=${product.id}, shop=true, location='none')}"
+                           class="btn btn-success active" style="min-width: 8.8rem"
+                           aria-current="page">Buy</a>
+                        <a th:href="@{/add-cart(id=${product.id}, shop='none', location='favorite')}"
+                           class="btn btn-success">
+                            <div class="text-center mt-1">
+                                <i class="bi bi-cart-plus"></i>
+                            </div>
+                        </a>
+                        <a th:href="@{/delete-favorite(id=${product.id})}"
+                           class="btn btn-success">
+                            <div class="text-center mt-1">
+                                <i class="bi bi-heartbreak"></i>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </th:block>
+        </div>
+    </div>
+</div>
+</body>
+</html>

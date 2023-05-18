@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Properties>
+        <Property name="LOG_DEFAULT_PATTERN">%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</Property>
+        <Property name="LOG_WARN_PATTERN">%d{ISO8601} %-5p [%t] %X{conversation} [client:%X{username:--}] [extras:[%X{extras:--}]] [%logger{40}] : %m%n%ex</Property>
+    </Properties>
+    <Appenders>
+        <File name="FILE" fileName="logs/app.log" append="true">
+            <PatternLayout pattern="${LOG_DEFAULT_PATTERN}" />
+        </File>
+        <File name="WARN_FILE" fileName="logs/appWarn.log" append="true">
+            <PatternLayout pattern="${LOG_WARN_PATTERN}" />
+        </File>
+        <Console name="CONSOLE">
+            <PatternLayout pattern="${LOG_DEFAULT_PATTERN}" />
+        </Console>
+    </Appenders>
+    <Loggers>
+        <Logger name="by.tms" level="WARN" additivity="false">
+            <AppenderRef ref="WARN_FILE" />
+        </Logger>
+        <Root level="INFO">
+            <AppenderRef ref="CONSOLE" />
+            <AppenderRef ref="FILE" />
+        </Root>
+    </Loggers>
+</Configuration>
