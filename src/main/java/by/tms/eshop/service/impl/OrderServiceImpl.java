@@ -1,5 +1,6 @@
 package by.tms.eshop.service.impl;
 
+import by.tms.eshop.domain.Order;
 import by.tms.eshop.domain.Product;
 import by.tms.eshop.dto.OrderDto;
 import by.tms.eshop.dto.ProductDto;
@@ -34,7 +35,10 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderDto> getOrdersById(Long id) {
-        return getOrdersDtosFromOrders(orderRepository.findOrderById(id));
+//        List<Order> orderById = orderRepository.findOrderById(id);
+        List<Order> orderById = orderRepository.findOrderByUserId(id);
+        getOrdersDtosFromOrders(orderById);
+        return getOrdersDtosFromOrders(orderRepository.findOrderByUserId(id));
 //        return getOrdersDtosFromOrders(orderRepository.getOrdersById(id));
     }
 

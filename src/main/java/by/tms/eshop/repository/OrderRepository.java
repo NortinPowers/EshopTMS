@@ -13,7 +13,7 @@ public interface OrderRepository extends JpaRepository<Order, Long>, OrderCustom
     void saveProductInOrderConfigurations(Long id, List<Product> products);
 
 //    List<Order> getOrdersById(Long id);
-    List<Order> findOrderById(Long id);
+    List<Order> findOrderByUserId(Long id);
 
 //    boolean checkOrderNumber(String number);
     boolean existsByName(String number);
