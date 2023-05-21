@@ -34,7 +34,7 @@ public class Order extends BaseEntity {
     @JoinTable(name = "order_product",
             joinColumns = @JoinColumn(name = "order_id"),
             inverseJoinColumns = @JoinColumn(name = "product_id"))
-    List<Product> products;
+    private List<Product> products;
 
     public List<Product> getProducts() {
         return products == null ? new ArrayList<>() : products;

@@ -33,27 +33,18 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ModelAndView getProductsByCategory(String category, Pageable pageable) {
         ModelMap modelMap = new ModelMap();
-//        List<Product> allByProductCategoryCategory = productRepository.findAllByProductCategory_Category(category);
-//        List<ProductDto> products = getProductsDtosFromProducts(allByProductCategoryCategory);
-//        PagedListHolder<ProductDto> pageHolder = getPagedListHolder(pageable, products);
-//        Page<ProductDto> page = new PageImpl<>(pageHolder.getPageList(), pageable, products.size());
-//        List<Product> products = productRepository.findAllByProductCategory_CategoryWithPagination(category).getContent();
-//        Page<ProductDto> page = new PageImpl<>(getProductsDtosFromProducts(products), pageable, products.size());
         Page<ProductDto> page = productRepository.findAllWithPaginationByProductCategory_Category(category, pageable).map(DtoUtils::makeProductDtoModelTransfer);
         modelMap.addAttribute(PAGE, page);
-//        modelMap.addAttribute(PAGE, productRepository.getProductsByCategory(category, pageable));
         modelMap.addAttribute(URL, "/products-page?category=" + category + "&size=3");
         return new ModelAndView(PRODUCTS, modelMap);
     }
 
     @Override
     public ModelAndView getProduct(Long id) {
-//        ModelMap modelMap = new ModelMap(Attributes.PRODUCT, makeProductDtoModelTransfer(productRepository.getProduct(id)));
         Optional<Product> productOptional = productRepository.findById(id);
         ModelMap modelMap = null;
         if (productOptional.isPresent()) {
             modelMap = new ModelMap(Attributes.PRODUCT, makeProductDtoModelTransfer(productOptional.get()));
-//            ModelMap modelMap = new ModelMap(Attributes.PRODUCT, makeProductDtoModelTransfer(productRepository.findById(id)));
         }
         return new ModelAndView(PRODUCT, modelMap);
     }
@@ -61,7 +52,6 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public String getProductCategoryValue(Long id) {
         return productRepository.getProductCategoryValue(id);
-//        return productRepository.findByProductCategory_Id(id);
     }
 
     @Override

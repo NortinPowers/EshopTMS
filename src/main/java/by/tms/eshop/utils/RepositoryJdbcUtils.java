@@ -74,7 +74,6 @@ public class RepositoryJdbcUtils {
     }
 
     public static Cart getCurrentCart(Long userId, Long productId, String query, EntityManager entityManager) {
-//    public static Cart getCurrentCart(Long userId, Long productId, String query, Session session) {
         return entityManager.createQuery(query, Cart.class)
                 .setParameter(USER_ID, userId)
                 .setParameter(PRODUCT_ID, productId)
@@ -82,7 +81,6 @@ public class RepositoryJdbcUtils {
     }
 
     public static List<Cart> getCarts(Long userId, Long productId, String query, EntityManager entityManager) {
-//    public static List<Cart> getCarts(Long userId, Long productId, String query, Session session) {
         return entityManager.createQuery(query, Cart.class)
                 .setParameter(USER_ID, userId)
                 .setParameter(PRODUCT_ID, productId)
@@ -90,14 +88,12 @@ public class RepositoryJdbcUtils {
     }
 
     public static List<Product> getSearchProductsByCondition(String condition, String query, EntityManager entityManager) {
-//    public static List<Product> getSearchProductsByCondition(String condition, String query, Session session) {
         return entityManager.createQuery(query, Product.class)
                 .setParameter(CONDITION, condition)
                 .getResultList();
     }
 
     public static List<Product> getSearchProductsByPrice(BigDecimal minPrice, BigDecimal maxPrice, String query, EntityManager entityManager) {
-//    public static List<Product> getSearchProductsByPrice(BigDecimal minPrice, BigDecimal maxPrice, String query, Session session) {
         return entityManager.createQuery(query, Product.class)
                 .setParameter(MIN_PRICE, minPrice)
                 .setParameter(MAX_PRICE, maxPrice)

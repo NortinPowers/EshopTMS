@@ -1,13 +1,9 @@
-<!--<div th:if="${page.content != null}">-->
 <div th:if="${products != null}">
     <div th:if="${products.size() == 0}">
-<!--    <div th:if="${page.content.size() == 0}">-->
         <h5 class="text-center">No suitable products found. Enter or change the search terms!</h5>
     </div>
     <div th:if="${products.size() != 0}">
-<!--    <div th:if="${page.content.size() != 0}">-->
         <div th:each="product : ${products}">
-<!--        <div th:each="product : ${page.content}">-->
             <div class="card mb-3 ml-1 border border-secondary rounded rounded-5 shadow-sm p-2 bg-body-tertiary rounded mr-1"
                  style="min-width: 18rem">
                 <div class="container text-center mb-2">
@@ -80,18 +76,4 @@
             </div>
         </div>
     </div>
-<!--    <div class="pagination justify-content-center mt-5 mb-3">-->
-    <!--        <ul class="pagination">-->
-    <!--            <li th:class="${page.number == 0 ? 'disabled' : ''}">-->
-    <!--                <a class="page-link" th:href="@{${url}(page=0)}">&laquo;</a>-->
-    <!--            </li>-->
-    <!--            <li th:each="pageNumber : ${#numbers.sequence(1, page.totalPages)}"-->
-    <!--                th:class="${pageNumber == page.number+1 ? 'active' : ''}">-->
-    <!--                <a class="page-link" th:href="@{${url}(page=${pageNumber-1})}" th:text="${pageNumber}"></a>-->
-    <!--            </li>-->
-    <!--            <li th:class="${page.number >= page.totalPages-1 ? 'disabled' : ''}">-->
-    <!--                <a class="page-link" th:href="@{${url}(page=${page.totalPages}-1)}">&raquo;</a>-->
-    <!--            </li>-->
-    <!--        </ul>-->
-    <!--    </div>-->
 </div>

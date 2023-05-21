@@ -21,8 +21,6 @@ public class HomeController {
 
     @GetMapping(value = {"/","/eshop"})
     public ModelAndView redirectToEshopPage(ModelAndView modelAndView) {
-//        log.info("TEST_INFO");
-//        log.error("TEST_ERROR");
         List<String> productCategories = productCategoryService.getProductCategories();
         modelAndView.addObject(PRODUCT_CATEGORIES, productCategories);
         modelAndView.setViewName(ESHOP);

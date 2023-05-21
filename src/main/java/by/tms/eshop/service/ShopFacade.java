@@ -92,13 +92,6 @@ public class ShopFacade {
     public void returnProductsBySearchCondition(HttpSession session, String searchCondition) {
         if (!searchCondition.isEmpty()) {
             Set<ProductDto> products = productService.getFoundedProducts(searchCondition);
-//            Pageable pageable = PageRequest.of(0, 3);
-//            List<ProductDto> productsList =new ArrayList<>(products);
-//            PagedListHolder<ProductDto> pageHolder = new PagedListHolder<>(productsList);
-//            pageHolder.setPageSize(pageable.getPageSize());
-//            pageHolder.setPage(pageable.getPageNumber());
-//            Page<ProductDto> page = new PageImpl<>(pageHolder.getPageList(), pageable, products.size());
-//            session.setAttribute(FOUND_PRODUCTS, page);
             session.setAttribute(FOUND_PRODUCTS, products);
         }
     }

@@ -39,7 +39,6 @@ public class CartServiceImpl implements CartService {
     @Override
     public void deleteCartProductsAfterBuy(Long userId) {
         cartRepository.deleteCartByUserId(userId);
-//        cartRepository.deleteCartProductsAfterBuy(userId);
     }
 
     @Override

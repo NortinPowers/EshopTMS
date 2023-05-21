@@ -16,5 +16,5 @@ public class OrderDto {
     private String name;
     private LocalDate date;
     private User user;
-    List<Product> products;
+    private List<Product> products;
 }

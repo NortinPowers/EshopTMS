@@ -16,21 +16,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<User> getUserByLogin(String login) {
-//        return userRepository.getUserByLogin(login);
         return userRepository.findUserByLogin(login);
     }
 
     @Override
     public void addUser(User user) {
-//        userRepository.addUser(user);
         userRepository.saveAndFlush(user);
-//        userRepository.save(user);
     }
 
     @Override
     public Optional<User> getVerifyUser(String login, String email) {
-//        return userRepository.getVerifyUser(login, email);
-//        return userRepository.findUserByLoginAndEmail(login, email);
         return userRepository.findUserByLoginOrEmail(login, email);
     }
 }
