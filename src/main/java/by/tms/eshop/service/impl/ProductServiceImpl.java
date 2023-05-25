@@ -1,28 +1,27 @@
 package by.tms.eshop.service.impl;
 
-import by.tms.eshop.domain.Product;
-import by.tms.eshop.dto.ProductDto;
-import by.tms.eshop.repository.ProductRepository;
-import by.tms.eshop.service.ProductService;
-import by.tms.eshop.utils.Constants.Attributes;
-import by.tms.eshop.utils.DtoUtils;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.servlet.ModelAndView;
-
-import java.math.BigDecimal;
-import java.util.Optional;
-import java.util.Set;
-
 import static by.tms.eshop.utils.Constants.Attributes.PAGE;
 import static by.tms.eshop.utils.Constants.Attributes.URL;
 import static by.tms.eshop.utils.Constants.MappingPath.PRODUCT;
 import static by.tms.eshop.utils.Constants.MappingPath.PRODUCTS;
 import static by.tms.eshop.utils.DtoUtils.makeProductDtoModelTransfer;
 import static by.tms.eshop.utils.ServiceUtils.getProductDtoSet;
+
+import by.tms.eshop.domain.Product;
+import by.tms.eshop.dto.ProductDto;
+import by.tms.eshop.repository.ProductRepository;
+import by.tms.eshop.service.ProductService;
+import by.tms.eshop.utils.Constants.Attributes;
+import by.tms.eshop.utils.DtoUtils;
+import java.math.BigDecimal;
+import java.util.Optional;
+import java.util.Set;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.servlet.ModelAndView;
 
 @Service
 @RequiredArgsConstructor

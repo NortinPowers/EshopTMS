@@ -68,7 +68,7 @@ public class ControllerUtils {
     }
 
     public static Long getUserId(HttpSession session) {
-        return (getUserDto(session).getId());
+        return getUserDto(session).getId();
     }
 
     public static BigDecimal getPrice(HttpServletRequest request, String param, BigDecimal defaultValue) {
@@ -78,16 +78,16 @@ public class ControllerUtils {
 
     public static Set<ProductDto> applyPriceFilterOnProducts(BigDecimal minPrice, BigDecimal maxPrice, Set<ProductDto> products) {
         products = products.stream()
-                .filter(product -> product.getPrice().compareTo(minPrice) > 0 && product.getPrice().compareTo(maxPrice) < 0)
-                .collect(Collectors.toCollection(LinkedHashSet::new));
+                           .filter(product -> product.getPrice().compareTo(minPrice) > 0 && product.getPrice().compareTo(maxPrice) < 0)
+                           .collect(Collectors.toCollection(LinkedHashSet::new));
         return products;
     }
 
     public static Set<ProductDto> applyTypeFilterOnProducts(String type, Set<ProductDto> products) {
         if (!ALL.equals(type)) {
             products = products.stream()
-                    .filter(product -> product.getCategory().equals(type))
-                    .collect(Collectors.toCollection(LinkedHashSet::new));
+                               .filter(product -> product.getCategory().equals(type))
+                               .collect(Collectors.toCollection(LinkedHashSet::new));
         }
         return products;
     }
@@ -107,7 +107,7 @@ public class ControllerUtils {
     public static void fillError(String field, ModelAndView modelAndView, BindingResult bindingResult) {
         if (bindingResult.hasFieldErrors(field)) {
             modelAndView.addObject(field + "Error", Objects.requireNonNull(bindingResult.getFieldError(field))
-                    .getDefaultMessage());
+                                                           .getDefaultMessage());
         }
     }
 
