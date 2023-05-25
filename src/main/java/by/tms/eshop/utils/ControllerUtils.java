@@ -1,24 +1,5 @@
 package by.tms.eshop.utils;
 
-import by.tms.eshop.domain.User;
-import by.tms.eshop.dto.ProductDto;
-import by.tms.eshop.dto.UserDto;
-import by.tms.eshop.utils.Constants.UserVerifyField;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
-import lombok.experimental.UtilityClass;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.MDC;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.servlet.ModelAndView;
-
-import java.math.BigDecimal;
-import java.util.LinkedHashSet;
-import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import static by.tms.eshop.utils.Constants.ALL;
 import static by.tms.eshop.utils.Constants.Attributes.FILTER_FOUND_PRODUCTS;
 import static by.tms.eshop.utils.Constants.Attributes.FOUND_PRODUCTS;
@@ -42,6 +23,26 @@ import static by.tms.eshop.utils.Constants.UserVerifyField.PASSWORD;
 import static by.tms.eshop.utils.Constants.UserVerifyField.SURNAME;
 import static by.tms.eshop.utils.Constants.UserVerifyField.VERIFY_PASSWORD;
 import static java.util.UUID.randomUUID;
+
+import by.tms.eshop.domain.User;
+import by.tms.eshop.dto.ProductDto;
+import by.tms.eshop.dto.UserDto;
+import by.tms.eshop.utils.Constants.UserVerifyField;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+import java.math.BigDecimal;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
+import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.slf4j.MDC;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.servlet.ModelAndView;
 
 @Slf4j
 @UtilityClass
@@ -67,7 +68,7 @@ public class ControllerUtils {
     }
 
     public static Long getUserId(HttpSession session) {
-        return ((UserDto) session.getAttribute(USER_ACCESS_PERMISSION)).getId();
+        return (getUserDto(session).getId());
     }
 
     public static BigDecimal getPrice(HttpServletRequest request, String param, BigDecimal defaultValue) {
@@ -111,7 +112,7 @@ public class ControllerUtils {
     }
 
     public static void closeUserSession(HttpSession session) {
-        UserDto userDto = (UserDto) session.getAttribute(USER_ACCESS_PERMISSION);
+        UserDto userDto = getUserDto(session);
         String userUUID = (String) session.getAttribute(USER_UUID);
         log.info("User [" + userUUID + "] with a login " + userDto.getLogin() + " logged out of the system");
         session.removeAttribute(USER_ACCESS_PERMISSION);
@@ -148,10 +149,23 @@ public class ControllerUtils {
     }
 
     public static void setViewByAccessPermission(HttpSession session, ModelAndView modelAndView) {
-        if (session.getAttribute(USER_ACCESS_PERMISSION) != null) {
+        if (getUserDto(session) != null) {
             modelAndView.setViewName(ESHOP);
         } else {
             modelAndView.setViewName(LOGIN);
         }
+    }
+
+    public static UserDto getUserDto(HttpSession session) {
+        return (UserDto) session.getAttribute(USER_ACCESS_PERMISSION);
+    }
+
+    public static BigDecimal getProductsPrice(List<ImmutablePair<ProductDto, Integer>> productWithCount) {
+        BigDecimal fullPrice = BigDecimal.ZERO;
+        for (ImmutablePair<ProductDto, Integer> product : productWithCount) {
+            BigDecimal totalPrice = product.getLeft().getPrice().multiply(new BigDecimal(product.getRight()));
+            fullPrice = fullPrice.add(totalPrice);
+        }
+        return fullPrice;
     }
 }

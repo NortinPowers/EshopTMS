@@ -4,13 +4,11 @@ import by.tms.eshop.dto.LocationDto;
 import by.tms.eshop.dto.ProductDto;
 import by.tms.eshop.repository.CartRepository;
 import by.tms.eshop.service.CartService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.math.BigDecimal;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -39,16 +37,6 @@ public class CartServiceImpl implements CartService {
     @Override
     public void deleteCartProductsAfterBuy(Long userId) {
         cartRepository.deleteCartByUserId(userId);
-    }
-
-    @Override
-    public BigDecimal getProductsPrice(List<ImmutablePair<ProductDto, Integer>> productWithCount) {
-        BigDecimal fullPrice = BigDecimal.ZERO;
-        for (ImmutablePair<ProductDto, Integer> product : productWithCount) {
-            BigDecimal totalPrice = product.getLeft().getPrice().multiply(new BigDecimal(product.getRight()));
-            fullPrice = fullPrice.add(totalPrice);
-        }
-        return fullPrice;
     }
 
     @Override
