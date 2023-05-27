@@ -1,22 +1,7 @@
 package by.tms.eshop.service;
 
-import by.tms.eshop.domain.User;
-import by.tms.eshop.dto.ProductDto;
-import by.tms.eshop.dto.UserDto;
-import by.tms.eshop.dto.UserFormDto;
-import by.tms.eshop.utils.DtoUtils;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.ModelAndView;
-
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
-
+import static by.tms.eshop.dto.conversion.DtoConverter.makeUserDtoModelTransfer;
+import static by.tms.eshop.dto.conversion.DtoConverter.makeUserModelTransfer;
 import static by.tms.eshop.utils.Constants.Attributes.FILTER_FOUND_PRODUCTS;
 import static by.tms.eshop.utils.Constants.Attributes.FOUND_PRODUCTS;
 import static by.tms.eshop.utils.Constants.Attributes.LOGIN_ERROR;
@@ -35,12 +20,27 @@ import static by.tms.eshop.utils.Constants.RequestParameters.MIN_PRICE;
 import static by.tms.eshop.utils.Constants.RequestParameters.PRODUCT_PAGE;
 import static by.tms.eshop.utils.Constants.RequestParameters.SEARCH;
 import static by.tms.eshop.utils.Constants.RequestParameters.TRUE;
+import static by.tms.eshop.utils.ControllerUtils.applyPriceFilterOnProducts;
+import static by.tms.eshop.utils.ControllerUtils.applyTypeFilterOnProducts;
 import static by.tms.eshop.utils.ControllerUtils.getPrice;
 import static by.tms.eshop.utils.ControllerUtils.isVerifyUser;
 import static by.tms.eshop.utils.ControllerUtils.saveUserSession;
-import static by.tms.eshop.utils.DtoUtils.makeUserDtoModelTransfer;
-import static by.tms.eshop.utils.DtoUtils.makeUserModelTransfer;
-import static by.tms.eshop.utils.ServiceUtils.getProductByFilter;
+
+import by.tms.eshop.domain.User;
+import by.tms.eshop.dto.ProductDto;
+import by.tms.eshop.dto.UserDto;
+import by.tms.eshop.dto.UserFormDto;
+import by.tms.eshop.dto.conversion.DtoConverter;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.ModelAndView;
 
 @Component
 @RequiredArgsConstructor
@@ -52,7 +52,7 @@ public class ShopFacade {
     private final UserService userService;
 
     public void carriesPurchase(Long userId) {
-        List<ProductDto> productsDto = cartService.getPurchasedProducts(userId, DtoUtils.selectCart());
+        List<ProductDto> productsDto = cartService.getPurchasedProducts(userId, DtoConverter.selectCart());
         orderService.saveUserOrder(userId, productsDto);
         cartService.deleteCartProductsAfterBuy(userId);
     }
@@ -112,5 +112,13 @@ public class ShopFacade {
             modelAndView.addObject(LOGIN_ERROR, RECHECK_DATA);
             modelAndView.setViewName(LOGIN);
         }
+    }
+
+    private Set<ProductDto> getProductByFilter(HttpSession session, String type, BigDecimal minPrice, BigDecimal maxPrice) {
+        Set<ProductDto> products;
+        products = (Set<ProductDto>) session.getAttribute(FOUND_PRODUCTS);
+        products = applyPriceFilterOnProducts(minPrice, maxPrice, products);
+        products = applyTypeFilterOnProducts(type, products);
+        return products;
     }
 }

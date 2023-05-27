@@ -1,4 +1,4 @@
-package by.tms.eshop.utils;
+package by.tms.eshop.dto.conversion;
 
 import by.tms.eshop.domain.Order;
 import by.tms.eshop.domain.Product;
@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @UtilityClass
-public class DtoUtils {
+public class DtoConverter {
 
     public static ProductDto makeProductDtoModelTransfer(Product product) {
         return ProductDto.builder()
@@ -64,13 +64,7 @@ public class DtoUtils {
 
     public static List<Product> getProductsFromProductsDtos(List<ProductDto> productsDto) {
         return productsDto.stream()
-                .map(DtoUtils::makeProductModelTransfer)
-                .toList();
-    }
-
-    public static List<ProductDto> getProductsDtosFromProducts(List<Product> products) {
-        return products.stream()
-                .map(DtoUtils::makeProductDtoModelTransfer)
+                .map(DtoConverter::makeProductModelTransfer)
                 .toList();
     }
 
@@ -100,7 +94,7 @@ public class DtoUtils {
 
     public static List<OrderDto> getOrdersDtosFromOrders(List<Order> orders) {
         return orders.stream()
-                .map(DtoUtils::makeOrderDtoModelTransfer)
+                .map(DtoConverter::makeOrderDtoModelTransfer)
                 .collect(Collectors.toList());
     }
 }

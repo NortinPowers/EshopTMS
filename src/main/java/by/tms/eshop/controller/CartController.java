@@ -11,7 +11,7 @@ import static by.tms.eshop.utils.Constants.RequestParameters.LOCATION;
 import static by.tms.eshop.utils.Constants.RequestParameters.SHOP;
 import static by.tms.eshop.utils.ControllerUtils.getProductsPrice;
 import static by.tms.eshop.utils.ControllerUtils.getUserId;
-import static by.tms.eshop.utils.DtoUtils.selectCart;
+import static by.tms.eshop.dto.conversion.DtoConverter.selectCart;
 
 import by.tms.eshop.dto.ProductDto;
 import by.tms.eshop.service.CartService;

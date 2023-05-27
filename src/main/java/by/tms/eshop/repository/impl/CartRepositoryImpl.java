@@ -1,27 +1,24 @@
 package by.tms.eshop.repository.impl;
 
+import static by.tms.eshop.utils.Constants.QueryParameter.PRODUCT_ID;
+import static by.tms.eshop.utils.Constants.QueryParameter.USER_ID;
+
 import by.tms.eshop.domain.Cart;
+import by.tms.eshop.domain.Product;
+import by.tms.eshop.domain.User;
 import by.tms.eshop.dto.LocationDto;
 import by.tms.eshop.dto.ProductDto;
 import by.tms.eshop.repository.CartCustomizedRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.stereotype.Repository;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import static by.tms.eshop.utils.Constants.QueryParameter.USER_ID;
-import static by.tms.eshop.utils.RepositoryJdbcUtils.getCart;
-import static by.tms.eshop.utils.RepositoryJdbcUtils.getCarts;
-import static by.tms.eshop.utils.RepositoryJdbcUtils.getCurrentCart;
-import static by.tms.eshop.utils.RepositoryJdbcUtils.getImmutablePairsProductDtoCount;
-import static by.tms.eshop.utils.RepositoryJdbcUtils.getModifyCount;
-import static by.tms.eshop.utils.RepositoryJdbcUtils.isProductNotIncluded;
 
 @Repository
 @RequiredArgsConstructor
@@ -81,7 +78,11 @@ public class CartRepositoryImpl implements CartCustomizedRepository {
 
     @Override
     public Integer getCartProductCount(Long userId, Long productId) {
-        return getCarts(userId, productId, GET_CURRENT_CART, entityManager).stream()
+        List<Cart> carts = entityManager.createQuery(GET_CURRENT_CART, Cart.class)
+                                        .setParameter(USER_ID, userId)
+                                        .setParameter(PRODUCT_ID, productId)
+                                        .getResultList();
+        return carts.stream()
                 .map(Cart::getCount)
                 .findAny()
                 .orElse(0);
@@ -123,5 +124,49 @@ public class CartRepositoryImpl implements CartCustomizedRepository {
     private void deleteProductByMark(Long userId, Long productId, String query) {
         Cart cart = getCurrentCart(userId, productId, query, entityManager);
         entityManager.remove(cart);
+    }
+
+    private boolean isProductNotIncluded(Long productId, List<ProductDto> products) {
+        return products.stream()
+                       .filter(product -> Objects.equals(product.getId(), productId))
+                       .findAny()
+                       .isEmpty();
+    }
+
+    private Integer getModifyCount(boolean up, Integer productCount) {
+        return up ? ++productCount : --productCount;
+    }
+
+    private Cart getCart(Long userId, Long productId, LocationDto locationDto) {
+        return Cart.builder()
+                   .user(User.builder()
+                             .id(userId)
+                             .build())
+                   .product(Product.builder()
+                                   .id(productId)
+                                   .build())
+                   .favorite(locationDto.isFavorite())
+                   .cart(locationDto.isCart())
+                   .count(1)
+                   .build();
+    }
+
+    private Cart getCurrentCart(Long userId, Long productId, String query, EntityManager entityManager) {
+        return entityManager.createQuery(query, Cart.class)
+                            .setParameter(USER_ID, userId)
+                            .setParameter(PRODUCT_ID, productId)
+                            .getSingleResult();
+    }
+
+    private List<ImmutablePair<ProductDto, Integer>> getImmutablePairsProductDtoCount(List<Cart> carts) {
+        List<ImmutablePair<ProductDto, Integer>> pairs = new ArrayList<>();
+        carts.forEach(cart -> pairs.add(new ImmutablePair<>(ProductDto.builder()
+                                                                      .id(cart.getProduct().getId())
+                                                                      .name(cart.getProduct().getName())
+                                                                      .category(cart.getProduct().getProductCategory().getCategory())
+                                                                      .price(cart.getProduct().getPrice())
+                                                                      .info(cart.getProduct().getInfo())
+                                                                      .build(), cart.getCount())));
+        return pairs;
     }
 }

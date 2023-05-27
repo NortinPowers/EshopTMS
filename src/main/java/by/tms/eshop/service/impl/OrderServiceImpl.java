@@ -1,20 +1,19 @@
 package by.tms.eshop.service.impl;
 
+import static by.tms.eshop.dto.conversion.DtoConverter.getOrdersDtosFromOrders;
+import static by.tms.eshop.dto.conversion.DtoConverter.getProductsFromProductsDtos;
+import static by.tms.eshop.utils.ControllerUtils.createOrderNumber;
+
 import by.tms.eshop.domain.Order;
 import by.tms.eshop.domain.Product;
 import by.tms.eshop.dto.OrderDto;
 import by.tms.eshop.dto.ProductDto;
 import by.tms.eshop.repository.OrderRepository;
 import by.tms.eshop.service.OrderService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-
-import static by.tms.eshop.utils.ControllerUtils.createOrderNumber;
-import static by.tms.eshop.utils.DtoUtils.getOrdersDtosFromOrders;
-import static by.tms.eshop.utils.DtoUtils.getProductsFromProductsDtos;
 
 @Service
 @RequiredArgsConstructor

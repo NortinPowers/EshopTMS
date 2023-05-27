@@ -11,6 +11,8 @@ public class Constants {
     public static final String ALL = "all";
     public static final String TRUE = "true";
     public static final Long MAX_COMPLETION_TIME = 2000L;
+    public static final String AUTHORIZATION_PATTERN = "[a-zA-Z0-9]{4,30}";
+    public static final String NAMES_PATTERN = "[a-zA-Z0-9]{4,30}";
 
     @UtilityClass
     public class QueryParameter {

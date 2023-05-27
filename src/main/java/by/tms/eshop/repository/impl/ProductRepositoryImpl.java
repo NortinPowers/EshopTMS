@@ -1,19 +1,20 @@
 package by.tms.eshop.repository.impl;
 
+import static by.tms.eshop.utils.Constants.ALL;
+import static by.tms.eshop.utils.Constants.QueryParameter.CONDITION;
+import static by.tms.eshop.utils.Constants.QueryParameter.MAX_PRICE;
+import static by.tms.eshop.utils.Constants.QueryParameter.MIN_PRICE;
+
 import by.tms.eshop.domain.Product;
 import by.tms.eshop.repository.ProductCustomizedRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
-
 import java.math.BigDecimal;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
-
-import static by.tms.eshop.utils.RepositoryJdbcUtils.getQueryDependType;
-import static by.tms.eshop.utils.RepositoryJdbcUtils.getSearchProductsByCondition;
-import static by.tms.eshop.utils.RepositoryJdbcUtils.getSearchProductsByPrice;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
 
 @Repository
 @RequiredArgsConstructor
@@ -35,7 +36,25 @@ public class ProductRepositoryImpl implements ProductCustomizedRepository {
 
     @Override
     public Set<Product> selectAllProductsByFilter(String category, BigDecimal minPrice, BigDecimal maxPrice) {
-        String query = getQueryDependType(category, SELECT_ALL_PRODUCTS_BY_FILTER);
+        String query = SELECT_ALL_PRODUCTS_BY_FILTER;
+        if (!ALL.equals(category)) {
+            query += " AND productCategory.category = '" + category + "' ORDER BY id";
+        } else {
+            query += " ORDER BY id";
+        }
         return new LinkedHashSet<>(getSearchProductsByPrice(minPrice, maxPrice, query, entityManager));
+    }
+
+    private List<Product> getSearchProductsByCondition(String condition, String query, EntityManager entityManager) {
+        return entityManager.createQuery(query, Product.class)
+                            .setParameter(CONDITION, condition)
+                            .getResultList();
+    }
+
+    private List<Product> getSearchProductsByPrice(BigDecimal minPrice, BigDecimal maxPrice, String query, EntityManager entityManager) {
+        return entityManager.createQuery(query, Product.class)
+                            .setParameter(MIN_PRICE, minPrice)
+                            .setParameter(MAX_PRICE, maxPrice)
+                            .getResultList();
     }
 }

@@ -2,15 +2,14 @@ package by.tms.eshop.repository.impl;
 
 import by.tms.eshop.domain.Order;
 import by.tms.eshop.domain.Product;
+import by.tms.eshop.domain.User;
 import by.tms.eshop.repository.OrderCustomizedRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import java.time.LocalDate;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
-
-import static by.tms.eshop.utils.RepositoryJdbcUtils.getOrder;
 
 @Repository
 @RequiredArgsConstructor
@@ -31,5 +30,15 @@ public class OrderRepositoryImpl implements OrderCustomizedRepository {
         Order order = entityManager.find(Order.class, id);
         order.setProducts(products);
         products.forEach(product -> product.setOrders(List.of(order)));
+    }
+
+    private Order getOrder(String order, Long id) {
+        return Order.builder()
+                    .name(order)
+                    .date(LocalDate.now())
+                    .user(User.builder()
+                              .id(id)
+                              .build())
+                    .build();
     }
 }
