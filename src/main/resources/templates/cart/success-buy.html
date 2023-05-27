@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Success buying</title>
+    <th:block th:insert="~{/include/bootstrap}"/>
+</head>
+<body>
+<th:block th:insert="~{/include/navigate}"/>
+<div class="card mt-5 ml-5 mr-5 mb-5 text-center border-success mb-3 shadow bg-body-tertiary rounded">
+    <div class="card-header">
+        <h3 style="text-shadow: 1px 1px 2px #3f0909">Purchase completed successfully</h3>
+    </div>
+    <div class="card-body">
+        <blockquote class="blockquote mb-0">
+            <p>We will be glad to see you again in our store</p>
+            <footer class="blockquote-footer">With respect <cite>the store's team</cite></footer>
+        </blockquote>
+    </div>
+</div>
+</body>
+</html>

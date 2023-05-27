@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${product.name}"></title>
+    <th:block th:insert="~{/include/bootstrap}"/>
+</head>
+<body>
+<th:block th:insert="~{/include/navigate}"/>
+<div class="card mr-5 ml-5 mt-5 shadow bg-body-tertiary rounded" style="max-width: 14rem">
+    <img class="card-img-top" style="max-height: 20rem"
+         th:src="@{/images/__${#strings.toLowerCase(product.category)}__/__${product.name}__.jpg}"
+         th:alt="${product.name}">
+    <div class="card-body">
+        <h5 class="card-title text-nowrap" style="text-align: -webkit-center" th:text="${product.name}"></h5>
+        <p class="card-text font-italic" th:text="${product.info + '.'}"></p>
+    </div>
+    <div class="card-footer text-center">
+        <small class="text-muted" style="font-size: 20px" th:text="${product.price + '$'}"></small>
+    </div>
+    <th:block th:with="authorizedUser = ${session.userAccessPermission}">
+        <div th:if="${authorizedUser != null}">
+            <div class="btn-group btn-group-fill">
+                <a th:href="@{/add-cart(id=${product.id}, shop=true, location='none')}"
+                   class="btn btn-success active" style="min-width: 8.8rem"
+                   aria-current="page">Buy</a>
+                <a th:href="@{/add-cart(id=${product.id}, shop='none', location='product-page')}"
+                   class="btn btn-success">
+                    <div class="text-center mt-1">
+                        <i class="bi bi-cart-plus"></i>
+                    </div>
+                </a>
+                <a th:href="@{/add-favorite(id=${product.id}, shop='none', location='product-page')}"
+                   class="btn btn-success">
+                    <div class="text-center mt-1">
+                        <i class="bi bi-heart"></i>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </th:block>
+</div>
+</body>
+</html>

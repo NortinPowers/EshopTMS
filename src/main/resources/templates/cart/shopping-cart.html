@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Shopping-cart</title>
+    <th:block th:insert="~{/include/bootstrap}"/>
+</head>
+<body>
+<th:block th:insert="~{/include/navigate}"/>
+<table class="table table-sm table-dark w-75 ml-5 mt-5" style="text-align: center">
+    <thead>
+    <tr style="text-align: center">
+        <th scope="col">#</th>
+        <th scope="col">Product name</th>
+        <th scope="col">Price</th>
+        <th scope="col">Count</th>
+        <th scope="col">Total price</th>
+        <th scope="col">#</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="product : ${cartProducts}">
+        <th scope="row">-</th>
+        <td class="font-italic" th:text="${product.left.name}"></td>
+        <td class="font-italic" th:text="${product.left.price}"></td>
+        <td class="font-italic" th:text="${product.right}"></td>
+        <td class="font-italic" th:text="${product.left.price*product.right}"></td>
+        <td class="font-italic">
+            <a th:href="@{/delete-cart(id=${product.left.id})}">
+                Delete
+            </a>
+        </td>
+    </tr>
+    <th:block th:if="${fullPrice > 0}">
+        <tr style="border-top: chartreuse solid 2px">
+            <td colspan="5" style="text-align: right; font-weight: bold">Full price:</td>
+            <td class="font-weight-bold" style="text-align: center" th:text="${fullPrice}"></td>
+        </tr>
+    </th:block>
+    </tbody>
+</table>
+<th:block th:with="authorizedUser = ${session.userAccessPermission}">
+    <th:block th:if="${(authorizedUser != null) and (fullPrice > 0)}">
+        <form method="post" th:action="@{/cart-processing}">
+            <input type="submit" name="buy" value="Buy" class="btn btn-lg btn-success btn-block w-75 ml-5 mt-5"/>
+        </form>
+    </th:block>
+</th:block>
+</body>
+</html>
