@@ -3,10 +3,9 @@ package by.tms.eshop.repository;
 import by.tms.eshop.domain.Cart;
 import by.tms.eshop.dto.LocationDto;
 import by.tms.eshop.dto.ProductDto;
+import java.util.List;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.springframework.data.jpa.repository.JpaRepository;
-
-import java.util.List;
 
 public interface CartRepository extends JpaRepository<Cart, Long>, CartCustomizedRepository {
 

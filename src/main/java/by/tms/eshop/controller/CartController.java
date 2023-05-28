@@ -11,9 +11,9 @@ import static by.tms.eshop.utils.Constants.RequestParameters.LOCATION;
 import static by.tms.eshop.utils.Constants.RequestParameters.SHOP;
 import static by.tms.eshop.utils.ControllerUtils.getProductsPrice;
 import static by.tms.eshop.utils.ControllerUtils.getUserId;
-import static by.tms.eshop.dto.conversion.DtoConverter.selectCart;
 
 import by.tms.eshop.dto.ProductDto;
+import by.tms.eshop.dto.conversion.Convertor;
 import by.tms.eshop.service.CartService;
 import by.tms.eshop.service.ShopFacade;
 import jakarta.servlet.http.HttpSession;
@@ -32,11 +32,12 @@ public class CartController {
 
     private final CartService cartService;
     private final ShopFacade shopFacade;
+    private final Convertor convertor;
 
     @GetMapping("/cart")
     public ModelAndView showCardPage(HttpSession session, ModelAndView modelAndView) {
         Long userId = getUserId(session);
-        List<ImmutablePair<ProductDto, Integer>> cartProducts = cartService.getSelectedProducts(userId, selectCart());
+        List<ImmutablePair<ProductDto, Integer>> cartProducts = cartService.getSelectedProducts(userId, convertor.selectCart());
         modelAndView.addObject(CART_PRODUCTS, cartProducts);
         modelAndView.addObject(FULL_PRICE, getProductsPrice(cartProducts));
         modelAndView.setViewName(SHOPPING_CART);
@@ -61,14 +62,14 @@ public class CartController {
                                          @RequestParam(name = ID) Long productId,
                                          @RequestParam(name = SHOP) String shopFlag,
                                          @RequestParam(name = LOCATION) String location) {
-        cartService.addSelectedProduct(getUserId(session), productId, selectCart());
+        cartService.addSelectedProduct(getUserId(session), productId, convertor.selectCart());
         return new ModelAndView(shopFacade.getPathFromAddCartByParameters(productId, shopFlag, location));
     }
 
     @GetMapping("/delete-cart")
     public ModelAndView deleteProductFromCart(HttpSession session,
                                               @RequestParam(name = ID) Long productId) {
-        cartService.deleteProduct(getUserId(session), productId, selectCart());
+        cartService.deleteProduct(getUserId(session), productId, convertor.selectCart());
         return new ModelAndView(REDIRECT_TO_CART);
     }
 }

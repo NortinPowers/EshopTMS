@@ -7,9 +7,9 @@ import static by.tms.eshop.utils.Constants.RequestParameters.ID;
 import static by.tms.eshop.utils.Constants.RequestParameters.LOCATION;
 import static by.tms.eshop.utils.ControllerUtils.getPathFromAddFavoriteByParameters;
 import static by.tms.eshop.utils.ControllerUtils.getUserId;
-import static by.tms.eshop.dto.conversion.DtoConverter.selectFavorite;
 
 import by.tms.eshop.dto.ProductDto;
+import by.tms.eshop.dto.conversion.Convertor;
 import by.tms.eshop.service.CartService;
 import by.tms.eshop.service.ProductService;
 import jakarta.servlet.http.HttpSession;
@@ -29,10 +29,11 @@ public class FavoriteController {
 
     private final CartService cartService;
     private final ProductService productService;
+    private final Convertor convertor;
 
     @GetMapping("/favorites")
     public ModelAndView showFavoritesPage(HttpSession session) {
-        List<ProductDto> productDtos = cartService.getSelectedProducts(getUserId(session), selectFavorite()).stream()
+        List<ProductDto> productDtos = cartService.getSelectedProducts(getUserId(session), convertor.selectFavorite()).stream()
                                               .map(Pair::getLeft)
                                               .collect(Collectors.toList());
         ModelMap modelMap = new ModelMap(FAVORITE_PRODUCTS, productDtos);
@@ -43,14 +44,14 @@ public class FavoriteController {
     public ModelAndView addProductToFavorite(HttpSession session,
                                              @RequestParam(name = ID) Long productId,
                                              @RequestParam(name = LOCATION) String location) {
-        cartService.addSelectedProduct(getUserId(session), productId, selectFavorite());
+        cartService.addSelectedProduct(getUserId(session), productId, convertor.selectFavorite());
         return new ModelAndView(getPathFromAddFavoriteByParameters(productId, location, productService.getProductCategoryValue(productId)));
     }
 
     @GetMapping("/delete-favorite")
     public ModelAndView deleteProductFromFavorite(HttpSession session,
                                                   @RequestParam(name = ID) Long productId) {
-        cartService.deleteProduct(getUserId(session), productId, selectFavorite());
+        cartService.deleteProduct(getUserId(session), productId, convertor.selectFavorite());
         return new ModelAndView(REDIRECT_TO_FAVORITES);
     }
 }

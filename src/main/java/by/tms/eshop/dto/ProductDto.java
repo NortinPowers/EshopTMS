@@ -1,12 +1,11 @@
 package by.tms.eshop.dto;
 
+import java.io.Serializable;
+import java.math.BigDecimal;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.io.Serializable;
-import java.math.BigDecimal;
 
 @Getter
 @Setter

@@ -1,5 +1,14 @@
 package by.tms.eshop.controller;
 
+import static by.tms.eshop.utils.Constants.MappingPath.CREATE_USER;
+import static by.tms.eshop.utils.Constants.MappingPath.LOGIN;
+import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_ESHOP;
+import static by.tms.eshop.utils.Constants.MappingPath.SUCCESS_REGISTER;
+import static by.tms.eshop.utils.ControllerUtils.closeUserSession;
+import static by.tms.eshop.utils.ControllerUtils.fillUserValidationError;
+import static by.tms.eshop.utils.ControllerUtils.fillsLoginVerifyErrors;
+import static by.tms.eshop.utils.ControllerUtils.setViewByAccessPermission;
+
 import by.tms.eshop.dto.UserFormDto;
 import by.tms.eshop.service.ShopFacade;
 import by.tms.eshop.validator.ExcludeLogValidation;
@@ -16,15 +25,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
-
-import static by.tms.eshop.utils.Constants.MappingPath.CREATE_USER;
-import static by.tms.eshop.utils.Constants.MappingPath.LOGIN;
-import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_ESHOP;
-import static by.tms.eshop.utils.Constants.MappingPath.SUCCESS_REGISTER;
-import static by.tms.eshop.utils.ControllerUtils.closeUserSession;
-import static by.tms.eshop.utils.ControllerUtils.fillUserValidationError;
-import static by.tms.eshop.utils.ControllerUtils.fillsLoginVerifyErrors;
-import static by.tms.eshop.utils.ControllerUtils.setViewByAccessPermission;
 
 @Controller
 @RequiredArgsConstructor

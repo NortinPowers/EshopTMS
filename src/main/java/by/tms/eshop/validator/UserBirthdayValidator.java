@@ -2,10 +2,9 @@ package by.tms.eshop.validator;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import org.springframework.stereotype.Component;
-
 import java.time.LocalDate;
 import java.time.Period;
+import org.springframework.stereotype.Component;
 
 @Component
 public class UserBirthdayValidator implements ConstraintValidator<UserBirthdayConstraint, LocalDate> {

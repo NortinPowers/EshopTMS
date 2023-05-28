@@ -1,11 +1,10 @@
 package by.tms.eshop.service;
 
 import by.tms.eshop.dto.ProductDto;
-import org.springframework.data.domain.Pageable;
-import org.springframework.web.servlet.ModelAndView;
-
 import java.math.BigDecimal;
 import java.util.Set;
+import org.springframework.data.domain.Pageable;
+import org.springframework.web.servlet.ModelAndView;
 
 public interface ProductService {
 

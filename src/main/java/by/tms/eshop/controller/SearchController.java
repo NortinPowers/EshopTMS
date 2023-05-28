@@ -1,5 +1,14 @@
 package by.tms.eshop.controller;
 
+import static by.tms.eshop.utils.Constants.Attributes.PRODUCT_CATEGORIES;
+import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_SEARCH_RESULT_SAVE;
+import static by.tms.eshop.utils.Constants.MappingPath.SEARCH_PATH;
+import static by.tms.eshop.utils.Constants.RequestParameters.FILTER;
+import static by.tms.eshop.utils.Constants.RequestParameters.SEARCH_CONDITION;
+import static by.tms.eshop.utils.Constants.RequestParameters.SELECT;
+import static by.tms.eshop.utils.ControllerUtils.removeUnsavedAttribute;
+import static by.tms.eshop.utils.ControllerUtils.setFilterAttribute;
+
 import by.tms.eshop.service.ProductCategoryService;
 import by.tms.eshop.service.ShopFacade;
 import jakarta.servlet.http.HttpServletRequest;
@@ -10,15 +19,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
-
-import static by.tms.eshop.utils.Constants.Attributes.PRODUCT_CATEGORIES;
-import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_SEARCH_RESULT_SAVE;
-import static by.tms.eshop.utils.Constants.MappingPath.SEARCH_PATH;
-import static by.tms.eshop.utils.Constants.RequestParameters.FILTER;
-import static by.tms.eshop.utils.Constants.RequestParameters.SEARCH_CONDITION;
-import static by.tms.eshop.utils.Constants.RequestParameters.SELECT;
-import static by.tms.eshop.utils.ControllerUtils.removeUnsavedAttribute;
-import static by.tms.eshop.utils.ControllerUtils.setFilterAttribute;
 
 @RestController
 @RequiredArgsConstructor

@@ -3,9 +3,8 @@ package by.tms.eshop.service;
 import by.tms.eshop.domain.Product;
 import by.tms.eshop.dto.OrderDto;
 import by.tms.eshop.dto.ProductDto;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
+import org.springframework.transaction.annotation.Transactional;
 
 public interface OrderService {
 

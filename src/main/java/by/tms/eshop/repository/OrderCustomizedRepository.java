@@ -1,7 +1,6 @@
 package by.tms.eshop.repository;
 
 import by.tms.eshop.domain.Product;
-
 import java.util.List;
 
 public interface OrderCustomizedRepository {

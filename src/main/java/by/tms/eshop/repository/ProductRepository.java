@@ -1,14 +1,13 @@
 package by.tms.eshop.repository;
 
 import by.tms.eshop.domain.Product;
+import java.math.BigDecimal;
+import java.util.Optional;
+import java.util.Set;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-
-import java.math.BigDecimal;
-import java.util.Optional;
-import java.util.Set;
 
 public interface ProductRepository extends JpaRepository<Product, Long>, ProductCustomizedRepository {
 

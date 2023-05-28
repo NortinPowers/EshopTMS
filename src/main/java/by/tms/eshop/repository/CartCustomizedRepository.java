@@ -2,9 +2,8 @@ package by.tms.eshop.repository;
 
 import by.tms.eshop.dto.LocationDto;
 import by.tms.eshop.dto.ProductDto;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-
 import java.util.List;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 
 public interface CartCustomizedRepository {
 

@@ -1,11 +1,11 @@
 package by.tms.eshop.controller;
 
+import static by.tms.eshop.utils.Constants.MappingPath.ERROR_500;
+import static by.tms.eshop.utils.Constants.MappingPath.SOME_ERROR;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
-
-import static by.tms.eshop.utils.Constants.MappingPath.ERROR_500;
-import static by.tms.eshop.utils.Constants.MappingPath.SOME_ERROR;
 
 @RestController
 public class ExceptionController {

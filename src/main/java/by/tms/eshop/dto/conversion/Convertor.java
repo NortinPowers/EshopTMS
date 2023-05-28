@@ -9,15 +9,14 @@ import by.tms.eshop.dto.OrderDto;
 import by.tms.eshop.dto.ProductDto;
 import by.tms.eshop.dto.UserDto;
 import by.tms.eshop.dto.UserFormDto;
-import lombok.experimental.UtilityClass;
-
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.stereotype.Component;
 
-@UtilityClass
-public class DtoConverter {
+@Component
+public class Convertor {
 
-    public static ProductDto makeProductDtoModelTransfer(Product product) {
+    public ProductDto makeProductDtoModelTransfer(Product product) {
         return ProductDto.builder()
                 .id(product.getId())
                 .price(product.getPrice())
@@ -27,7 +26,7 @@ public class DtoConverter {
                 .build();
     }
 
-    public static Product makeProductModelTransfer(ProductDto productDto) {
+    public Product makeProductModelTransfer(ProductDto productDto) {
         return Product.builder()
                 .id(productDto.getId())
                 .price(productDto.getPrice())
@@ -39,7 +38,7 @@ public class DtoConverter {
                 .build();
     }
 
-    public static UserDto makeUserDtoModelTransfer(User user) {
+    public UserDto makeUserDtoModelTransfer(User user) {
         return UserDto.builder()
                 .id(user.getId())
                 .login(user.getLogin())
@@ -50,7 +49,7 @@ public class DtoConverter {
                 .build();
     }
 
-    public static User makeUserModelTransfer(UserFormDto user) {
+    public User makeUserModelTransfer(UserFormDto user) {
         return User.builder()
                 .id(user.getId())
                 .login(user.getLogin())
@@ -62,27 +61,27 @@ public class DtoConverter {
                 .build();
     }
 
-    public static List<Product> getProductsFromProductsDtos(List<ProductDto> productsDto) {
+    public List<Product> getProductsFromProductsDtos(List<ProductDto> productsDto) {
         return productsDto.stream()
-                .map(DtoConverter::makeProductModelTransfer)
+                .map(this::makeProductModelTransfer)
                 .toList();
     }
 
-    public static LocationDto selectCart() {
+    public LocationDto selectCart() {
         return LocationDto.builder()
                 .cart(true)
                 .favorite(false)
                 .build();
     }
 
-    public static LocationDto selectFavorite() {
+    public LocationDto selectFavorite() {
         return LocationDto.builder()
                 .cart(false)
                 .favorite(true)
                 .build();
     }
 
-    public static OrderDto makeOrderDtoModelTransfer(Order order) {
+    public OrderDto makeOrderDtoModelTransfer(Order order) {
         return OrderDto.builder()
                 .id(order.getId())
                 .name(order.getName())
@@ -92,9 +91,9 @@ public class DtoConverter {
                 .build();
     }
 
-    public static List<OrderDto> getOrdersDtosFromOrders(List<Order> orders) {
+    public List<OrderDto> getOrdersDtosFromOrders(List<Order> orders) {
         return orders.stream()
-                .map(DtoConverter::makeOrderDtoModelTransfer)
+                .map(this::makeOrderDtoModelTransfer)
                 .collect(Collectors.toList());
     }
 }
