@@ -24,13 +24,13 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class CartRepositoryImpl implements CartCustomizedRepository {
 
+    private static final String GET_CART_PRODUCTS_BY_USER_ID = "FROM Cart WHERE user.id = :userId AND cart = true";
+    private static final String GET_CURRENT_CART = "FROM Cart WHERE user.id = :userId AND product.id = :productId AND cart = true";
+    private static final String GET_CURRENT_FAVORITE = "FROM Cart WHERE user.id = :userId AND product.id = :productId AND favorite = true";
+    private static final String GET_FAVORITE_PRODUCTS_BY_USER_ID = "FROM Cart WHERE user.id = :userId AND favorite = true";
+
     @PersistenceContext
     private final EntityManager entityManager;
-
-    private static final String GET_CURRENT_FAVORITE = "FROM Cart WHERE user.id = :userId AND product.id = :productId AND favorite = true";
-    private static final String GET_CURRENT_CART = "FROM Cart WHERE user.id = :userId AND product.id = :productId AND cart = true";
-    private static final String GET_CART_PRODUCTS_BY_USER_ID = "FROM Cart WHERE user.id = :userId AND cart = true";
-    private static final String GET_FAVORITE_PRODUCTS_BY_USER_ID = "FROM Cart WHERE user.id = :userId AND favorite = true";
 
     @Override
     public void addSelectedProduct(Long userId, Long productId, LocationDto locationDto) {
@@ -110,7 +110,7 @@ public class CartRepositoryImpl implements CartCustomizedRepository {
     private void modifyProductCount(Long userId, Long productId, boolean up) {
         Integer productCount = getCartProductCount(userId, productId);
         productCount = getModifyCount(up, productCount);
-        Cart cart = getCurrentCart(userId, productId, GET_CURRENT_CART, entityManager);
+        Cart cart = getCurrentCart(userId, productId, GET_CURRENT_CART);
         cart.setCount(productCount);
         entityManager.merge(cart);
     }
@@ -122,7 +122,7 @@ public class CartRepositoryImpl implements CartCustomizedRepository {
     }
 
     private void deleteProductByMark(Long userId, Long productId, String query) {
-        Cart cart = getCurrentCart(userId, productId, query, entityManager);
+        Cart cart = getCurrentCart(userId, productId, query);
         entityManager.remove(cart);
     }
 
@@ -133,6 +133,7 @@ public class CartRepositoryImpl implements CartCustomizedRepository {
                        .isEmpty();
     }
 
+    @SuppressWarnings("checkstyle:ParameterAssignment")
     private Integer getModifyCount(boolean up, Integer productCount) {
         return up ? ++productCount : --productCount;
     }
@@ -151,7 +152,7 @@ public class CartRepositoryImpl implements CartCustomizedRepository {
                    .build();
     }
 
-    private Cart getCurrentCart(Long userId, Long productId, String query, EntityManager entityManager) {
+    private Cart getCurrentCart(Long userId, Long productId, String query) {
         return entityManager.createQuery(query, Cart.class)
                             .setParameter(USER_ID, userId)
                             .setParameter(PRODUCT_ID, productId)

@@ -9,16 +9,14 @@ public class Constants {
     public static final String CONVERSATION = "conversation";
     public static final String SAVE = "save";
     public static final String ALL = "all";
-    public static final String TRUE = "true";
+    @SuppressWarnings({"checkstyle:MultipleStringLiterals", "checkstyle:AnnotationLocation"}) public static final String TRUE = "true";
     public static final Long MAX_COMPLETION_TIME = 2000L;
-    public static final String AUTHORIZATION_PATTERN = "[a-zA-Z0-9]{4,30}";
+    @SuppressWarnings({"checkstyle:MultipleStringLiterals", "checkstyle:AnnotationLocation"}) public static final String AUTHORIZATION_PATTERN = "[a-zA-Z0-9]{4,30}";
     public static final String NAMES_PATTERN = "[a-zA-Z0-9]{4,30}";
 
     @UtilityClass
     public class QueryParameter {
-        public static final String CONDITION = "condition";
-        public static final String MIN_PRICE = "minPrice";
-        public static final String MAX_PRICE = "maxPrice";
+
         public static final String USER_ID = "userId";
         public static final String PRODUCT_ID = "productId";
         public static final String CATEGORY = "category";

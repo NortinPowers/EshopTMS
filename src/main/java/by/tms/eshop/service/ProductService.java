@@ -14,7 +14,9 @@ public interface ProductService {
 
     String getProductCategoryValue(Long productId);
 
-    Set<ProductDto> getFoundedProducts(String searchCondition);
+    Set<ProductDto> getFoundedProducts(String condition);
 
-    Set<ProductDto> selectAllProductsByFilter(String type, BigDecimal minPrice, BigDecimal maxPrice);
+    Set<ProductDto> selectAllProductsByFilter(BigDecimal minPrice, BigDecimal maxPrice);
+
+    Set<ProductDto> selectProductsFromCategoryByFilter(String category, BigDecimal minPrice, BigDecimal maxPrice);
 }

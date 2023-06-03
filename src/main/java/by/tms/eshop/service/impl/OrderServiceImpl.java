@@ -4,11 +4,13 @@ import static by.tms.eshop.utils.ControllerUtils.createOrderNumber;
 
 import by.tms.eshop.domain.Order;
 import by.tms.eshop.domain.Product;
+import by.tms.eshop.domain.User;
 import by.tms.eshop.dto.OrderDto;
 import by.tms.eshop.dto.ProductDto;
 import by.tms.eshop.dto.conversion.Convertor;
 import by.tms.eshop.repository.OrderRepository;
 import by.tms.eshop.service.OrderService;
+import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -24,12 +26,21 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Long createOrder(Long id) {
         String orderNumber = generateOrderNumber(id);
-        return orderRepository.createOrder(orderNumber, id);
+        Order order = Order.builder()
+                           .name(orderNumber)
+                           .date(LocalDate.now())
+                           .user(User.builder()
+                                     .id(id)
+                                     .build())
+                           .build();
+        orderRepository.save(order);
+        return order.getId();
     }
 
     @Override
     public void saveProductInOrderConfigurations(Long id, List<Product> products) {
-        orderRepository.saveProductInOrderConfigurations(id, products);
+        Order order = orderRepository.findOrderById(id);
+        order.setProducts(products);
     }
 
     @Override

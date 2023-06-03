@@ -1,5 +1,6 @@
 package by.tms.eshop.service;
 
+import static by.tms.eshop.utils.Constants.ALL;
 import static by.tms.eshop.utils.Constants.Attributes.FILTER_FOUND_PRODUCTS;
 import static by.tms.eshop.utils.Constants.Attributes.FOUND_PRODUCTS;
 import static by.tms.eshop.utils.Constants.Attributes.LOGIN_ERROR;
@@ -82,7 +83,11 @@ public class ShopFacade {
             session.setAttribute(FILTER_FOUND_PRODUCTS, getProductByFilter(session, category, minPrice, maxPrice));
             modelAndView.setViewName(REDIRECT_TO_SEARCH_FILTER_TRUE_RESULT_SAVE);
         } else {
-            session.setAttribute(FOUND_PRODUCTS, productService.selectAllProductsByFilter(category, minPrice, maxPrice));
+            if (!ALL.equals(category)) {
+                session.setAttribute(FOUND_PRODUCTS, productService.selectProductsFromCategoryByFilter(category, minPrice, maxPrice));
+            } else {
+                session.setAttribute(FOUND_PRODUCTS, productService.selectAllProductsByFilter(minPrice, maxPrice));
+            }
             modelAndView.setViewName(REDIRECT_TO_SEARCH_RESULT_SAVE);
         }
         return modelAndView;

@@ -42,6 +42,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.slf4j.MDC;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.servlet.ModelAndView;
 
 @Slf4j
@@ -76,6 +77,7 @@ public class ControllerUtils {
         return StringUtils.isNotBlank(value) ? new BigDecimal(value) : defaultValue;
     }
 
+    @SuppressWarnings("checkstyle:ParameterAssignment")
     public static Set<ProductDto> applyPriceFilterOnProducts(BigDecimal minPrice, BigDecimal maxPrice, Set<ProductDto> products) {
         products = products.stream()
                            .filter(product -> product.getPrice().compareTo(minPrice) > 0 && product.getPrice().compareTo(maxPrice) < 0)
@@ -83,6 +85,7 @@ public class ControllerUtils {
         return products;
     }
 
+    @SuppressWarnings("checkstyle:ParameterAssignment")
     public static Set<ProductDto> applyTypeFilterOnProducts(String type, Set<ProductDto> products) {
         if (!ALL.equals(type)) {
             products = products.stream()
@@ -106,8 +109,10 @@ public class ControllerUtils {
 
     public static void fillError(String field, ModelAndView modelAndView, BindingResult bindingResult) {
         if (bindingResult.hasFieldErrors(field)) {
-            modelAndView.addObject(field + "Error", Objects.requireNonNull(bindingResult.getFieldError(field))
-                                                           .getDefaultMessage());
+            FieldError fieldError = bindingResult.getFieldError(field);
+            if (fieldError != null) {
+                modelAndView.addObject(field + "Error", fieldError.getDefaultMessage());
+            }
         }
     }
 

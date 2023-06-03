@@ -15,6 +15,7 @@ import java.math.BigDecimal;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -54,13 +55,20 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Set<ProductDto> getFoundedProducts(String searchCondition) {
-        return getProductDtoSet(productRepository.getFoundedProducts(searchCondition));
+    public Set<ProductDto> getFoundedProducts(String condition) {
+        Set<Product> products = productRepository.getProductsByConditionInName(condition);
+        products.addAll(productRepository.getProductsByConditionInInfo(condition));
+        return products.stream().map(convertor::makeProductDtoModelTransfer).collect(Collectors.toSet());
     }
 
     @Override
-    public Set<ProductDto> selectAllProductsByFilter(String type, BigDecimal minPrice, BigDecimal maxPrice) {
-        return getProductDtoSet(productRepository.selectAllProductsByFilter(type, minPrice, maxPrice));
+    public Set<ProductDto> selectAllProductsByFilter(BigDecimal minPrice, BigDecimal maxPrice) {
+        return getProductDtoSet(productRepository.selectAllProductsByFilter(minPrice, maxPrice));
+    }
+
+    @Override
+    public Set<ProductDto> selectProductsFromCategoryByFilter(String category, BigDecimal minPrice, BigDecimal maxPrice) {
+        return getProductDtoSet(productRepository.selectProductsFromCategoryByFilter(category, minPrice, maxPrice));
     }
 
     private Set<ProductDto> getProductDtoSet(Set<Product> convertedProducts) {
