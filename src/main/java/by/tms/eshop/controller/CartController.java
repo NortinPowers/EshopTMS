@@ -58,7 +58,7 @@ public class CartController {
     }
 
     @GetMapping("/add-cart")
-    public ModelAndView AddProductToCart(HttpSession session,
+    public ModelAndView addProductToCart(HttpSession session,
                                          @RequestParam(name = ID) Long productId,
                                          @RequestParam(name = SHOP) String shopFlag,
                                          @RequestParam(name = LOCATION) String location) {

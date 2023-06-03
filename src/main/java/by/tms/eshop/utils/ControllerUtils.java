@@ -56,9 +56,9 @@ public class ControllerUtils {
         HttpSession session = req.getSession();
         session.setAttribute(USER_ACCESS_PERMISSION, userDto);
         log.info("The user with a login " + userDto.getLogin() + " is logged in");
-        String userUUID = randomUUID().toString();
-        MDC.put(CONVERSATION, userUUID);
-        session.setAttribute(USER_UUID, userUUID);
+        String userUuid = randomUUID().toString();
+        MDC.put(CONVERSATION, userUuid);
+        session.setAttribute(USER_UUID, userUuid);
         log.info("User with the login " + userDto.getLogin() + " has been assigned a UUID");
     }
 
@@ -113,8 +113,8 @@ public class ControllerUtils {
 
     public static void closeUserSession(HttpSession session) {
         UserDto userDto = getUserDto(session);
-        String userUUID = (String) session.getAttribute(USER_UUID);
-        log.info("User [" + userUUID + "] with a login " + userDto.getLogin() + " logged out of the system");
+        String userUuid = (String) session.getAttribute(USER_UUID);
+        log.info("User [" + userUuid + "] with a login " + userDto.getLogin() + " logged out of the system");
         session.removeAttribute(USER_ACCESS_PERMISSION);
         session.removeAttribute(USER_UUID);
         session.invalidate();

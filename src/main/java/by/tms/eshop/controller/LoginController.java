@@ -35,7 +35,7 @@ public class LoginController {
     private final ShopFacade shopFacade;
 
     @GetMapping("/login")
-    public ModelAndView showLoginPage(HttpSession session,  ModelAndView modelAndView ) {
+    public ModelAndView showLoginPage(HttpSession session, ModelAndView modelAndView) {
         setViewByAccessPermission(session, modelAndView);
         return modelAndView;
     }

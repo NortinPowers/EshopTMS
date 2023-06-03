@@ -18,7 +18,7 @@ public class HomeController {
 
     private final ProductCategoryService productCategoryService;
 
-    @GetMapping(value = {"/","/eshop"})
+    @GetMapping(value = {"/", "/eshop"})
     public ModelAndView redirectToEshopPage(ModelAndView modelAndView) {
         List<String> productCategories = productCategoryService.getProductCategories();
         modelAndView.addObject(PRODUCT_CATEGORIES, productCategories);

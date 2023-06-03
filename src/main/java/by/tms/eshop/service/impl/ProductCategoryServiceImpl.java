@@ -13,7 +13,7 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
     private final ProductCategoryRepository productCategoryRepository;
 
     @Override
-    public  List<String> getProductCategories() {
+    public List<String> getProductCategories() {
         return productCategoryRepository.findAllCategory();
     }
 }
