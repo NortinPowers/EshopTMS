@@ -1,13 +1,10 @@
 package by.tms.eshop.controller;
 
 import static by.tms.eshop.utils.Constants.MappingPath.CREATE_USER;
-import static by.tms.eshop.utils.Constants.MappingPath.LOGIN;
 import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_ESHOP;
 import static by.tms.eshop.utils.Constants.MappingPath.SUCCESS_REGISTER;
 import static by.tms.eshop.utils.ControllerUtils.closeUserSession;
 import static by.tms.eshop.utils.ControllerUtils.fillUserValidationError;
-import static by.tms.eshop.utils.ControllerUtils.fillsLoginVerifyErrors;
-import static by.tms.eshop.utils.ControllerUtils.setViewByAccessPermission;
 
 import by.tms.eshop.dto.UserFormDto;
 import by.tms.eshop.service.ShopFacade;
@@ -34,25 +31,40 @@ public class LoginController {
     private final UserValidator userValidator;
     private final ShopFacade shopFacade;
 
-    @GetMapping("/login")
-    public ModelAndView showLoginPage(HttpSession session, ModelAndView modelAndView) {
-        setViewByAccessPermission(session, modelAndView);
-        return modelAndView;
-    }
+//    @GetMapping("/login")
+//    public ModelAndView showLoginPage(HttpSession session, ModelAndView modelAndView) {
+//        setViewByAccessPermission(session, modelAndView);
+//        return modelAndView;
+//    }
 
-    @PostMapping("/login-verify")
-    public ModelAndView showLoginVerifyPage(HttpServletRequest request,
-                                            @Validated(Default.class) @ModelAttribute("user") UserFormDto user,
-                                            BindingResult bindingResult,
-                                            ModelAndView modelAndView) {
-        if (bindingResult.hasErrors()) {
-            fillsLoginVerifyErrors(bindingResult, modelAndView);
-            modelAndView.setViewName(LOGIN);
-        } else {
-            shopFacade.checkLoginUser(request, user, modelAndView);
-        }
-        return modelAndView;
-    }
+    //new
+//    @GetMapping("/login")
+//    public ModelAndView showLoginPage(ModelAndView modelAndView) {
+//        modelAndView.setViewName("login");
+////        modelAndView.setViewName("login/login");
+//        return modelAndView;
+//    }
+
+//    @PostMapping("/login")
+//    public ModelAndView showSuccess(ModelAndView modelAndView) {
+//        modelAndView.setViewName("home/eshop");
+//        return modelAndView;
+//    }
+
+//    @PostMapping("/login-verify")
+//    @PostMapping("/login")
+//    public ModelAndView showLoginVerifyPage(HttpServletRequest request,
+//                                            @Validated(Default.class) @ModelAttribute("user") UserFormDto user,
+//                                            BindingResult bindingResult,
+//                                            ModelAndView modelAndView) {
+//        if (bindingResult.hasErrors()) {
+//            fillsLoginVerifyErrors(bindingResult, modelAndView);
+//            modelAndView.setViewName(LOGIN);
+//        } else {
+//            shopFacade.checkLoginUser(request, user, modelAndView);
+//        }
+//        return modelAndView;
+//    }
 
     @GetMapping("/logout")
     public ModelAndView showLogoutPage(HttpSession session) {
