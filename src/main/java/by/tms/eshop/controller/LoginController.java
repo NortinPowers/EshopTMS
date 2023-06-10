@@ -30,6 +30,8 @@ public class LoginController {
 
     private final UserValidator userValidator;
     private final ShopFacade shopFacade;
+//    private final AuthenticationManager authenticationManager;
+//    private final SecurityContextRepository securityContextRepository = new HttpSessionSecurityContextRepository();
 
 //    @GetMapping("/login")
 //    public ModelAndView showLoginPage(HttpSession session, ModelAndView modelAndView) {
@@ -51,9 +53,10 @@ public class LoginController {
 //        return modelAndView;
 //    }
 
-//    @PostMapping("/login-verify")
+    //    @PostMapping("/login-verify")
 //    @PostMapping("/login")
 //    public ModelAndView showLoginVerifyPage(HttpServletRequest request,
+//                                            HttpServletResponse response,
 //                                            @Validated(Default.class) @ModelAttribute("user") UserFormDto user,
 //                                            BindingResult bindingResult,
 //                                            ModelAndView modelAndView) {
@@ -61,7 +64,18 @@ public class LoginController {
 //            fillsLoginVerifyErrors(bindingResult, modelAndView);
 //            modelAndView.setViewName(LOGIN);
 //        } else {
-//            shopFacade.checkLoginUser(request, user, modelAndView);
+//            UsernamePasswordAuthenticationToken token = UsernamePasswordAuthenticationToken.unauthenticated(
+//                    user.getName(), user.getPassword());
+//            Authentication authentication = authenticationManager.authenticate(token);
+//            SecurityContext context = createEmptyContext();
+//            context.setAuthentication(authentication);
+//            setContext(context);
+//            securityContextRepository.saveContext(context, request, response);
+////            shopFacade.checkLoginUser(request, user, modelAndView);
+//            Object principal = authentication.getPrincipal();
+//            System.out.println(principal.toString());
+//
+////            shopFacade.saveUserOldStyle(request, user, modelAndView);
 //        }
 //        return modelAndView;
 //    }

@@ -12,7 +12,7 @@
 </head>
 <body>
 <div class="login-box">
-    <form action="/create-user" method="post" class="registration">
+    <form th:action="@{/create-user}" method="post" class="registration">
         <h1>Register form</h1>
         <div class="user-box">
             <label for="login">
@@ -93,7 +93,7 @@
         <div style="margin-top: 15px">
             <input type="submit" value="Register" class='validateBtn'/>
         </div>
-        <a th:href="@{/login}" class="buttonType">Back</a>
+        <a th:href="@{/templates/login}" class="buttonType">Back</a>
     </form>
 </div>
 <script type="text/javascript" src="/js/validate.js"></script>

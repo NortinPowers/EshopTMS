@@ -28,9 +28,12 @@ public class Constants {
         public static final String ESHOP = "home/eshop";
         public static final String PRODUCTS = "product/products";
         public static final String PRODUCT = "product/product";
-        public static final String LOGIN = "login/login";
-        public static final String CREATE_USER = "login/create-user";
-        public static final String SUCCESS_REGISTER = "login/success-register";
+        public static final String LOGIN = "auth/login";
+//        public static final String LOGIN = "login/login";
+        public static final String CREATE_USER = "auth/create-user";
+//        public static final String CREATE_USER = "login/create-user";
+        public static final String SUCCESS_REGISTER = "auth/success-register";
+//        public static final String SUCCESS_REGISTER = "login/success-register";
         public static final String ACCOUNT = "account/account";
         public static final String SEARCH_PATH = "search/search";
         public static final String SHOPPING_CART = "cart/shopping-cart";

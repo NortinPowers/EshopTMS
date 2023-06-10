@@ -3,11 +3,11 @@
         <ul class="nav nav-pills ">
             <li class="nav-item">
                 <a class="btn btn-outline-warning"
-                   href="/eshop">Home</a>
+                   th:href="@{/eshop}">Home</a>
             </li>
             <li class="nav-item">
                 <a class="btn btn-outline-warning ml-2"
-                   href="/search">
+                   th:href="@{/search}">
                     <div class="text-center">
                         <i class="bi bi-search"></i>
                     </div>
@@ -24,7 +24,7 @@
         </ul>
         <th:block th:if="${authorizedUser == null}">
             <a id="loginButton" class="form-inline my-2 my-lg-0" style="text-decoration: none"
-               href="/login">
+               th:href="@{/login}">
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Login</button>
             </a>
         </th:block>
@@ -34,13 +34,14 @@
             <ul class="nav nav-pills ">
                 <li class="nav-item">
                     <a id="accountButton"
-                       href="/account">
+                       th:href="@{/account}">
                         <button class="btn btn-outline-success mr-2" type="submit">Account</button>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a id="exitButton"
-                       href="/logout">
+                       th:href="@{/logout}">
+<!--                       th:href="@{/logout}" methods="post">-->
                         <button class="btn btn-outline-success" type="submit">Exit</button>
                     </a>
                 </li>

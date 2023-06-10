@@ -118,6 +118,12 @@ public class ShopFacade {
         }
     }
 
+//    public void saveUserOldStyle(HttpServletRequest request, User user, ModelAndView modelAndView) {
+//        UserDto userDto = convertor.makeUserDtoModelTransfer(user);
+//        saveUserSession(request, userDto);
+//        modelAndView.setViewName(REDIRECT_TO_ESHOP);
+//    }
+
     private Set<ProductDto> getProductByFilter(HttpSession session, String type, BigDecimal minPrice, BigDecimal maxPrice) {
         Set<ProductDto> products;
         products = (Set<ProductDto>) session.getAttribute(FOUND_PRODUCTS);
