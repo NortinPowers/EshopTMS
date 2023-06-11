@@ -102,7 +102,7 @@ public class LoginController {
             fillUserValidationError(bindingResult, modelAndView);
             modelAndView.setViewName(CREATE_USER);
         } else {
-            shopFacade.createAndLoginUser(request, user);
+            shopFacade.createUser(request, user);
             modelAndView.setViewName(SUCCESS_REGISTER);
         }
         return modelAndView;

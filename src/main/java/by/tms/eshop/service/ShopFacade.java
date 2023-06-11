@@ -39,6 +39,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -51,6 +52,7 @@ public class ShopFacade {
     private final ProductService productService;
     private final UserService userService;
     private final Convertor convertor;
+    private final PasswordEncoder passwordEncoder;
 
     public void carriesPurchase(Long userId) {
         List<ProductDto> productsDto = cartService.getPurchasedProducts(userId, convertor.selectCart());
@@ -101,13 +103,17 @@ public class ShopFacade {
         }
     }
 
-    public void createAndLoginUser(HttpServletRequest request, UserFormDto user) {
+//    public void createAndLoginUser(HttpServletRequest request, UserFormDto user) {
+//        User userEntity = convertor.makeUserModelTransfer(user);
+//        userService.addUser(userEntity);
+//        saveUserSession(request, convertor.makeUserDtoModelTransfer(userEntity));
+//    }
+
+    public void createUser(HttpServletRequest request, UserFormDto user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         User userEntity = convertor.makeUserModelTransfer(user);
         userService.addUser(userEntity);
-
         ControllerUtils.markUser(request, convertor.makeUserDtoModelTransfer(userEntity));
-
-//        saveUserSession(request, convertor.makeUserDtoModelTransfer(userEntity));
     }
 
     public void checkLoginUser(HttpServletRequest request, UserFormDto user, ModelAndView modelAndView) {
