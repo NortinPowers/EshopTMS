@@ -1,5 +1,7 @@
 package by.tms.eshop.config;
 
+import static by.tms.eshop.utils.Constants.MappingPath.SUCCESS_REGISTER;
+
 import by.tms.eshop.service.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -32,7 +34,7 @@ public class SecurityConfig {
 //                .sessionManagement((session) -> session
 //                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(requests -> requests
-                                               .requestMatchers("/", "/eshop", "/search", "/search-filter", "/search-param", "/products-page", "/product/*", "/create-user")
+                                               .requestMatchers("/", "/eshop", "/search", "/search-filter", "/search-param", "/products-page", "/product/*", "/create-user", SUCCESS_REGISTER)
                                                .permitAll()
                                                .requestMatchers(PathRequest.toStaticResources().atCommonLocations())
                                                .permitAll()

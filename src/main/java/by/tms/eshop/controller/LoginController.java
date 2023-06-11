@@ -83,6 +83,7 @@ public class LoginController {
     @GetMapping("/logout")
     public ModelAndView showLogoutPage(HttpSession session) {
         closeUserSession(session);
+        //fix
         return new ModelAndView(REDIRECT_TO_ESHOP);
     }
 

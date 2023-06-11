@@ -30,6 +30,7 @@ import by.tms.eshop.dto.ProductDto;
 import by.tms.eshop.dto.UserDto;
 import by.tms.eshop.dto.UserFormDto;
 import by.tms.eshop.dto.conversion.Convertor;
+import by.tms.eshop.utils.ControllerUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import java.math.BigDecimal;
@@ -103,7 +104,10 @@ public class ShopFacade {
     public void createAndLoginUser(HttpServletRequest request, UserFormDto user) {
         User userEntity = convertor.makeUserModelTransfer(user);
         userService.addUser(userEntity);
-        saveUserSession(request, convertor.makeUserDtoModelTransfer(userEntity));
+
+        ControllerUtils.markUser(request, convertor.makeUserDtoModelTransfer(userEntity));
+
+//        saveUserSession(request, convertor.makeUserDtoModelTransfer(userEntity));
     }
 
     public void checkLoginUser(HttpServletRequest request, UserFormDto user, ModelAndView modelAndView) {

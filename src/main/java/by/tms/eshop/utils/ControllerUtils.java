@@ -63,6 +63,16 @@ public class ControllerUtils {
         log.info("User with the login " + userDto.getLogin() + " has been assigned a UUID");
     }
 
+    public static void markUser(HttpServletRequest req, UserDto userDto) {
+        HttpSession session = req.getSession();
+//        session.setAttribute(USER_ACCESS_PERMISSION, userDto);
+        log.info("The user with a login " + userDto.getLogin() + " is logged in");
+        String userUuid = randomUUID().toString();
+        MDC.put(CONVERSATION, userUuid);
+        session.setAttribute(USER_UUID, userUuid);
+        log.info("User with the login " + userDto.getLogin() + " has been assigned a UUID");
+    }
+
     public static String createOrderNumber(Long id) {
         String uuid = randomUUID().toString();
         return "#" + id + "-" + uuid;
@@ -116,11 +126,20 @@ public class ControllerUtils {
         }
     }
 
+//    public static void closeUserSession(HttpSession session) {
+//        UserDto userDto = getUserDto(session);
+//        String userUuid = (String) session.getAttribute(USER_UUID);
+//        log.info("User [" + userUuid + "] with a login " + userDto.getLogin() + " logged out of the system");
+//        session.removeAttribute(USER_ACCESS_PERMISSION);
+//        session.removeAttribute(USER_UUID);
+//        session.invalidate();
+//    }
+
     public static void closeUserSession(HttpSession session) {
         UserDto userDto = getUserDto(session);
         String userUuid = (String) session.getAttribute(USER_UUID);
         log.info("User [" + userUuid + "] with a login " + userDto.getLogin() + " logged out of the system");
-        session.removeAttribute(USER_ACCESS_PERMISSION);
+//        session.removeAttribute(USER_ACCESS_PERMISSION);
         session.removeAttribute(USER_UUID);
         session.invalidate();
     }

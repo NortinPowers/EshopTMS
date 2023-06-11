@@ -1,51 +1,51 @@
-<!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
-<head>
-  <title>Login</title>
-  <link rel="stylesheet" href="/css/page.css">
-  <style>
-    p.error {
-      color: #f57b07;
-      padding-left: 160px;
-      font-size: large;
-    }
+<!--<!DOCTYPE html>-->
+<!--<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">-->
+<!--<head>-->
+<!--  <title>Login</title>-->
+<!--  <link rel="stylesheet" href="/css/page.css">-->
+<!--  <style>-->
+<!--    p.error {-->
+<!--      color: #f57b07;-->
+<!--      padding-left: 160px;-->
+<!--      font-size: large;-->
+<!--    }-->
 
-    div.error {
-      color: #f57b07;
-      padding-left: 160px;
-      font-size: large;
-    }
-  </style>
-</head>
-<body>
-<div th:if="${param.error}" style="color: #ff1500; font-size: large">
-  Invalid username and password.
-</div>
-<div th:if="${param.logout}">
-  You have been logged out.
-</div>
-<div class="login-box">
-  <h2>Login</h2>
-  <form th:action="@{/login}" method="post">
-    <div class="user-box">
-      <p class="error" style="padding-left: 200px" th:text="${loginError}"></p>
-      <input type="text" name="username" id="login" required="">
-      <label for="login">Username</label>
-    </div>
-    <div class="user-box">
-      <p class="error" th:text="${passwordError}"></p>
-      <input type="password" name="password" id="password" required="">
-      <label for="password">Password</label>
-    </div>
-    <div style="margin-top: 15px">
-      <input type="submit" value="Submit"/>
-    </div>
-<!--    <div><label> User Name : <input type="text" name="username"/> </label></div>-->
-<!--      <div><label> Password: <input type="password" name="password"/> </label></div>-->
-<!--      <div><input type="submit" value="Sign In"/></div>-->
-    <a th:href="@{/create-user}" class="button">Register</a>
-    <a th:href="@{/eshop}" class="button">Back</a>
-  </form>
-</div>
-</body>
-</html>
+<!--    div.error {-->
+<!--      color: #f57b07;-->
+<!--      padding-left: 160px;-->
+<!--      font-size: large;-->
+<!--    }-->
+<!--  </style>-->
+<!--</head>-->
+<!--<body>-->
+<!--<div th:if="${param.error}" style="color: #ff1500; font-size: large">-->
+<!--  Invalid username and password.-->
+<!--</div>-->
+<!--<div th:if="${param.logout}">-->
+<!--  You have been logged out.-->
+<!--</div>-->
+<!--<div class="login-box">-->
+<!--  <h2>Login</h2>-->
+<!--  <form th:action="@{/login}" method="post">-->
+<!--    <div class="user-box">-->
+<!--      <p class="error" style="padding-left: 200px" th:text="${loginError}"></p>-->
+<!--      <input type="text" name="username" id="login" required="">-->
+<!--      <label for="login">Username</label>-->
+<!--    </div>-->
+<!--    <div class="user-box">-->
+<!--      <p class="error" th:text="${passwordError}"></p>-->
+<!--      <input type="password" name="password" id="password" required="">-->
+<!--      <label for="password">Password</label>-->
+<!--    </div>-->
+<!--    <div style="margin-top: 15px">-->
+<!--      <input type="submit" value="Submit"/>-->
+<!--    </div>-->
+<!--&lt;!&ndash;    <div><label> User Name : <input type="text" name="username"/> </label></div>&ndash;&gt;-->
+<!--&lt;!&ndash;      <div><label> Password: <input type="password" name="password"/> </label></div>&ndash;&gt;-->
+<!--&lt;!&ndash;      <div><input type="submit" value="Sign In"/></div>&ndash;&gt;-->
+<!--    <a th:href="@{/create-user}" class="button">Register</a>-->
+<!--    <a th:href="@{/eshop}" class="button">Back</a>-->
+<!--  </form>-->
+<!--</div>-->
+<!--</body>-->
+<!--</html>-->
