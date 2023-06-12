@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 
 @Component
-public class Convertor {
+public class Converter {
 
     public ProductDto makeProductDtoModelTransfer(Product product) {
         return ProductDto.builder()

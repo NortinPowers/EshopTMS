@@ -1,4 +1,5 @@
-<th:block th:with="authorizedUser=${session.userAccessPermission}">
+<th:block xmlns:sec="http://www.w3.org/1999/xhtml">
+<!--<th:block th:with="authorizedUser=${session.userAccessPermission}" xmlns:sec="http://www.w3.org/1999/xhtml">-->
     <nav class="navbar navbar-dark bg-dark">
         <ul class="nav nav-pills ">
             <li class="nav-item">
@@ -13,7 +14,8 @@
                     </div>
                 </a>
             </li>
-            <th:block th:if="${authorizedUser != null}">
+<!--            <th:block th:if="${authorizedUser != null}">-->
+            <th:block sec:authorize="isAuthenticated()">
                 <li class="nav-item">
                     <a class="btn btn-outline-info ml-2" href="/favorites">Favorites</a>
                 </li>
@@ -22,15 +24,17 @@
                 </li>
             </th:block>
         </ul>
-        <th:block th:if="${authorizedUser == null}">
+<!--        <th:block th:if="${authorizedUser == null}">-->
+        <th:block sec:authorize="!isAuthenticated()">
             <a id="loginButton" class="form-inline my-2 my-lg-0" style="text-decoration: none"
                th:href="@{/login}">
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Login</button>
             </a>
         </th:block>
-        <th:block th:if="${authorizedUser != null}">
-            <h2 style="text-align: center; color: #e5a0a4; margin-right: 11%; text-shadow: 1px 1px 2px red, 0 0 1em #ff004d, 0 0 0.2em #ff0062;">
-                Welcome [[${authorizedUser.name}]]</h2>
+<!--        <th:block th:if="${authorizedUser != null}">-->
+        <th:block sec:authorize="isAuthenticated()">
+            <h2 style="text-align: center; color: #e5a0a4; margin-right: 11%; text-shadow: 1px 1px 2px red, 0 0 1em #ff004d, 0 0 0.2em #ff0062;" sec:authentication="name">
+                Welcome  <span th:remove="tag" sec:authentication="name">thymeleaf</span>! </h2>
             <ul class="nav nav-pills ">
                 <li class="nav-item">
                     <a id="accountButton"

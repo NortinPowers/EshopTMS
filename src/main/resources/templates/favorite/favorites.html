@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Favorites</title>
@@ -23,8 +23,10 @@
             <div class="card-footer text-center">
                 <small class="text-muted" style="font-size: 20px" th:text="${product.price + '$'}"></small>
             </div>
-            <th:block th:with="authorizedUser = ${session.userAccessPermission}">
-                <div th:if="${authorizedUser != null}">
+            <th:block>
+<!--            <th:block th:with="authorizedUser = ${session.userAccessPermission}">-->
+<!--                <div th:if="${authorizedUser != null}">-->
+                <div sec:authorize="isAuthenticated()">
                     <div class="btn-group btn-group-fill">
                         <a th:href="@{/add-cart(id=${product.id}, shop=true, location='none')}"
                            class="btn btn-success active" style="min-width: 8.8rem"

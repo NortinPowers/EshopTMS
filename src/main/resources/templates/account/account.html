@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Personal Account</title>
@@ -16,19 +16,23 @@
         <div class="row g-3" style="text-shadow: 1px 0 2px #e6e6e6;">
             <div class="col-md-5">
                 <p class="form-control border-success rounded-pill form-control form-control-lg"
-                   th:text="${models.userDto.name}"></p>
+                   sec:authentication="name"></p>
+<!--                   th:text="${models.userDto.name}"></p>-->
             </div>
             <div class="col-md-5">
                 <p class="form-control border-success rounded-pill form-control form-control-lg"
-                   th:text="${models.userDto.email}"></p>
+                   sec:authentication="principal.user.email"></p>
+<!--                   th:text="${models.userDto.email}"></p>-->
             </div>
             <div class="col-md-5">
                 <p class="form-control border-success rounded-pill form-control form-control-lg"
-                   th:text="${models.userDto.surname}"></p>
+                   </p>
+<!--                   th:text="${models.userDto.surname}"></p>-->
             </div>
             <div class="col-md-5">
                 <p class="form-control border-success rounded-pill form-control form-control-lg"
-                   th:text="${#temporals.format(models.userDto.birthday, 'dd MMMM yyyy')}"></p>
+                   </p>
+<!--                   th:text="${#temporals.format(models.userDto.birthday, 'dd MMMM yyyy')}"></p>-->
             </div>
         </div>
     </div>

@@ -24,7 +24,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 //        SecurityContextRepository repo = new HttpSessionSecurityContextRepository();
-        http
+        return http
                 .userDetailsService(customUserDetailsService)
 //                .sessionManagement((session) -> session
 //                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
@@ -52,11 +52,12 @@ public class SecurityConfig {
                 )
                 .rememberMe(Customizer.withDefaults())
                 .logout((logout) -> logout
-                        .clearAuthentication(true)
-                        .deleteCookies()
-                        .permitAll());
+//                        .clearAuthentication(true)
+//                        .deleteCookies()
+.permitAll())
+                .build();
 //                .logout(LogoutConfigurer::permitAll);
-        return http.build();
+//        return http.build();
     }
 
     @Bean

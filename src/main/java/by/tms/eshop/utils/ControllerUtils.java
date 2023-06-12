@@ -27,6 +27,7 @@ import static java.util.UUID.randomUUID;
 import by.tms.eshop.domain.User;
 import by.tms.eshop.dto.ProductDto;
 import by.tms.eshop.dto.UserDto;
+import by.tms.eshop.security.CustomUserDetail;
 import by.tms.eshop.utils.Constants.UserVerifyField;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -41,6 +42,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.slf4j.MDC;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.servlet.ModelAndView;
@@ -136,11 +139,16 @@ public class ControllerUtils {
 //    }
 
     public static void closeUserSession(HttpSession session) {
-        UserDto userDto = getUserDto(session);
-        String userUuid = (String) session.getAttribute(USER_UUID);
-        log.info("User [" + userUuid + "] with a login " + userDto.getLogin() + " logged out of the system");
+//        UserDto userDto = getUserDto(session);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetail principal = (CustomUserDetail) authentication.getPrincipal();
+        String login = principal.getUser().getLogin();
+//        String userUuid = (String) session.getAttribute(USER_UUID);
+        log.info("User with a login " + login + " logged out of the system");
+//        log.info("User [" + userUuid + "] with a login " + userDto.getLogin() + " logged out of the system");
 //        session.removeAttribute(USER_ACCESS_PERMISSION);
-        session.removeAttribute(USER_UUID);
+//        session.removeAttribute(USER_UUID);
+//        ??
         session.invalidate();
     }
 

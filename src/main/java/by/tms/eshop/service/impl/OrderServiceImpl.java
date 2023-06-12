@@ -7,7 +7,7 @@ import by.tms.eshop.domain.Product;
 import by.tms.eshop.domain.User;
 import by.tms.eshop.dto.OrderDto;
 import by.tms.eshop.dto.ProductDto;
-import by.tms.eshop.dto.conversion.Convertor;
+import by.tms.eshop.dto.conversion.Converter;
 import by.tms.eshop.repository.OrderRepository;
 import by.tms.eshop.service.OrderService;
 import java.time.LocalDate;
@@ -21,7 +21,7 @@ import org.springframework.stereotype.Service;
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
-    private final Convertor convertor;
+    private final Converter converter;
 
     @Override
     public Long createOrder(Long id) {
@@ -46,8 +46,8 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderDto> getOrdersById(Long id) {
         List<Order> orderById = orderRepository.findOrderByUserId(id);
-        convertor.getOrdersDtosFromOrders(orderById);
-        return convertor.getOrdersDtosFromOrders(orderRepository.findOrderByUserId(id));
+        converter.getOrdersDtosFromOrders(orderById);
+        return converter.getOrdersDtosFromOrders(orderRepository.findOrderByUserId(id));
     }
 
     @Override
@@ -58,7 +58,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void saveUserOrder(Long userId, List<ProductDto> productsDto) {
         Long order = createOrder(userId);
-        List<Product> products = convertor.getProductsFromProductsDtos(productsDto);
+        List<Product> products = converter.getProductsFromProductsDtos(productsDto);
         saveProductInOrderConfigurations(order, products);
     }
 

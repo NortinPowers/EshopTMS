@@ -29,7 +29,7 @@ import by.tms.eshop.domain.User;
 import by.tms.eshop.dto.ProductDto;
 import by.tms.eshop.dto.UserDto;
 import by.tms.eshop.dto.UserFormDto;
-import by.tms.eshop.dto.conversion.Convertor;
+import by.tms.eshop.dto.conversion.Converter;
 import by.tms.eshop.utils.ControllerUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -51,11 +51,11 @@ public class ShopFacade {
     private final OrderService orderService;
     private final ProductService productService;
     private final UserService userService;
-    private final Convertor convertor;
+    private final Converter converter;
     private final PasswordEncoder passwordEncoder;
 
     public void carriesPurchase(Long userId) {
-        List<ProductDto> productsDto = cartService.getPurchasedProducts(userId, convertor.selectCart());
+        List<ProductDto> productsDto = cartService.getPurchasedProducts(userId, converter.selectCart());
         orderService.saveUserOrder(userId, productsDto);
         cartService.deleteCartProductsAfterBuy(userId);
     }
@@ -111,15 +111,15 @@ public class ShopFacade {
 
     public void createUser(HttpServletRequest request, UserFormDto user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        User userEntity = convertor.makeUserModelTransfer(user);
+        User userEntity = converter.makeUserModelTransfer(user);
         userService.addUser(userEntity);
-        ControllerUtils.markUser(request, convertor.makeUserDtoModelTransfer(userEntity));
+        ControllerUtils.markUser(request, converter.makeUserDtoModelTransfer(userEntity));
     }
 
     public void checkLoginUser(HttpServletRequest request, UserFormDto user, ModelAndView modelAndView) {
         Optional<User> incomingUser = userService.getUserByLogin(user.getLogin());
         if (incomingUser.isPresent() && isVerifyUser(incomingUser.get(), user.getPassword())) {
-            UserDto userDto = convertor.makeUserDtoModelTransfer(incomingUser.get());
+            UserDto userDto = converter.makeUserDtoModelTransfer(incomingUser.get());
             saveUserSession(request, userDto);
             modelAndView.setViewName(REDIRECT_TO_ESHOP);
         } else {

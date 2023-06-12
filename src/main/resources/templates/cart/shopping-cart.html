@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Shopping-cart</title>
@@ -39,8 +39,10 @@
     </th:block>
     </tbody>
 </table>
-<th:block th:with="authorizedUser = ${session.userAccessPermission}">
-    <th:block th:if="${(authorizedUser != null) and (fullPrice > 0)}">
+<th:block>
+<!--<th:block th:with="authorizedUser = ${session.userAccessPermission}">-->
+<!--    <th:block th:if="${(authorizedUser != null) and (fullPrice > 0)}">-->
+    <th:block sec:authorize="isAuthenticated()" th:if="(fullPrice > 0)">
         <form method="post" th:action="@{/cart-processing}">
             <input type="submit" name="buy" value="Buy" class="btn btn-lg btn-success btn-block w-75 ml-5 mt-5"/>
         </form>
