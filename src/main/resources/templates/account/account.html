@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" xmlns:>
 <head>
     <meta charset="UTF-8">
     <title>Personal Account</title>
@@ -26,13 +26,17 @@
             </div>
             <div class="col-md-5">
                 <p class="form-control border-success rounded-pill form-control form-control-lg"
-                   </p>
+                   sec:authentication="principal.user.surname"></p>
 <!--                   th:text="${models.userDto.surname}"></p>-->
             </div>
-            <div class="col-md-5">
-                <p class="form-control border-success rounded-pill form-control form-control-lg"
-                   </p>
+            <div class="col-md-5"
+                 th:with="userBirthday=${T(org.springframework.security.core.context.SecurityContextHolder).getContext().getAuthentication().getPrincipal().getUser().getBirthday()}">
+<!--                <p class="form-control border-success rounded-pill form-control form-control-lg"-->
+<!--                   th:text="${#temporals.format(sec:authentication="principal.user.birthday", 'dd MMMM yyyy')}"></p>-->
 <!--                   th:text="${#temporals.format(models.userDto.birthday, 'dd MMMM yyyy')}"></p>-->
+<!--                <th:block th:with="userBirthday=${T(org.springframework.security.core.context.SecurityContextHolder).getContext().getAuthentication().getPrincipal().getUser().getBirthday()}">-->
+                    <p class="form-control border-success rounded-pill form-control form-control-lg" th:text="${#temporals.format(userBirthday, 'dd MMMM yyyy')}"></p>
+<!--                </th:block>-->
             </div>
         </div>
     </div>
