@@ -46,7 +46,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderDto> getOrdersById(Long id) {
         List<Order> orderById = orderRepository.findOrderByUserId(id);
-        converter.getOrdersDtosFromOrders(orderById);
+//        converter.getOrdersDtosFromOrders(orderById);
         return converter.getOrdersDtosFromOrders(orderRepository.findOrderByUserId(id));
     }
 
