@@ -4,7 +4,6 @@ import static by.tms.eshop.utils.Constants.ALL;
 import static by.tms.eshop.utils.Constants.Attributes.FILTER_FOUND_PRODUCTS;
 import static by.tms.eshop.utils.Constants.Attributes.FOUND_PRODUCTS;
 import static by.tms.eshop.utils.Constants.Attributes.USER_ACCESS_PERMISSION;
-import static by.tms.eshop.utils.Constants.Attributes.USER_UUID;
 import static by.tms.eshop.utils.Constants.CONVERSATION;
 import static by.tms.eshop.utils.Constants.MappingPath.ESHOP;
 import static by.tms.eshop.utils.Constants.MappingPath.LOGIN;
@@ -56,23 +55,25 @@ public class ControllerUtils {
         return user.getPassword().equals(password);
     }
 
-    public static void saveUserSession(HttpServletRequest req, UserDto userDto) {
-        HttpSession session = req.getSession();
-        session.setAttribute(USER_ACCESS_PERMISSION, userDto);
-        log.info("The user with a login " + userDto.getLogin() + " is logged in");
-        String userUuid = randomUUID().toString();
-        MDC.put(CONVERSATION, userUuid);
-        session.setAttribute(USER_UUID, userUuid);
-        log.info("User with the login " + userDto.getLogin() + " has been assigned a UUID");
-    }
+//    public static void saveUserSession(HttpServletRequest req, UserDto userDto) {
+//        HttpSession session = req.getSession();
+//        session.setAttribute(USER_ACCESS_PERMISSION, userDto);
+//        log.info("The user with a login " + userDto.getLogin() + " is logged in");
+//        String userUuid = randomUUID().toString();
+//        MDC.put(CONVERSATION, userUuid);
+//        session.setAttribute(USER_UUID, userUuid);
+//        log.info("User with the login " + userDto.getLogin() + " has been assigned a UUID");
+//    }
 
-    public static void markUser(HttpServletRequest req, UserDto userDto) {
-        HttpSession session = req.getSession();
+    public static void markUserToLog(UserDto userDto) {
+//    public static void markUser(HttpServletRequest req, UserDto userDto) {
+//        HttpSession session = req.getSession();
 //        session.setAttribute(USER_ACCESS_PERMISSION, userDto);
         log.info("The user with a login " + userDto.getLogin() + " is logged in");
-        String userUuid = randomUUID().toString();
-        MDC.put(CONVERSATION, userUuid);
-        session.setAttribute(USER_UUID, userUuid);
+//        String userUuid = randomUUID().toString();
+//        MDC.put(CONVERSATION, userUuid);
+        MDC.put(CONVERSATION, randomUUID().toString());
+//        session.setAttribute(USER_UUID, userUuid);
         log.info("User with the login " + userDto.getLogin() + " has been assigned a UUID");
     }
 
@@ -138,18 +139,19 @@ public class ControllerUtils {
 //        session.invalidate();
 //    }
 
-    public static void closeUserSession(HttpSession session) {
+//    public static void writeLoggedToLog(HttpSession session) {
+    public static void writeLoggedToLog() {
 //        UserDto userDto = getUserDto(session);
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        CustomUserDetail principal = (CustomUserDetail) authentication.getPrincipal();
-        String login = principal.getUser().getLogin();
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        CustomUserDetail principal = (CustomUserDetail) authentication.getPrincipal();
+//        String login = principal.getUser().getLogin();
 //        String userUuid = (String) session.getAttribute(USER_UUID);
-        log.info("User with a login " + login + " logged out of the system");
+        log.info("User with a login " + getAuthenticationUser().getLogin() + " logged out of the system");
 //        log.info("User [" + userUuid + "] with a login " + userDto.getLogin() + " logged out of the system");
 //        session.removeAttribute(USER_ACCESS_PERMISSION);
 //        session.removeAttribute(USER_UUID);
 //        ??
-        session.invalidate();
+//        session.invalidate();
     }
 
     public static void setFilterAttribute(HttpSession session, String filter) {
@@ -199,5 +201,15 @@ public class ControllerUtils {
             fullPrice = fullPrice.add(totalPrice);
         }
         return fullPrice;
+    }
+
+    public static User getAuthenticationUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetail principal = (CustomUserDetail) authentication.getPrincipal();
+        return principal.getUser();
+    }
+
+    public static Long getAuthenticationUserId() {
+        return getAuthenticationUser().getId();
     }
 }

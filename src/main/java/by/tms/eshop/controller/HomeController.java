@@ -35,15 +35,15 @@ public class HomeController {
         return modelAndView;
     }
 
-    private void getEshopView(ModelAndView modelAndView) {
-        List<String> productCategories = productCategoryService.getProductCategories();
-        modelAndView.addObject(PRODUCT_CATEGORIES, productCategories);
-        modelAndView.setViewName(ESHOP);
-    }
-
     @PostMapping("/")
     public ModelAndView entersToEshop(ModelAndView modelAndView) {
         getEshopView(modelAndView);
         return modelAndView;
+    }
+
+    private void getEshopView(ModelAndView modelAndView) {
+        List<String> productCategories = productCategoryService.getProductCategories();
+        modelAndView.addObject(PRODUCT_CATEGORIES, productCategories);
+        modelAndView.setViewName(ESHOP);
     }
 }

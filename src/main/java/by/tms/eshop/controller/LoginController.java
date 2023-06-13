@@ -3,15 +3,14 @@ package by.tms.eshop.controller;
 import static by.tms.eshop.utils.Constants.MappingPath.CREATE_USER;
 import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_ESHOP;
 import static by.tms.eshop.utils.Constants.MappingPath.SUCCESS_REGISTER;
-import static by.tms.eshop.utils.ControllerUtils.closeUserSession;
 import static by.tms.eshop.utils.ControllerUtils.fillUserValidationError;
+import static by.tms.eshop.utils.ControllerUtils.writeLoggedToLog;
 
 import by.tms.eshop.dto.UserFormDto;
 import by.tms.eshop.service.ShopFacade;
 import by.tms.eshop.validator.ExcludeLogValidation;
 import by.tms.eshop.validator.UserValidator;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.groups.Default;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -81,8 +80,10 @@ public class LoginController {
 //    }
 
     @GetMapping("/logout")
-    public ModelAndView showLogoutPage(HttpSession session) {
-        closeUserSession(session);
+    public ModelAndView showLogoutPage() {
+//    public ModelAndView showLogoutPage(HttpSession session) {
+//        writeLoggedToLog(session);
+        writeLoggedToLog();
         //fix
         return new ModelAndView(REDIRECT_TO_ESHOP);
     }
@@ -102,7 +103,8 @@ public class LoginController {
             fillUserValidationError(bindingResult, modelAndView);
             modelAndView.setViewName(CREATE_USER);
         } else {
-            shopFacade.createUser(request, user);
+            shopFacade.createUser(user);
+//            shopFacade.createUser(request, user);
             modelAndView.setViewName(SUCCESS_REGISTER);
         }
         return modelAndView;

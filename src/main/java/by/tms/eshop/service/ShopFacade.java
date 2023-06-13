@@ -3,11 +3,7 @@ package by.tms.eshop.service;
 import static by.tms.eshop.utils.Constants.ALL;
 import static by.tms.eshop.utils.Constants.Attributes.FILTER_FOUND_PRODUCTS;
 import static by.tms.eshop.utils.Constants.Attributes.FOUND_PRODUCTS;
-import static by.tms.eshop.utils.Constants.Attributes.LOGIN_ERROR;
-import static by.tms.eshop.utils.Constants.ErrorMessage.RECHECK_DATA;
-import static by.tms.eshop.utils.Constants.MappingPath.LOGIN;
 import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_CART;
-import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_ESHOP;
 import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_FAVORITES;
 import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_PRODUCTS_PAGE_CATEGORY_WITH_PARAM;
 import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_PRODUCT_WITH_PARAM;
@@ -22,21 +18,17 @@ import static by.tms.eshop.utils.Constants.RequestParameters.TRUE;
 import static by.tms.eshop.utils.ControllerUtils.applyPriceFilterOnProducts;
 import static by.tms.eshop.utils.ControllerUtils.applyTypeFilterOnProducts;
 import static by.tms.eshop.utils.ControllerUtils.getPrice;
-import static by.tms.eshop.utils.ControllerUtils.isVerifyUser;
-import static by.tms.eshop.utils.ControllerUtils.saveUserSession;
+import static by.tms.eshop.utils.ControllerUtils.markUserToLog;
 
 import by.tms.eshop.domain.User;
 import by.tms.eshop.dto.ProductDto;
-import by.tms.eshop.dto.UserDto;
 import by.tms.eshop.dto.UserFormDto;
 import by.tms.eshop.dto.conversion.Converter;
-import by.tms.eshop.utils.ControllerUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -109,24 +101,26 @@ public class ShopFacade {
 //        saveUserSession(request, convertor.makeUserDtoModelTransfer(userEntity));
 //    }
 
-    public void createUser(HttpServletRequest request, UserFormDto user) {
+    public void createUser(UserFormDto user) {
+//    public void createUser(HttpServletRequest request, UserFormDto user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         User userEntity = converter.makeUserModelTransfer(user);
         userService.addUser(userEntity);
-        ControllerUtils.markUser(request, converter.makeUserDtoModelTransfer(userEntity));
+        markUserToLog(converter.makeUserDtoModelTransfer(userEntity));
+//        markUser(request, converter.makeUserDtoModelTransfer(userEntity));
     }
 
-    public void checkLoginUser(HttpServletRequest request, UserFormDto user, ModelAndView modelAndView) {
-        Optional<User> incomingUser = userService.getUserByLogin(user.getLogin());
-        if (incomingUser.isPresent() && isVerifyUser(incomingUser.get(), user.getPassword())) {
-            UserDto userDto = converter.makeUserDtoModelTransfer(incomingUser.get());
-            saveUserSession(request, userDto);
-            modelAndView.setViewName(REDIRECT_TO_ESHOP);
-        } else {
-            modelAndView.addObject(LOGIN_ERROR, RECHECK_DATA);
-            modelAndView.setViewName(LOGIN);
-        }
-    }
+//    public void checkLoginUser(HttpServletRequest request, UserFormDto user, ModelAndView modelAndView) {
+//        Optional<User> incomingUser = userService.getUserByLogin(user.getLogin());
+//        if (incomingUser.isPresent() && isVerifyUser(incomingUser.get(), user.getPassword())) {
+//            UserDto userDto = converter.makeUserDtoModelTransfer(incomingUser.get());
+//            saveUserSession(request, userDto);
+//            modelAndView.setViewName(REDIRECT_TO_ESHOP);
+//        } else {
+//            modelAndView.addObject(LOGIN_ERROR, RECHECK_DATA);
+//            modelAndView.setViewName(LOGIN);
+//        }
+//    }
 
 //    public void saveUserOldStyle(HttpServletRequest request, User user, ModelAndView modelAndView) {
 //        UserDto userDto = convertor.makeUserDtoModelTransfer(user);
