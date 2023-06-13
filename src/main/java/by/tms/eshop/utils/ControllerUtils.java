@@ -65,16 +65,19 @@ public class ControllerUtils {
 //        log.info("User with the login " + userDto.getLogin() + " has been assigned a UUID");
 //    }
 
-    public static void markUserToLog(UserDto userDto) {
+//    public static void markUserToLog(UserDto userDto) {
+    public static void markUserToLog(User user) {
 //    public static void markUser(HttpServletRequest req, UserDto userDto) {
 //        HttpSession session = req.getSession();
 //        session.setAttribute(USER_ACCESS_PERMISSION, userDto);
-        log.info("The user with a login " + userDto.getLogin() + " is logged in");
+        log.info("The user with a login " + user.getLogin() + " is logged in");
+//        log.info("The user with a login " + userDto.getLogin() + " is logged in");
 //        String userUuid = randomUUID().toString();
 //        MDC.put(CONVERSATION, userUuid);
         MDC.put(CONVERSATION, randomUUID().toString());
 //        session.setAttribute(USER_UUID, userUuid);
-        log.info("User with the login " + userDto.getLogin() + " has been assigned a UUID");
+        log.info("User with the login " + user.getLogin() + " has been assigned a UUID");
+//        log.info("User with the login " + userDto.getLogin() + " has been assigned a UUID");
     }
 
     public static String createOrderNumber(Long id) {

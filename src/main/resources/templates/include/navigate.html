@@ -1,55 +1,63 @@
 <th:block xmlns:sec="http://www.w3.org/1999/xhtml">
-<!--<th:block th:with="authorizedUser=${session.userAccessPermission}" xmlns:sec="http://www.w3.org/1999/xhtml">-->
-    <nav class="navbar navbar-dark bg-dark">
-        <ul class="nav nav-pills ">
-            <li class="nav-item">
-                <a class="btn btn-outline-warning"
-                   th:href="@{/eshop}">Home</a>
-            </li>
-            <li class="nav-item">
-                <a class="btn btn-outline-warning ml-2"
-                   th:href="@{/search}">
-                    <div class="text-center">
-                        <i class="bi bi-search"></i>
-                    </div>
-                </a>
-            </li>
-<!--            <th:block th:if="${authorizedUser != null}">-->
-            <th:block sec:authorize="isAuthenticated()">
-                <li class="nav-item">
-                    <a class="btn btn-outline-info ml-2" href="/favorites">Favorites</a>
-                </li>
-                <li class="nav-item">
-                    <a class="btn btn-outline-info ml-2" href="/cart">Shopping cart</a>
-                </li>
-            </th:block>
-        </ul>
-<!--        <th:block th:if="${authorizedUser == null}">-->
-        <th:block sec:authorize="!isAuthenticated()">
-            <a id="loginButton" class="form-inline my-2 my-lg-0" style="text-decoration: none"
-               th:href="@{/login}">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Login</button>
-            </a>
-        </th:block>
-<!--        <th:block th:if="${authorizedUser != null}">-->
-        <th:block sec:authorize="isAuthenticated()">
-            <h2 style="text-align: center; color: #e5a0a4; margin-right: 11%; text-shadow: 1px 1px 2px red, 0 0 1em #ff004d, 0 0 0.2em #ff0062;" sec:authentication="name">
-                Welcome  <span th:remove="tag" sec:authentication="name">thymeleaf</span>! </h2>
-            <ul class="nav nav-pills ">
-                <li class="nav-item">
-                    <a id="accountButton"
-                       th:href="@{/account}">
-                        <button class="btn btn-outline-success mr-2" type="submit">Account</button>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a id="exitButton"
-                       th:href="@{/logout}">
-<!--                       th:href="@{/logout}" methods="post">-->
-                        <button class="btn btn-outline-success" type="submit">Exit</button>
-                    </a>
-                </li>
-            </ul>
-        </th:block>
-    </nav>
+  <!--<th:block th:with="authorizedUser=${session.userAccessPermission}" xmlns:sec="http://www.w3.org/1999/xhtml">-->
+  <nav class="navbar navbar-dark bg-dark">
+    <ul class="nav nav-pills ">
+      <li class="nav-item">
+        <a class="btn btn-outline-warning"
+           th:href="@{/eshop}">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="btn btn-outline-warning ml-2"
+           th:href="@{/search}">
+          <div class="text-center">
+            <i class="bi bi-search"></i>
+          </div>
+        </a>
+      </li>
+      <!--            <th:block th:if="${authorizedUser != null}">-->
+      <th:block sec:authorize="isAuthenticated()">
+        <li class="nav-item">
+          <a class="btn btn-outline-info ml-2" href="/favorites">Favorites</a>
+        </li>
+        <li class="nav-item">
+          <a class="btn btn-outline-info ml-2" href="/cart">Shopping cart</a>
+        </li>
+      </th:block>
+    </ul>
+    <!--        <th:block th:if="${authorizedUser == null}">-->
+    <th:block sec:authorize="!isAuthenticated()">
+      <h2 style="text-align: center; color: #e5a0a4; margin-right: 11%; text-shadow: 1px 1px 2px red, 0 0 1em #ff004d, 0 0 0.2em #ff0062;">Log in to start shopping</h2>
+      <a id="loginButton" class="form-inline my-2 my-lg-0" style="text-decoration: none"
+         th:href="@{/login}">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Login</button>
+      </a>
+    </th:block>
+    <!--        <th:block th:if="${authorizedUser != null}">-->
+    <th:block sec:authorize="isAuthenticated()">
+      <h2 style="text-align: center; color: #e5a0a4; margin-right: 11%; text-shadow: 1px 1px 2px red, 0 0 1em #ff004d, 0 0 0.2em #ff0062;">Welcome <span sec:authentication="name"></span></h2>
+<!--      <h2 style="text-align: center; color: #e5a0a4; margin-right: 11%; text-shadow: 1px 1px 2px red, 0 0 1em #ff004d, 0 0 0.2em #ff0062;" sec:authentication="name"></h2>-->
+<!--        Welcome <span th:remove="tag" sec:authentication="name"></span>! </h2>-->
+      <ul class="nav nav-pills ">
+        <li class="nav-item">
+          <a id="accountButton"
+             th:href="@{/account}">
+            <button class="btn btn-outline-success mr-2" type="submit">Account</button>
+          </a>
+        </li>
+        <li class="nav-item">
+          <form th:action="@{/logout}" method="post">
+            <input type="submit" value="Sign Out" class="btn btn-outline-success"/>
+          </form>
+          <!--                       th:href="@{/logou/t}">-->
+          <!--                    <a id="exitButton"-->
+          <!--                       th:href="@{/logout}" methods="post">-->
+          <!--                        <button class="btn btn-outline-success" type="submit">Exit</button>-->
+          <!--                    </a>-->
+        </li>
+      </ul>
+    </th:block>
+<!--    <th:block sec:authorize="!isAuthenticated()">-->
+<!--      <h2 style="text-align: center; color: #e5a0a4; margin-right: 11%; text-shadow: 1px 1px 2px red, 0 0 1em #ff004d, 0 0 0.2em #ff0062;">Log in to start shopping</h2>-->
+<!--    </th:block>-->
+  </nav>
 </th:block>

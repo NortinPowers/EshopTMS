@@ -18,7 +18,6 @@ import static by.tms.eshop.utils.Constants.RequestParameters.TRUE;
 import static by.tms.eshop.utils.ControllerUtils.applyPriceFilterOnProducts;
 import static by.tms.eshop.utils.ControllerUtils.applyTypeFilterOnProducts;
 import static by.tms.eshop.utils.ControllerUtils.getPrice;
-import static by.tms.eshop.utils.ControllerUtils.markUserToLog;
 
 import by.tms.eshop.domain.User;
 import by.tms.eshop.dto.ProductDto;
@@ -106,7 +105,7 @@ public class ShopFacade {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         User userEntity = converter.makeUserModelTransfer(user);
         userService.addUser(userEntity);
-        markUserToLog(converter.makeUserDtoModelTransfer(userEntity));
+//        markUserToLog(converter.makeUserDtoModelTransfer(userEntity));
 //        markUser(request, converter.makeUserDtoModelTransfer(userEntity));
     }
 

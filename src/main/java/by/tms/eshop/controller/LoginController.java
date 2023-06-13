@@ -1,10 +1,8 @@
 package by.tms.eshop.controller;
 
 import static by.tms.eshop.utils.Constants.MappingPath.CREATE_USER;
-import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_ESHOP;
 import static by.tms.eshop.utils.Constants.MappingPath.SUCCESS_REGISTER;
 import static by.tms.eshop.utils.ControllerUtils.fillUserValidationError;
-import static by.tms.eshop.utils.ControllerUtils.writeLoggedToLog;
 
 import by.tms.eshop.dto.UserFormDto;
 import by.tms.eshop.service.ShopFacade;
@@ -14,6 +12,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.groups.Default;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -29,8 +30,8 @@ public class LoginController {
 
     private final UserValidator userValidator;
     private final ShopFacade shopFacade;
-//    private final AuthenticationManager authenticationManager;
-//    private final SecurityContextRepository securityContextRepository = new HttpSessionSecurityContextRepository();
+    private final AuthenticationManager authenticationManager;
+    private final SecurityContextRepository securityContextRepository = new HttpSessionSecurityContextRepository();
 
 //    @GetMapping("/login")
 //    public ModelAndView showLoginPage(HttpSession session, ModelAndView modelAndView) {
@@ -41,7 +42,7 @@ public class LoginController {
     //new
 //    @GetMapping("/login")
 //    public ModelAndView showLoginPage(ModelAndView modelAndView) {
-//        modelAndView.setViewName("login");
+//        modelAndView.setViewName(LOGIN);
 ////        modelAndView.setViewName("login/login");
 //        return modelAndView;
 //    }
@@ -52,7 +53,7 @@ public class LoginController {
 //        return modelAndView;
 //    }
 
-    //    @PostMapping("/login-verify")
+//        @PostMapping("/login-verify")
 //    @PostMapping("/login")
 //    public ModelAndView showLoginVerifyPage(HttpServletRequest request,
 //                                            HttpServletResponse response,
@@ -63,6 +64,7 @@ public class LoginController {
 //            fillsLoginVerifyErrors(bindingResult, modelAndView);
 //            modelAndView.setViewName(LOGIN);
 //        } else {
+//
 //            UsernamePasswordAuthenticationToken token = UsernamePasswordAuthenticationToken.unauthenticated(
 //                    user.getName(), user.getPassword());
 //            Authentication authentication = authenticationManager.authenticate(token);
@@ -70,23 +72,36 @@ public class LoginController {
 //            context.setAuthentication(authentication);
 //            setContext(context);
 //            securityContextRepository.saveContext(context, request, response);
+//
+//            User authenticationUser = ControllerUtils.getAuthenticationUser();
 ////            shopFacade.checkLoginUser(request, user, modelAndView);
-//            Object principal = authentication.getPrincipal();
-//            System.out.println(principal.toString());
 //
 ////            shopFacade.saveUserOldStyle(request, user, modelAndView);
+//            ControllerUtils.markUserToLog(authenticationUser);
+//            modelAndView.setViewName(REDIRECT_TO_ESHOP);
 //        }
 //        return modelAndView;
 //    }
 
-    @GetMapping("/logout")
-    public ModelAndView showLogoutPage() {
-//    public ModelAndView showLogoutPage(HttpSession session) {
-//        writeLoggedToLog(session);
-        writeLoggedToLog();
-        //fix
-        return new ModelAndView(REDIRECT_TO_ESHOP);
-    }
+//    @PostMapping("/logout")
+////    @GetMapping("/logout")
+//    public ModelAndView showLogoutPage() {
+////    public ModelAndView showLogoutPage(HttpSession session) {
+////        writeLoggedToLog(session);
+//        writeLoggedToLog();
+//        //fix
+//        return new ModelAndView(REDIRECT_TO_ESHOP);
+//    }
+//
+//    @GetMapping("/logout")
+////    @GetMapping("/logout")
+//    public ModelAndView doLogout() {
+////    public ModelAndView showLogoutPage(HttpSession session) {
+////        writeLoggedToLog(session);
+//        writeLoggedToLog();
+//        //fix
+//        return new ModelAndView(REDIRECT_TO_ESHOP);
+//    }
 
     @GetMapping("/create-user")
     public ModelAndView create() {
