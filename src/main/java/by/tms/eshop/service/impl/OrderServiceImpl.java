@@ -8,6 +8,7 @@ import by.tms.eshop.domain.User;
 import by.tms.eshop.dto.OrderDto;
 import by.tms.eshop.dto.ProductDto;
 import by.tms.eshop.dto.conversion.Converter;
+import by.tms.eshop.mapper.ProductMapper;
 import by.tms.eshop.repository.OrderRepository;
 import by.tms.eshop.service.OrderService;
 import java.time.LocalDate;
@@ -22,6 +23,7 @@ public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
     private final Converter converter;
+    private final ProductMapper productMapper;
 
     @Override
     public Long createOrder(Long id) {
@@ -45,9 +47,10 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderDto> getOrdersById(Long id) {
-        List<Order> orderById = orderRepository.findOrderByUserId(id);
+//        List<Order> orderById = orderRepository.findOrderByUserId(id);
 //        converter.getOrdersDtosFromOrders(orderById);
         return converter.getOrdersDtosFromOrders(orderRepository.findOrderByUserId(id));
+//        return converter.getOrdersDtosFromOrders(orderRepository.findOrderByUserId(id));
     }
 
     @Override
@@ -58,7 +61,10 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void saveUserOrder(Long userId, List<ProductDto> productsDto) {
         Long order = createOrder(userId);
-        List<Product> products = converter.getProductsFromProductsDtos(productsDto);
+//        List<Product> products = converter.getProductsFromProductsDtos(productsDto);
+        List<Product> products = productsDto.stream()
+                                            .map(productMapper::convertToProduct)
+                                            .toList();
         saveProductInOrderConfigurations(order, products);
     }
 

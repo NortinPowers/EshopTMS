@@ -1,54 +1,56 @@
 package by.tms.eshop.dto.conversion;
 
 import by.tms.eshop.domain.Order;
-import by.tms.eshop.domain.Product;
-import by.tms.eshop.domain.ProductCategory;
 import by.tms.eshop.domain.User;
 import by.tms.eshop.dto.LocationDto;
 import by.tms.eshop.dto.OrderDto;
-import by.tms.eshop.dto.ProductDto;
-import by.tms.eshop.dto.UserDto;
 import by.tms.eshop.dto.UserFormDto;
+import by.tms.eshop.mapper.ProductMapper;
 import java.util.List;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class Converter {
 
-    public ProductDto makeProductDtoModelTransfer(Product product) {
-        return ProductDto.builder()
-                .id(product.getId())
-                .price(product.getPrice())
-                .info(product.getInfo())
-                .name(product.getName())
-                .category(product.getProductCategory().getCategory())
-                .build();
-    }
+    private final ProductMapper productMapper;
 
-    public Product makeProductModelTransfer(ProductDto productDto) {
-        return Product.builder()
-                .id(productDto.getId())
-                .price(productDto.getPrice())
-                .info(productDto.getInfo())
-                .name(productDto.getName())
-                .productCategory(ProductCategory.builder()
-                        .category(productDto.getCategory())
-                        .build())
-                .build();
-    }
+//    public ProductDto makeProductDtoModelTransfer(Product product) {
+//        return ProductDto.builder()
+//                .id(product.getId())
+//                .price(product.getPrice())
+//                .info(product.getInfo())
+//                .name(product.getName())
+//                .category(product.getProductCategory().getCategory())
+//                .build();
+//    }
 
-    public UserDto makeUserDtoModelTransfer(User user) {
-        return UserDto.builder()
-                .id(user.getId())
-                .login(user.getLogin())
-                .name(user.getName())
-                .surname(user.getSurname())
-                .email(user.getEmail())
-                .birthday(user.getBirthday())
-                .build();
-    }
+//    public Product makeProductModelTransfer(ProductDto productDto) {
+//        return Product.builder()
+//                .id(productDto.getId())
+//                .price(productDto.getPrice())
+//                .info(productDto.getInfo())
+//                .name(productDto.getName())
+//                .productCategory(ProductCategory.builder()
+//                        .category(productDto.getCategory())
+//                        .build())
+//                .build();
+//    }
 
+//    public UserDto makeUserDtoModelTransfer(User user) {
+//        return UserDto.builder()
+//                .id(user.getId())
+//                .login(user.getLogin())
+//                .name(user.getName())
+//                .surname(user.getSurname())
+//                .email(user.getEmail())
+//                .birthday(user.getBirthday())
+//                .build();
+//    }
+
+//    +
     public User makeUserModelTransfer(UserFormDto user) {
         return User.builder()
                 .id(user.getId())
@@ -61,11 +63,12 @@ public class Converter {
                 .build();
     }
 
-    public List<Product> getProductsFromProductsDtos(List<ProductDto> productsDto) {
-        return productsDto.stream()
-                .map(this::makeProductModelTransfer)
-                .toList();
-    }
+//    public List<Product> getProductsFromProductsDtos(List<ProductDto> productsDto) {
+//        return productsDto.stream()
+//                .map(productMapper::convertToProduct)
+////                .map(this::makeProductModelTransfer)
+//                .toList();
+//    }
 
     public LocationDto selectCart() {
         return LocationDto.builder()

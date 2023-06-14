@@ -19,7 +19,7 @@ public interface CartRepository extends JpaRepository<Cart, Long>, CartCustomize
 
     Integer getCartProductCount(Long userId, Long productId);
 
-    void deleteCartByUserId(Long userId);
+    void deleteCartByUserIdAndCart(Long userId, Boolean cart);
 
     List<ProductDto> getPurchasedProducts(Long userId, LocationDto locationDto);
 }

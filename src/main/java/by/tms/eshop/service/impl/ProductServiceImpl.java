@@ -7,7 +7,7 @@ import static by.tms.eshop.utils.Constants.MappingPath.PRODUCTS;
 
 import by.tms.eshop.domain.Product;
 import by.tms.eshop.dto.ProductDto;
-import by.tms.eshop.dto.conversion.Converter;
+import by.tms.eshop.mapper.ProductMapper;
 import by.tms.eshop.repository.ProductRepository;
 import by.tms.eshop.service.ProductService;
 import by.tms.eshop.utils.Constants.Attributes;
@@ -28,12 +28,15 @@ import org.springframework.web.servlet.ModelAndView;
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
-    private final Converter converter;
+    //    private final Converter converter;
+    private final ProductMapper productMapper;
 
     @Override
     public ModelAndView getProductsByCategory(String category, Pageable pageable) {
         ModelMap modelMap = new ModelMap();
-        Page<ProductDto> page = productRepository.findAllWithPaginationByProductCategory_Category(category, pageable).map(converter::makeProductDtoModelTransfer);
+        Page<ProductDto> page = productRepository.findAllWithPaginationByProductCategory_Category(category, pageable)
+                                                 .map(productMapper::convertToProductDto);
+//                                                 .map(converter::makeProductDtoModelTransfer);
         modelMap.addAttribute(PAGE, page);
         modelMap.addAttribute(URL, "/products-page?category=" + category + "&size=3");
         return new ModelAndView(PRODUCTS, modelMap);
@@ -44,7 +47,8 @@ public class ProductServiceImpl implements ProductService {
         Optional<Product> productOptional = productRepository.findById(id);
         ModelMap modelMap = null;
         if (productOptional.isPresent()) {
-            modelMap = new ModelMap(Attributes.PRODUCT, converter.makeProductDtoModelTransfer(productOptional.get()));
+            modelMap = new ModelMap(Attributes.PRODUCT, productMapper.convertToProductDto(productOptional.get()));
+//            modelMap = new ModelMap(Attributes.PRODUCT, converter.makeProductDtoModelTransfer(productOptional.get()));
         }
         return new ModelAndView(PRODUCT, modelMap);
     }
@@ -58,7 +62,10 @@ public class ProductServiceImpl implements ProductService {
     public Set<ProductDto> getFoundedProducts(String condition) {
         Set<Product> products = productRepository.getProductsByConditionInName(condition);
         products.addAll(productRepository.getProductsByConditionInInfo(condition));
-        return products.stream().map(converter::makeProductDtoModelTransfer).collect(Collectors.toSet());
+        return products.stream()
+                       .map(productMapper::convertToProductDto)
+                       .collect(Collectors.toSet());
+//        return products.stream().map(converter::makeProductDtoModelTransfer).collect(Collectors.toSet());
     }
 
     @Override
@@ -74,7 +81,8 @@ public class ProductServiceImpl implements ProductService {
     private Set<ProductDto> getProductDtoSet(Set<Product> convertedProducts) {
         Set<ProductDto> products = new LinkedHashSet<>();
         for (Product product : convertedProducts) {
-            products.add(converter.makeProductDtoModelTransfer(product));
+            products.add(productMapper.convertToProductDto(product));
+//            products.add(converter.makeProductDtoModelTransfer(product));
         }
         return products;
     }

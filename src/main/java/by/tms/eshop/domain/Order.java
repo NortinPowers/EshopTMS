@@ -6,6 +6,7 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +23,7 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true)
-public class Order extends BaseEntity {
+public class Order extends BaseEntity implements Serializable {
 
     private String name;
     private LocalDate date;

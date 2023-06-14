@@ -1,6 +1,5 @@
 package by.tms.eshop.dto;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -11,7 +10,8 @@ import lombok.Setter;
 @Setter
 @EqualsAndHashCode
 @Builder
-public class ProductDto implements Serializable {
+public class ProductDto {
+//public class ProductDto implements Serializable {
 
     private Long id;
     private String name;

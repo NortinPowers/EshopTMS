@@ -65,7 +65,7 @@ public class ControllerUtils {
 //        log.info("User with the login " + userDto.getLogin() + " has been assigned a UUID");
 //    }
 
-//    public static void markUserToLog(UserDto userDto) {
+    //    public static void markUserToLog(UserDto userDto) {
     public static void markUserToLog(User user) {
 //    public static void markUser(HttpServletRequest req, UserDto userDto) {
 //        HttpSession session = req.getSession();
@@ -112,7 +112,8 @@ public class ControllerUtils {
         return products;
     }
 
-    public static String getPathFromAddFavoriteByParameters(Long productId, String location, String productCategory) {
+    public static String getPathFromAddFavoriteByParameters(Long productId, String location, String productCategory, Integer page) {
+//    public static String getPathFromAddFavoriteByParameters(Long productId, String location, String productCategory) {
         String path;
         if (Objects.equals(location, SEARCH)) {
             path = REDIRECT_TO_SEARCH_RESULT_SAVE;
@@ -121,7 +122,12 @@ public class ControllerUtils {
         } else {
             path = REDIRECT_TO_PRODUCTS_PAGE_CATEGORY_WITH_PARAM + productCategory + "&size=3";
         }
-        return path;
+        if (page < 0) {
+            return path;
+        } else {
+            return path + "&page=" + page;
+        }
+//        return path;
     }
 
     public static void fillError(String field, ModelAndView modelAndView, BindingResult bindingResult) {
@@ -142,7 +148,7 @@ public class ControllerUtils {
 //        session.invalidate();
 //    }
 
-//    public static void writeLoggedToLog(HttpSession session) {
+    //    public static void writeLoggedToLog(HttpSession session) {
     public static void writeLoggedToLog() {
 //        UserDto userDto = getUserDto(session);
 //        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

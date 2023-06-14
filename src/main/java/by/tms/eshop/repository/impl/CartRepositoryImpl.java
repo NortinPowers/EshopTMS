@@ -24,7 +24,7 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class CartRepositoryImpl implements CartCustomizedRepository {
 
-    private static final String GET_CART_PRODUCTS_BY_USER_ID = "FROM Cart WHERE user.id = :userId AND cart = true order by product.id";
+    private static final String GET_CART_PRODUCTS_BY_USER_ID = "FROM Cart WHERE user.id = :userId AND cart = true order by product.name";
     private static final String GET_CURRENT_CART = "FROM Cart WHERE user.id = :userId AND product.id = :productId AND cart = true";
     private static final String GET_CURRENT_FAVORITE = "FROM Cart WHERE user.id = :userId AND product.id = :productId AND favorite = true";
     private static final String GET_FAVORITE_PRODUCTS_BY_USER_ID = "FROM Cart WHERE user.id = :userId AND favorite = true";

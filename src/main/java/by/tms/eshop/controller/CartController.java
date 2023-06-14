@@ -63,10 +63,15 @@ public class CartController {
 //    public ModelAndView addProductToCart(HttpSession session,
     public ModelAndView addProductToCart(@RequestParam(name = ID) Long productId,
                                          @RequestParam(name = SHOP) String shopFlag,
-                                         @RequestParam(name = LOCATION) String location) {
+                                         @RequestParam(name = LOCATION) String location,
+                                         @RequestParam(name = "page", required = false) Integer page) {
         cartService.addSelectedProduct(getAuthenticationUserId(), productId, converter.selectCart());
 //        cartService.addSelectedProduct(getUserId(session), productId, converter.selectCart());
-        return new ModelAndView(shopFacade.getPathFromAddCartByParameters(productId, shopFlag, location));
+        if (page == null) {
+            page = -1;
+        }
+        return new ModelAndView(shopFacade.getPathFromAddCartByParameters(productId, shopFlag, location, page));
+//        return new ModelAndView(shopFacade.getPathFromAddCartByParameters(productId, shopFlag, location));
     }
 
     @GetMapping("/delete-cart")

@@ -55,10 +55,16 @@ public class FavoriteController {
     @GetMapping("/add-favorite")
 //    public ModelAndView addProductToFavorite(HttpSession session,
     public ModelAndView addProductToFavorite(@RequestParam(name = ID) Long productId,
-                                             @RequestParam(name = LOCATION) String location) {
+//                                             @RequestParam(name = LOCATION) String location) {
+                                             @RequestParam(name = LOCATION) String location,
+                                             @RequestParam(name = "page", required = false) Integer page) {
         cartService.addSelectedProduct(getAuthenticationUserId(), productId, converter.selectFavorite());
 //        cartService.addSelectedProduct(getUserId(session), productId, converter.selectFavorite());
-        return new ModelAndView(getPathFromAddFavoriteByParameters(productId, location, productService.getProductCategoryValue(productId)));
+        if (page == null) {
+            page = -1;
+        }
+        return new ModelAndView(getPathFromAddFavoriteByParameters(productId, location, productService.getProductCategoryValue(productId), page));
+//        return new ModelAndView(getPathFromAddFavoriteByParameters(productId, location, productService.getProductCategoryValue(productId)));
     }
 
     @GetMapping("/delete-favorite")

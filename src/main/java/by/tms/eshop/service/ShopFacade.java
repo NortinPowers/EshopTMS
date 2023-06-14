@@ -48,10 +48,12 @@ public class ShopFacade {
     public void carriesPurchase(Long userId) {
         List<ProductDto> productsDto = cartService.getPurchasedProducts(userId, converter.selectCart());
         orderService.saveUserOrder(userId, productsDto);
+        //--
         cartService.deleteCartProductsAfterBuy(userId);
     }
 
-    public String getPathFromAddCartByParameters(Long productId, String shopFlag, String location) {
+    //    public String getPathFromAddCartByParameters(Long productId, String shopFlag, String location) {
+    public String getPathFromAddCartByParameters(Long productId, String shopFlag, String location, Integer page) {
         String path;
         if (Objects.equals(shopFlag, TRUE)) {
             path = REDIRECT_TO_CART;
@@ -65,7 +67,12 @@ public class ShopFacade {
             String productCategory = productService.getProductCategoryValue(productId);
             path = REDIRECT_TO_PRODUCTS_PAGE_CATEGORY_WITH_PARAM + productCategory + "&size=3";
         }
-        return path;
+        if (page<0) {
+            return path;
+        } else {
+            return path + "&page=" + page;
+        }
+//        return path;
     }
 
     public ModelAndView getSearchFilterResultPagePath(HttpServletRequest request, String category) {

@@ -23,6 +23,7 @@ public class SecurityConfig {
 
     private final CustomUserDetailsService customUserDetailsService;
 
+    @SuppressWarnings({"checkstyle:MultipleStringLiterals", "checkstyle:UnnecessaryParentheses"})
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 //        SecurityContextRepository repo = new HttpSessionSecurityContextRepository();
