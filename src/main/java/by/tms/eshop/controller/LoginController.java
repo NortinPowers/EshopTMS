@@ -12,9 +12,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.groups.Default;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
-import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -30,8 +27,8 @@ public class LoginController {
 
     private final UserValidator userValidator;
     private final ShopFacade shopFacade;
-    private final AuthenticationManager authenticationManager;
-    private final SecurityContextRepository securityContextRepository = new HttpSessionSecurityContextRepository();
+//    private final AuthenticationManager authenticationManager;
+//    private final SecurityContextRepository securityContextRepository = new HttpSessionSecurityContextRepository();
 
 //    @GetMapping("/login")
 //    public ModelAndView showLoginPage(HttpSession session, ModelAndView modelAndView) {
