@@ -23,6 +23,11 @@ public interface CartRepository extends JpaRepository<Cart, Long>, CartCustomize
 
     Integer getCartProductCount(Long userId, Long productId);
 
+//    @Query("FROM Cart WHERE user.id = :userId AND product.id = :productId AND cart = true")
+//    Integer getCartProductCountTest(Long userId, Long productId);
+//
+//    List<Cart> findCartByUserIdAndProductIdAndCart(Long userId, Long productId, boolean cart);
+
     void deleteCartByUserIdAndCart(Long userId, Boolean cart);
 
     List<ProductDto> getPurchasedProducts(Long userId, Location location);

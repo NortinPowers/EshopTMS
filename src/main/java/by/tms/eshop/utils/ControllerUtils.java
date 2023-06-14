@@ -65,7 +65,7 @@ public class ControllerUtils {
 //        log.info("User with the login " + userDto.getLogin() + " has been assigned a UUID");
 //    }
 
-    //    public static void markUserToLog(UserDto userDto) {
+//        public static void markUserToLog(UserDto userDto) {
     public static void markUserToLog(User user) {
 //    public static void markUser(HttpServletRequest req, UserDto userDto) {
 //        HttpSession session = req.getSession();
@@ -85,9 +85,9 @@ public class ControllerUtils {
         return "#" + id + "-" + uuid;
     }
 
-    public static Long getUserId(HttpSession session) {
-        return getUserDto(session).getId();
-    }
+//    public static Long getUserId(HttpSession session) {
+//        return getUserDto(session).getId();
+//    }
 
     public static BigDecimal getPrice(HttpServletRequest request, String param, BigDecimal defaultValue) {
         String value = request.getParameter(param);
@@ -149,20 +149,20 @@ public class ControllerUtils {
 //        session.invalidate();
 //    }
 
-    //    public static void writeLoggedToLog(HttpSession session) {
-    public static void writeLoggedToLog() {
-//        UserDto userDto = getUserDto(session);
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        CustomUserDetail principal = (CustomUserDetail) authentication.getPrincipal();
-//        String login = principal.getUser().getLogin();
-//        String userUuid = (String) session.getAttribute(USER_UUID);
-        log.info("User with a login " + getAuthenticationUser().getLogin() + " logged out of the system");
-//        log.info("User [" + userUuid + "] with a login " + userDto.getLogin() + " logged out of the system");
-//        session.removeAttribute(USER_ACCESS_PERMISSION);
-//        session.removeAttribute(USER_UUID);
-//        ??
-//        session.invalidate();
-    }
+//    //    public static void writeLoggedToLog(HttpSession session) {
+//    public static void writeLoggedToLog() {
+////        UserDto userDto = getUserDto(session);
+////        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+////        CustomUserDetail principal = (CustomUserDetail) authentication.getPrincipal();
+////        String login = principal.getUser().getLogin();
+////        String userUuid = (String) session.getAttribute(USER_UUID);
+//        log.info("User with a login " + getAuthenticationUser().getLogin() + " logged out of the system");
+////        log.info("User [" + userUuid + "] with a login " + userDto.getLogin() + " logged out of the system");
+////        session.removeAttribute(USER_ACCESS_PERMISSION);
+////        session.removeAttribute(USER_UUID);
+////        ??
+////        session.invalidate();
+//    }
 
     public static void setFilterAttribute(HttpSession session, String filter) {
         if (TRUE.equals(filter)) {
