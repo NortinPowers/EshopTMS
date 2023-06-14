@@ -7,12 +7,13 @@ import by.tms.eshop.domain.Product;
 import by.tms.eshop.domain.User;
 import by.tms.eshop.dto.OrderDto;
 import by.tms.eshop.dto.ProductDto;
-import by.tms.eshop.dto.conversion.Converter;
+import by.tms.eshop.mapper.OrderMapper;
 import by.tms.eshop.mapper.ProductMapper;
 import by.tms.eshop.repository.OrderRepository;
 import by.tms.eshop.service.OrderService;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -22,8 +23,9 @@ import org.springframework.stereotype.Service;
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
-    private final Converter converter;
+//    private final Converter converter;
     private final ProductMapper productMapper;
+    private final OrderMapper orderMapper;
 
     @Override
     public Long createOrder(Long id) {
@@ -49,7 +51,9 @@ public class OrderServiceImpl implements OrderService {
     public List<OrderDto> getOrdersById(Long id) {
 //        List<Order> orderById = orderRepository.findOrderByUserId(id);
 //        converter.getOrdersDtosFromOrders(orderById);
-        return converter.getOrdersDtosFromOrders(orderRepository.findOrderByUserId(id));
+        return orderRepository.findOrderByUserId(id).stream()
+              .map(orderMapper::convertToOrderDto)
+              .collect(Collectors.toList());
 //        return converter.getOrdersDtosFromOrders(orderRepository.findOrderByUserId(id));
     }
 

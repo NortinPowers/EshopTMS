@@ -13,7 +13,7 @@ import static by.tms.eshop.utils.ControllerUtils.getAuthenticationUserId;
 import static by.tms.eshop.utils.ControllerUtils.getProductsPrice;
 
 import by.tms.eshop.dto.ProductDto;
-import by.tms.eshop.dto.conversion.Converter;
+import by.tms.eshop.model.Location;
 import by.tms.eshop.service.CartService;
 import by.tms.eshop.service.ShopFacade;
 import java.util.List;
@@ -31,14 +31,15 @@ public class CartController {
 
     private final CartService cartService;
     private final ShopFacade shopFacade;
-    private final Converter converter;
+//    private final Converter converter;
 
     @GetMapping("/cart")
     public ModelAndView showCardPage(ModelAndView modelAndView) {
 //    public ModelAndView showCardPage(HttpSession session, ModelAndView modelAndView) {
 //        Long userId = getUserId(session);
 //        List<ImmutablePair<ProductDto, Integer>> cartProducts = cartService.getSelectedProducts(userId, converter.selectCart());
-        List<ImmutablePair<ProductDto, Integer>> cartProducts = cartService.getSelectedProducts(getAuthenticationUserId(), converter.selectCart());
+//        List<ImmutablePair<ProductDto, Integer>> cartProducts = cartService.getSelectedProducts(getAuthenticationUserId(), converter.selectCart());
+        List<ImmutablePair<ProductDto, Integer>> cartProducts = cartService.getSelectedProducts(getAuthenticationUserId(), Location.CART);
         modelAndView.addObject(CART_PRODUCTS, cartProducts);
         modelAndView.addObject(FULL_PRICE, getProductsPrice(cartProducts));
         modelAndView.setViewName(SHOPPING_CART);
@@ -65,7 +66,8 @@ public class CartController {
                                          @RequestParam(name = SHOP) String shopFlag,
                                          @RequestParam(name = LOCATION) String location,
                                          @RequestParam(name = "page", required = false) Integer page) {
-        cartService.addSelectedProduct(getAuthenticationUserId(), productId, converter.selectCart());
+        cartService.addSelectedProduct(getAuthenticationUserId(), productId, Location.CART);
+//        cartService.addSelectedProduct(getAuthenticationUserId(), productId, converter.selectCart());
 //        cartService.addSelectedProduct(getUserId(session), productId, converter.selectCart());
 //        if (page == null) {
 //            page = -1;
@@ -77,7 +79,8 @@ public class CartController {
     @GetMapping("/delete-cart")
 //    public ModelAndView deleteProductFromCart(HttpSession session,
     public ModelAndView deleteProductFromCart(@RequestParam(name = ID) Long productId) {
-        cartService.deleteProduct(getAuthenticationUserId(), productId, converter.selectCart());
+        cartService.deleteProduct(getAuthenticationUserId(), productId, Location.CART);
+//        cartService.deleteProduct(getAuthenticationUserId(), productId, converter.selectCart());
 //        cartService.deleteProduct(getUserId(session), productId, converter.selectCart());
         return new ModelAndView(REDIRECT_TO_CART);
     }

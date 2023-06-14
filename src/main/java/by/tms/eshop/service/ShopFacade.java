@@ -22,7 +22,8 @@ import static by.tms.eshop.utils.ControllerUtils.getPrice;
 import by.tms.eshop.domain.User;
 import by.tms.eshop.dto.ProductDto;
 import by.tms.eshop.dto.UserFormDto;
-import by.tms.eshop.dto.conversion.Converter;
+import by.tms.eshop.mapper.UserMapper;
+import by.tms.eshop.model.Location;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import java.math.BigDecimal;
@@ -42,11 +43,13 @@ public class ShopFacade {
     private final OrderService orderService;
     private final ProductService productService;
     private final UserService userService;
-    private final Converter converter;
+//    private final Converter converter;
+    private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
 
     public void carriesPurchase(Long userId) {
-        List<ProductDto> productsDto = cartService.getPurchasedProducts(userId, converter.selectCart());
+//        List<ProductDto> productsDto = cartService.getPurchasedProducts(userId, converter.selectCart());
+        List<ProductDto> productsDto = cartService.getPurchasedProducts(userId, Location.CART);
         orderService.saveUserOrder(userId, productsDto);
         //--
         cartService.deleteCartProductsAfterBuy(userId);
@@ -111,7 +114,8 @@ public class ShopFacade {
     public void createUser(UserFormDto user) {
 //    public void createUser(HttpServletRequest request, UserFormDto user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        User userEntity = converter.makeUserModelTransfer(user);
+        User userEntity = userMapper.convetrToUser(user);
+//        User userEntity = converter.makeUserModelTransfer(user);
         userService.addUser(userEntity);
 //        markUserToLog(converter.makeUserDtoModelTransfer(userEntity));
 //        markUser(request, converter.makeUserDtoModelTransfer(userEntity));
