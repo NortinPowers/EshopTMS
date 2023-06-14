@@ -122,7 +122,8 @@ public class ControllerUtils {
         } else {
             path = REDIRECT_TO_PRODUCTS_PAGE_CATEGORY_WITH_PARAM + productCategory + "&size=3";
         }
-        if (page < 0) {
+        if (page == null) {
+//        if (page < 0) {
             return path;
         } else {
             return path + "&page=" + page;

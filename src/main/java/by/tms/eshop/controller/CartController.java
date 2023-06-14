@@ -67,9 +67,9 @@ public class CartController {
                                          @RequestParam(name = "page", required = false) Integer page) {
         cartService.addSelectedProduct(getAuthenticationUserId(), productId, converter.selectCart());
 //        cartService.addSelectedProduct(getUserId(session), productId, converter.selectCart());
-        if (page == null) {
-            page = -1;
-        }
+//        if (page == null) {
+//            page = -1;
+//        }
         return new ModelAndView(shopFacade.getPathFromAddCartByParameters(productId, shopFlag, location, page));
 //        return new ModelAndView(shopFacade.getPathFromAddCartByParameters(productId, shopFlag, location));
     }

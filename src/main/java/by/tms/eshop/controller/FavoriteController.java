@@ -60,9 +60,9 @@ public class FavoriteController {
                                              @RequestParam(name = "page", required = false) Integer page) {
         cartService.addSelectedProduct(getAuthenticationUserId(), productId, converter.selectFavorite());
 //        cartService.addSelectedProduct(getUserId(session), productId, converter.selectFavorite());
-        if (page == null) {
-            page = -1;
-        }
+//        if (page == null) {
+//            page = -1;
+//        }
         return new ModelAndView(getPathFromAddFavoriteByParameters(productId, location, productService.getProductCategoryValue(productId), page));
 //        return new ModelAndView(getPathFromAddFavoriteByParameters(productId, location, productService.getProductCategoryValue(productId)));
     }
