@@ -7,6 +7,14 @@
 </head>
 <body>
 <th:block th:insert="~{/include/navigate}"/>
+<th:block th:if="${favoriteProducts.size()<1}">
+<h3 class="text-center mt-2 text-dark font-italic">Try clicking on this icon on a product that you like!</h3>
+<div class="text-center">
+    <a th:href="@{/eshop}">
+    <img class="card-img-top w-25" src="/images/decoration/like.jpeg" alt="like">
+    </a>
+</div>
+</th:block>
 <div class="row row-cols-1 row-cols-md-5 g-4 mr-1 ml-1 mt-1">
     <div th:each="product : ${favoriteProducts}">
         <div class="card mr-4 ml-4 mt-4 shadow bg-body-tertiary rounded" style="max-width: 14rem">

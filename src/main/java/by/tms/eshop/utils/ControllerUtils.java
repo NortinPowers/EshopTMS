@@ -3,10 +3,6 @@ package by.tms.eshop.utils;
 import static by.tms.eshop.utils.Constants.ALL;
 import static by.tms.eshop.utils.Constants.Attributes.FILTER_FOUND_PRODUCTS;
 import static by.tms.eshop.utils.Constants.Attributes.FOUND_PRODUCTS;
-import static by.tms.eshop.utils.Constants.Attributes.USER_ACCESS_PERMISSION;
-import static by.tms.eshop.utils.Constants.CONVERSATION;
-import static by.tms.eshop.utils.Constants.MappingPath.ESHOP;
-import static by.tms.eshop.utils.Constants.MappingPath.LOGIN;
 import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_PRODUCTS_PAGE_CATEGORY_WITH_PARAM;
 import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_PRODUCT_WITH_PARAM;
 import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_SEARCH_RESULT_SAVE;
@@ -25,7 +21,6 @@ import static java.util.UUID.randomUUID;
 
 import by.tms.eshop.domain.User;
 import by.tms.eshop.dto.ProductDto;
-import by.tms.eshop.dto.UserDto;
 import by.tms.eshop.security.CustomUserDetail;
 import by.tms.eshop.utils.Constants.UserVerifyField;
 import jakarta.servlet.http.HttpServletRequest;
@@ -40,7 +35,6 @@ import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.slf4j.MDC;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
@@ -51,9 +45,9 @@ import org.springframework.web.servlet.ModelAndView;
 @UtilityClass
 public class ControllerUtils {
 
-    public static boolean isVerifyUser(User user, String password) {
-        return user.getPassword().equals(password);
-    }
+//    public static boolean isVerifyUser(User user, String password) {
+//        return user.getPassword().equals(password);
+//    }
 
 //    public static void saveUserSession(HttpServletRequest req, UserDto userDto) {
 //        HttpSession session = req.getSession();
@@ -66,19 +60,19 @@ public class ControllerUtils {
 //    }
 
 //        public static void markUserToLog(UserDto userDto) {
-    public static void markUserToLog(User user) {
-//    public static void markUser(HttpServletRequest req, UserDto userDto) {
-//        HttpSession session = req.getSession();
-//        session.setAttribute(USER_ACCESS_PERMISSION, userDto);
-        log.info("The user with a login " + user.getLogin() + " is logged in");
-//        log.info("The user with a login " + userDto.getLogin() + " is logged in");
-//        String userUuid = randomUUID().toString();
-//        MDC.put(CONVERSATION, userUuid);
-        MDC.put(CONVERSATION, randomUUID().toString());
-//        session.setAttribute(USER_UUID, userUuid);
-        log.info("User with the login " + user.getLogin() + " has been assigned a UUID");
-//        log.info("User with the login " + userDto.getLogin() + " has been assigned a UUID");
-    }
+//    public static void markUserToLog(User user) {
+////    public static void markUser(HttpServletRequest req, UserDto userDto) {
+////        HttpSession session = req.getSession();
+////        session.setAttribute(USER_ACCESS_PERMISSION, userDto);
+//        log.info("The user with a login " + user.getLogin() + " is logged in");
+////        log.info("The user with a login " + userDto.getLogin() + " is logged in");
+////        String userUuid = randomUUID().toString();
+////        MDC.put(CONVERSATION, userUuid);
+//        MDC.put(CONVERSATION, randomUUID().toString());
+////        session.setAttribute(USER_UUID, userUuid);
+//        log.info("User with the login " + user.getLogin() + " has been assigned a UUID");
+////        log.info("User with the login " + userDto.getLogin() + " has been assigned a UUID");
+//    }
 
     public static String createOrderNumber(Long id) {
         String uuid = randomUUID().toString();
@@ -192,17 +186,17 @@ public class ControllerUtils {
         fillError(PASSWORD, modelAndView, bindingResult);
     }
 
-    public static void setViewByAccessPermission(HttpSession session, ModelAndView modelAndView) {
-        if (getUserDto(session) != null) {
-            modelAndView.setViewName(ESHOP);
-        } else {
-            modelAndView.setViewName(LOGIN);
-        }
-    }
+//    public static void setViewByAccessPermission(HttpSession session, ModelAndView modelAndView) {
+//        if (getUserDto(session) != null) {
+//            modelAndView.setViewName(ESHOP);
+//        } else {
+//            modelAndView.setViewName(LOGIN);
+//        }
+//    }
 
-    public static UserDto getUserDto(HttpSession session) {
-        return (UserDto) session.getAttribute(USER_ACCESS_PERMISSION);
-    }
+//    public static UserDto getUserDto(HttpSession session) {
+//        return (UserDto) session.getAttribute(USER_ACCESS_PERMISSION);
+//    }
 
     public static BigDecimal getProductsPrice(List<ImmutablePair<ProductDto, Integer>> productWithCount) {
         BigDecimal fullPrice = BigDecimal.ZERO;

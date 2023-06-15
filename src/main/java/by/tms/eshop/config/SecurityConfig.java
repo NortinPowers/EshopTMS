@@ -20,6 +20,8 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     private final CustomUserDetailsService customUserDetailsService;
+    private final CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
+    private final LogoutHandler logoutHandler;
 
     @SuppressWarnings({"checkstyle:MultipleStringLiterals", "checkstyle:UnnecessaryParentheses"})
     @Bean
@@ -48,13 +50,15 @@ public class SecurityConfig {
                                    .loginPage("/login")
 //                                   .loginProcessingUrl("/login")
 //                        .usernameParameter("login")
-                                   .successForwardUrl("/")
+                                   .successHandler(customAuthenticationSuccessHandler)
+//                                   .successForwardUrl("/")
 //                        .failureForwardUrl("/login")
                                    .permitAll()
                 )
                 .rememberMe(Customizer.withDefaults())
                 .logout((logout) -> logout
-                        .logoutSuccessUrl("/")
+//                        .logoutSuccessUrl("/")
+                        .logoutSuccessHandler(logoutHandler)
 //                        .clearAuthentication(true)
 //                        .deleteCookies()
 .permitAll())
