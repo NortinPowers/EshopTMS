@@ -1,6 +1,7 @@
 package by.tms.eshop.controller;
 
 import static by.tms.eshop.utils.Constants.MappingPath.CREATE_USER;
+import static by.tms.eshop.utils.Constants.MappingPath.LOGIN;
 import static by.tms.eshop.utils.Constants.MappingPath.SUCCESS_REGISTER;
 import static by.tms.eshop.utils.ControllerUtils.fillUserValidationError;
 
@@ -37,12 +38,12 @@ public class LoginController {
 //    }
 
     //new
-//    @GetMapping("/login")
-//    public ModelAndView showLoginPage(ModelAndView modelAndView) {
-//        modelAndView.setViewName(LOGIN);
-////        modelAndView.setViewName("login/login");
-//        return modelAndView;
-//    }
+    @GetMapping("/login")
+    public ModelAndView showLoginPage(ModelAndView modelAndView) {
+        modelAndView.setViewName(LOGIN);
+//        modelAndView.setViewName("login/login");
+        return modelAndView;
+    }
 
 //    @PostMapping("/login")
 //    public ModelAndView showSuccess(ModelAndView modelAndView) {

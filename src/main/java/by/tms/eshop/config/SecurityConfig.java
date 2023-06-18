@@ -28,7 +28,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 //        SecurityContextRepository repo = new HttpSessionSecurityContextRepository();
         return http
-                .userDetailsService(customUserDetailsService)
+//                .userDetailsService(customUserDetailsService)
+
 //                .sessionManagement((session) -> session
 //                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
 //                .securityContext((context) -> context
