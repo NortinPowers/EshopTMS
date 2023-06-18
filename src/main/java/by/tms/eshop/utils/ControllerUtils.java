@@ -20,6 +20,7 @@ import static by.tms.eshop.utils.Constants.UserVerifyField.VERIFY_PASSWORD;
 import static java.util.UUID.randomUUID;
 
 import by.tms.eshop.domain.User;
+import by.tms.eshop.dto.CartDto;
 import by.tms.eshop.dto.ProductDto;
 import by.tms.eshop.security.CustomUserDetail;
 import by.tms.eshop.utils.Constants.UserVerifyField;
@@ -34,7 +35,6 @@ import java.util.stream.Collectors;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
@@ -198,10 +198,19 @@ public class ControllerUtils {
 //        return (UserDto) session.getAttribute(USER_ACCESS_PERMISSION);
 //    }
 
-    public static BigDecimal getProductsPrice(List<ImmutablePair<ProductDto, Integer>> productWithCount) {
+//    public static BigDecimal getProductsPrice(List<ImmutablePair<ProductDto, Integer>> productWithCount) {
+//        BigDecimal fullPrice = BigDecimal.ZERO;
+//        for (ImmutablePair<ProductDto, Integer> product : productWithCount) {
+//            BigDecimal totalPrice = product.getLeft().getPrice().multiply(new BigDecimal(product.getRight()));
+//            fullPrice = fullPrice.add(totalPrice);
+//        }
+//        return fullPrice;
+//    }
+
+    public static BigDecimal getProductsPrice(List<CartDto> carts) {
         BigDecimal fullPrice = BigDecimal.ZERO;
-        for (ImmutablePair<ProductDto, Integer> product : productWithCount) {
-            BigDecimal totalPrice = product.getLeft().getPrice().multiply(new BigDecimal(product.getRight()));
+        for (CartDto cart : carts) {
+            BigDecimal totalPrice = cart.getProductDto().getPrice().multiply(new BigDecimal(cart.getCount()));
             fullPrice = fullPrice.add(totalPrice);
         }
         return fullPrice;

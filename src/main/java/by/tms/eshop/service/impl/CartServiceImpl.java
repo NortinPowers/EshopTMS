@@ -3,7 +3,9 @@ package by.tms.eshop.service.impl;
 import by.tms.eshop.domain.Cart;
 import by.tms.eshop.domain.Product;
 import by.tms.eshop.domain.User;
+import by.tms.eshop.dto.CartDto;
 import by.tms.eshop.dto.ProductDto;
+import by.tms.eshop.mapper.CartMapper;
 import by.tms.eshop.mapper.ProductMapper;
 import by.tms.eshop.model.Location;
 import by.tms.eshop.repository.CartRepository;
@@ -12,8 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +23,7 @@ public class CartServiceImpl implements CartService {
 
     private final CartRepository cartRepository;
     private final ProductMapper productMapper;
+    private final CartMapper cartMapper;
 
 //    @Transactional
 //    @Override
@@ -46,20 +47,32 @@ public class CartServiceImpl implements CartService {
 //        return cartRepository.getSelectedProducts(userId, location);
 //    }
 
+//    @Override
+//    public List<ImmutablePair<ProductDto, Integer>> getSelectedProducts(Long userId, Location location) {
+//        if (location.isCart()) {
+////            List<ImmutablePair<Product, Integer>> cartProducts = cartRepository.getCartProducts(userId);
+////            return cartRepository.getCartProducts(userId).stream()
+////                                                                             .map(pair -> ImmutablePair.of(productMapper.convertToProductDto(pair.getLeft()), pair.getRight()))
+////                                                                             .collect(Collectors.toList());
+////            for (ImmutablePair<Product, Integer> cartProduct : cartProducts) {
+////                productMapper.convertToProductDto(cartProduct.getLeft());
+////            }
+////            return cartRepository.getCartProducts(userId)
+//            return getImmutablePairsProductDtoCount(cartRepository.getCartProducts(userId));
+//        } else {
+//            return getImmutablePairsProductDtoCount(cartRepository.getFavoriteProducts(userId));
+////            return cartRepository.getFavoriteProducts(userId);
+//        }
+////        return cartRepository.getSelectedProducts(userId, location);
+//    }
+
     @Override
-    public List<ImmutablePair<ProductDto, Integer>> getSelectedProducts(Long userId, Location location) {
+    public List<CartDto> getSelectedProducts(Long userId, Location location) {
         if (location.isCart()) {
-//            List<ImmutablePair<Product, Integer>> cartProducts = cartRepository.getCartProducts(userId);
-//            return cartRepository.getCartProducts(userId).stream()
-//                                                                             .map(pair -> ImmutablePair.of(productMapper.convertToProductDto(pair.getLeft()), pair.getRight()))
-//                                                                             .collect(Collectors.toList());
-//            for (ImmutablePair<Product, Integer> cartProduct : cartProducts) {
-//                productMapper.convertToProductDto(cartProduct.getLeft());
-//            }
-//            return cartRepository.getCartProducts(userId)
-            return getImmutablePairsProductDtoCount(cartRepository.getCartProducts(userId));
+//            return getImmutablePairsProductDtoCount(cartRepository.getCartProducts(userId));
+            return convertToCartDtos(cartRepository.getCartProducts(userId));
         } else {
-            return getImmutablePairsProductDtoCount(cartRepository.getFavoriteProducts(userId));
+            return convertToCartDtos(cartRepository.getFavoriteProducts(userId));
 //            return cartRepository.getFavoriteProducts(userId);
         }
 //        return cartRepository.getSelectedProducts(userId, location);
@@ -92,20 +105,45 @@ public class CartServiceImpl implements CartService {
 //        return cartRepository.getPurchasedProducts(userId, location);
 //    }
 
+//    @Override
+//    public List<ProductDto> getPurchasedProducts(Long userId, Location location) {
+//        List<ProductDto> products = new ArrayList<>();
+////        List<ImmutablePair<ProductDto, Integer>> productWithCount = getSelectedProducts(userId, location);
+////        List<ImmutablePair<ProductDto, Integer>> productWithCount = cartRepository.getCartProducts(userId);
+//        List<ImmutablePair<ProductDto, Integer>> productWithCount = getImmutablePairsProductDtoCount(cartRepository.getCartProducts(userId));
+//        for (Pair<ProductDto, Integer> productIntegerPair : productWithCount) {
+//            Integer count = productIntegerPair.getRight();
+//            while (count > 0) {
+//                products.add(productIntegerPair.getLeft());
+//                count--;
+//            }
+//        }
+//        return products;
+//    }
+
     @Override
     public List<ProductDto> getPurchasedProducts(Long userId, Location location) {
-        List<ProductDto> products = new ArrayList<>();
+//        List<ProductDto> products = new ArrayList<>();
 //        List<ImmutablePair<ProductDto, Integer>> productWithCount = getSelectedProducts(userId, location);
 //        List<ImmutablePair<ProductDto, Integer>> productWithCount = cartRepository.getCartProducts(userId);
-        List<ImmutablePair<ProductDto, Integer>> productWithCount = getImmutablePairsProductDtoCount(cartRepository.getCartProducts(userId));
-        for (Pair<ProductDto, Integer> productIntegerPair : productWithCount) {
-            Integer count = productIntegerPair.getRight();
+//        List<ImmutablePair<ProductDto, Integer>> productWithCount = getImmutablePairsProductDtoCount(cartRepository.getCartProducts(userId));
+        List<ProductDto> productDtos = new ArrayList<>();
+        List<CartDto> carts = convertToCartDtos(cartRepository.getCartProducts(userId));
+        for (CartDto cart : carts) {
+            Integer count = cart.getCount();
             while (count > 0) {
-                products.add(productIntegerPair.getLeft());
+                productDtos.add(cart.getProductDto());
                 count--;
             }
         }
-        return products;
+//        for (Pair<ProductDto, Integer> productIntegerPair : productWithCount) {
+//            Integer count = productIntegerPair.getRight();
+//            while (count > 0) {
+//                products.add(productIntegerPair.getLeft());
+//                count--;
+//            }
+//        }
+        return productDtos;
     }
 
     @Transactional
@@ -169,6 +207,12 @@ public class CartServiceImpl implements CartService {
 //                cartRepository.delete(userCartProduct);
 //            }
         }
+    }
+
+    private List<CartDto> convertToCartDtos(List<Cart> carts) {
+        return carts.stream()
+                    .map(cartMapper::convertToCartDto)
+                    .toList();
     }
 
     private void addProduct(Long userId, Long productId, Location location) {
@@ -247,16 +291,16 @@ public class CartServiceImpl implements CartService {
 //                                 .collect(Collectors.toList());
 //    }
 
-    private List<ImmutablePair<ProductDto, Integer>> getImmutablePairsProductDtoCount(List<Cart> carts) {
-        List<ImmutablePair<ProductDto, Integer>> pairs = new ArrayList<>();
-        carts.forEach(cart -> pairs.add(new ImmutablePair<>(productMapper.convertToProductDto(cart.getProduct()), cart.getCount())));
-//        carts.forEach(cart -> pairs.add(new ImmutablePair<>(ProductDto.builder()
-//                                                                      .id(cart.getProduct().getId())
-//                                                                      .name(cart.getProduct().getName())
-//                                                                      .category(cart.getProduct().getProductCategory().getCategory())
-//                                                                      .price(cart.getProduct().getPrice())
-//                                                                      .info(cart.getProduct().getInfo())
-//                                                                      .build(), cart.getCount())));
-        return pairs;
-    }
+//    private List<ImmutablePair<ProductDto, Integer>> getImmutablePairsProductDtoCount(List<Cart> carts) {
+//        List<ImmutablePair<ProductDto, Integer>> pairs = new ArrayList<>();
+//        carts.forEach(cart -> pairs.add(new ImmutablePair<>(productMapper.convertToProductDto(cart.getProduct()), cart.getCount())));
+////        carts.forEach(cart -> pairs.add(new ImmutablePair<>(ProductDto.builder()
+////                                                                      .id(cart.getProduct().getId())
+////                                                                      .name(cart.getProduct().getName())
+////                                                                      .category(cart.getProduct().getProductCategory().getCategory())
+////                                                                      .price(cart.getProduct().getPrice())
+////                                                                      .info(cart.getProduct().getInfo())
+////                                                                      .build(), cart.getCount())));
+//        return pairs;
+//    }
 }

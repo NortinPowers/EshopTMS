@@ -18,11 +18,11 @@
 <div class="row row-cols-1 row-cols-md-5 g-4 mr-1 ml-1 mt-1">
     <div th:each="product : ${favoriteProducts}">
         <div class="card mr-4 ml-4 mt-4 shadow bg-body-tertiary rounded" style="max-width: 14rem">
-            <a th:href="@{/product/__${product.id}__}">
+<!--            <a th:href="@{/product/__${product.id}__(location='favorite')}">-->
                 <img class="card-img-top" style="max-height: 20rem"
-                     th:src="@{/images/__${#strings.toLowerCase(product.getCategory)}__/__${product.name}__.jpg}"
+                     th:src="@{/images/__${#strings.toLowerCase(product.category)}__/__${product.name}__.jpg}"
                      th:alt="${product.name}">
-            </a>
+<!--            </a>-->
             <div class="card-body">
                 <h5 class="card-title text-wrap" style="text-align: -webkit-center"
                     th:text="${product.name}"></h5>

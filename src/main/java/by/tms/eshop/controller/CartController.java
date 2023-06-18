@@ -12,13 +12,12 @@ import static by.tms.eshop.utils.Constants.RequestParameters.SHOP;
 import static by.tms.eshop.utils.ControllerUtils.getAuthenticationUserId;
 import static by.tms.eshop.utils.ControllerUtils.getProductsPrice;
 
-import by.tms.eshop.dto.ProductDto;
+import by.tms.eshop.dto.CartDto;
 import by.tms.eshop.model.Location;
 import by.tms.eshop.service.CartService;
 import by.tms.eshop.service.ShopFacade;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -39,8 +38,10 @@ public class CartController {
 //        Long userId = getUserId(session);
 //        List<ImmutablePair<ProductDto, Integer>> cartProducts = cartService.getSelectedProducts(userId, converter.selectCart());
 //        List<ImmutablePair<ProductDto, Integer>> cartProducts = cartService.getSelectedProducts(getAuthenticationUserId(), converter.selectCart());
-        List<ImmutablePair<ProductDto, Integer>> cartProducts = cartService.getSelectedProducts(getAuthenticationUserId(), Location.CART);
+        List<CartDto> cartProducts = cartService.getSelectedProducts(getAuthenticationUserId(), Location.CART);
+//        List<ImmutablePair<ProductDto, Integer>> cartProducts = cartService.getSelectedProducts(getAuthenticationUserId(), Location.CART);
         modelAndView.addObject(CART_PRODUCTS, cartProducts);
+//        modelAndView.addObject(FULL_PRICE, getProductsPrice(cartProducts));
         modelAndView.addObject(FULL_PRICE, getProductsPrice(cartProducts));
         modelAndView.setViewName(SHOPPING_CART);
         return modelAndView;

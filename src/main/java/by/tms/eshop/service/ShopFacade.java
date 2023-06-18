@@ -20,6 +20,7 @@ import static by.tms.eshop.utils.ControllerUtils.applyTypeFilterOnProducts;
 import static by.tms.eshop.utils.ControllerUtils.getPrice;
 
 import by.tms.eshop.domain.User;
+import by.tms.eshop.dto.CartDto;
 import by.tms.eshop.dto.ProductDto;
 import by.tms.eshop.dto.UserFormDto;
 import by.tms.eshop.mapper.UserMapper;
@@ -30,6 +31,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -121,6 +123,23 @@ public class ShopFacade {
 //        markUser(request, converter.makeUserDtoModelTransfer(userEntity));
     }
 
+    public List<ProductDto> getFavoriteProducts(Long userId) {
+        List<CartDto> cartDtos = cartService.getSelectedProducts(userId, Location.FAVORITE);
+        return cartDtos.stream()
+                       .map(CartDto::getProductDto)
+                       .collect(Collectors.toList());
+    }
+
+    public String defineLocation(String location) {
+        String type = "all";
+        if (location != null) {
+            if (FAVORITE.equals(location)) {
+                type = FAVORITE;
+            }
+        }
+        return type;
+    }
+
 //    public void checkLoginUser(HttpServletRequest request, UserFormDto user, ModelAndView modelAndView) {
 //        Optional<User> incomingUser = userService.getUserByLogin(user.getLogin());
 //        if (incomingUser.isPresent() && isVerifyUser(incomingUser.get(), user.getPassword())) {
@@ -131,12 +150,13 @@ public class ShopFacade {
 //            modelAndView.addObject(LOGIN_ERROR, RECHECK_DATA);
 //            modelAndView.setViewName(LOGIN);
 //        }
-//    }
 
+//    }
 //    public void saveUserOldStyle(HttpServletRequest request, User user, ModelAndView modelAndView) {
 //        UserDto userDto = convertor.makeUserDtoModelTransfer(user);
 //        saveUserSession(request, userDto);
 //        modelAndView.setViewName(REDIRECT_TO_ESHOP);
+
 //    }
 
     private Set<ProductDto> getProductByFilter(HttpSession session, String type, BigDecimal minPrice, BigDecimal maxPrice) {
@@ -146,4 +166,6 @@ public class ShopFacade {
         products = applyTypeFilterOnProducts(type, products);
         return products;
     }
+
+
 }

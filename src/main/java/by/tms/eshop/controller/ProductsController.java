@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class ProductsController {
 
     private final ProductService productService;
+//    private final ShopFacade shopFacade;
 
     @GetMapping("/products-page")
     public ModelAndView showProductsPage(@RequestParam(CATEGORY) String category,
@@ -27,6 +28,19 @@ public class ProductsController {
 
     @GetMapping("/product/{id}")
     public ModelAndView showProductPage(@PathVariable(ID) Long id) {
+//                                        @RequestParam(name = LOCATION, required = false) String location) {
+//        String type = shopFacade.defineLocation(location);
+//        return productService.getProduct(id, type);
         return productService.getProduct(id);
     }
+
+//    private static String defineLocation(String location) {
+//        String type = "all";
+//        if (location != null) {
+//            if (FAVORITE.equals(location)) {
+//                type = FAVORITE;
+//            }
+//        }
+//        return type;
+//    }
 }

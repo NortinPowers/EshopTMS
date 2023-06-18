@@ -12,11 +12,9 @@ import by.tms.eshop.dto.ProductDto;
 import by.tms.eshop.model.Location;
 import by.tms.eshop.service.CartService;
 import by.tms.eshop.service.ProductService;
-import jakarta.servlet.http.HttpSession;
+import by.tms.eshop.service.ShopFacade;
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,10 +27,12 @@ public class FavoriteController {
 
     private final CartService cartService;
     private final ProductService productService;
+    private final ShopFacade shopFacade;
 //    private final Converter converter;
 
     @GetMapping("/favorites")
-    public ModelAndView showFavoritesPage(HttpSession session) {
+    public ModelAndView showFavoritesPage() {
+//    public ModelAndView showFavoritesPage(HttpSession session) {
 //    public ModelAndView showFavoritesPage(HttpSession session, Principal principal) {
 //        User user = getAuthenticationUser();
 //        Long id = user.getId();
@@ -40,12 +40,22 @@ public class FavoriteController {
 //        Long id = userPrincipal.getUserId();
 //        List<ProductDto> productDtos = cartService.getSelectedProducts(getUserId(session), converter.selectFavorite()).stream()
 //        List<ProductDto> products = cartService.getSelectedProducts(getAuthenticationUserId(), converter.selectFavorite()).stream()
-        List<ProductDto> products = cartService.getSelectedProducts(getAuthenticationUserId(), Location.FAVORITE).stream()
-                                               .map(Pair::getLeft)
-                                               .collect(Collectors.toList());
+
+//        List<ProductDto> products = cartService.getSelectedProducts(getAuthenticationUserId(), Location.FAVORITE).stream()
+//                                               .map(Pair::getLeft)
+//                                               .collect(Collectors.toList());
+        List<ProductDto> products = shopFacade.getFavoriteProducts(getAuthenticationUserId());
         ModelMap modelMap = new ModelMap(FAVORITE_PRODUCTS, products);
         return new ModelAndView(FAVORITES, modelMap);
     }
+
+//    private List<ProductDto> getFavoriteProducts(Long userId) {
+//        List<CartDto> cartDtos = cartService.getSelectedProducts(getAuthenticationUserId(), Location.FAVORITE);
+//        List<ProductDto> products = cartDtos.stream()
+//                                                    .map(CartDto::getProductDto)
+//                                                    .collect(Collectors.toList());
+//        return products;
+//    }
 
 //    private static User getAuthenticationUser() {
 //        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

@@ -43,6 +43,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+//    public ModelAndView getProduct(Long id, String location) {
     public ModelAndView getProduct(Long id) {
         Optional<Product> productOptional = productRepository.findById(id);
         ModelMap modelMap = null;
@@ -50,6 +51,12 @@ public class ProductServiceImpl implements ProductService {
             modelMap = new ModelMap(Attributes.PRODUCT, productMapper.convertToProductDto(productOptional.get()));
 //            modelMap = new ModelMap(Attributes.PRODUCT, converter.makeProductDtoModelTransfer(productOptional.get()));
         }
+//        ModelAndView modelAndView = new ModelAndView();
+//        modelAndView.addObject(PRODUCT, modelMap);
+//        if (location.equals(FAVORITE)) {
+//            modelAndView.addObject(FAVORITE, true);
+//        }
+//        return modelAndView;
         return new ModelAndView(PRODUCT, modelMap);
     }
 
