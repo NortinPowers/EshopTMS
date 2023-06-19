@@ -34,10 +34,18 @@
     </th:block>
     <!--        <th:block th:if="${authorizedUser != null}">-->
     <th:block sec:authorize="isAuthenticated()">
-      <h2 style="text-align: center; color: #e5a0a4; margin-right: 11%; text-shadow: 1px 1px 2px red, 0 0 1em #ff004d, 0 0 0.2em #ff0062;">Welcome <span sec:authentication="name"></span></h2>
+      <h2 style="text-align: center; color: #e5a0a4; margin-right: 11%; text-shadow: 1px 1px 2px red, 0 0 1em #ff004d, 0 0 0.2em #ff0062;">
+        Welcome <span sec:authentication="name"></span><span th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">, our lord</span>
+      </h2>
 <!--      <h2 style="text-align: center; color: #e5a0a4; margin-right: 11%; text-shadow: 1px 1px 2px red, 0 0 1em #ff004d, 0 0 0.2em #ff0062;" sec:authentication="name"></h2>-->
 <!--        Welcome <span th:remove="tag" sec:authentication="name"></span>! </h2>-->
       <ul class="nav nav-pills ">
+        <li class="nav-item" th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
+          <a id="adminButton"
+             th:href="@{/admin}">
+            <button class="btn btn-outline-warning mr-2" type="submit">Admin</button>
+          </a>
+        </li>
         <li class="nav-item">
           <a id="accountButton"
              th:href="@{/account}">
@@ -53,12 +61,6 @@
           <!--                       th:href="@{/logout}" methods="post">-->
           <!--                        <button class="btn btn-outline-success" type="submit">Exit</button>-->
           <!--                    </a>-->
-        </li>
-        <li class="nav-item ml-2" th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
-          <a id="adminButton"
-             th:href="@{/admin}">
-            <button class="btn btn-outline-success mr-2" type="submit">Admin</button>
-          </a>
         </li>
       </ul>
 <!--    </th:block>-->
