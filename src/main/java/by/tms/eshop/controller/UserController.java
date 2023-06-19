@@ -3,31 +3,37 @@ package by.tms.eshop.controller;
 import static by.tms.eshop.utils.Constants.MappingPath.CREATE_USER;
 import static by.tms.eshop.utils.Constants.MappingPath.LOGIN;
 import static by.tms.eshop.utils.Constants.MappingPath.SUCCESS_REGISTER;
+import static by.tms.eshop.utils.Constants.RequestParameters.ID;
 import static by.tms.eshop.utils.ControllerUtils.fillUserValidationError;
+import static by.tms.eshop.utils.ControllerUtils.fillsEditVerifyErrors;
 
 import by.tms.eshop.dto.UserFormDto;
 import by.tms.eshop.service.ShopFacade;
-import by.tms.eshop.validator.ExcludeLogValidation;
+import by.tms.eshop.service.UserService;
+import by.tms.eshop.validator.EditValidation;
 import by.tms.eshop.validator.UserValidator;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.groups.Default;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-@Controller
+@RestController
+//@Controller
 @RequiredArgsConstructor
 @Slf4j
-public class LoginController {
+public class UserController {
 
     private final UserValidator userValidator;
     private final ShopFacade shopFacade;
+    private final UserService userService;
 //    private final AuthenticationManager authenticationManager;
 //    private final SecurityContextRepository securityContextRepository = new HttpSessionSecurityContextRepository();
 
@@ -108,7 +114,7 @@ public class LoginController {
 
     @PostMapping("/create-user")
     public ModelAndView createUser(HttpServletRequest request,
-                                   @Validated({Default.class, ExcludeLogValidation.class}) @ModelAttribute("user") UserFormDto user,
+                                   @Validated({Default.class, EditValidation.class}) @ModelAttribute("user") UserFormDto user,
                                    BindingResult bindingResult,
                                    ModelAndView modelAndView) {
         userValidator.validate(user, bindingResult);
@@ -122,4 +128,36 @@ public class LoginController {
         }
         return modelAndView;
     }
+
+    @GetMapping("/edit-user/{id}")
+    public ModelAndView edit(@PathVariable(ID) Long id,
+                             ModelAndView modelAndView) {
+        shopFacade.getUserEditForm(id, modelAndView);
+        return modelAndView;
+    }
+
+    @PostMapping("/edit-user/{id}")
+//    @PatchMapping("/edit-user/{id}")
+    public ModelAndView editUser(@PathVariable(ID) Long id,
+                                 @Validated(EditValidation.class) @ModelAttribute("user") UserFormDto user,
+                                 BindingResult bindingResult,
+                                 ModelAndView modelAndView) {
+        if (bindingResult.hasErrors()) {
+            fillsEditVerifyErrors(bindingResult, modelAndView);
+            modelAndView.setViewName("/edit-user/" + id);
+        } else {
+            shopFacade.editUser(user);
+            modelAndView.setViewName("redirect:/account");
+        }
+        return modelAndView;
+    }
+
+//    private void getUserEditForm(Long id, ModelAndView modelAndView) {
+//        if (userService.getUserById(id).isPresent()) {
+//            modelAndView.addObject("user", userService.getUserById(id));
+//            modelAndView.setViewName("auth/edit");
+//        } else {
+//            modelAndView.setViewName("account/account");
+//        }
+//    }
 }

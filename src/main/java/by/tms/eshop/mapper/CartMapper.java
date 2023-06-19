@@ -4,9 +4,9 @@ import by.tms.eshop.domain.Cart;
 import by.tms.eshop.dto.CartDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.ReportingPolicy;
 
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
+@Mapper(config = CustomMapperConfig.class)
+//@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface CartMapper {
 
     @Mapping(source = "product", target = "productDto")

@@ -181,9 +181,17 @@ public class ControllerUtils {
         fillError(BIRTHDAY, modelAndView, bindingResult);
     }
 
-    public static void fillsLoginVerifyErrors(BindingResult bindingResult, ModelAndView modelAndView) {
-        fillError(UserVerifyField.LOGIN, modelAndView, bindingResult);
+//    public static void fillsLoginVerifyErrors(BindingResult bindingResult, ModelAndView modelAndView) {
+//        fillError(UserVerifyField.LOGIN, modelAndView, bindingResult);
+//        fillError(PASSWORD, modelAndView, bindingResult);
+//    }
+
+    public static void fillsEditVerifyErrors(BindingResult bindingResult, ModelAndView modelAndView) {
         fillError(PASSWORD, modelAndView, bindingResult);
+        fillError(VERIFY_PASSWORD, modelAndView, bindingResult);
+        fillError(NAME, modelAndView, bindingResult);
+        fillError(SURNAME, modelAndView, bindingResult);
+        fillError(BIRTHDAY, modelAndView, bindingResult);
     }
 
 //    public static void setViewByAccessPermission(HttpSession session, ModelAndView modelAndView) {

@@ -27,4 +27,9 @@ public class UserServiceImpl implements UserService {
     public Optional<User> getVerifyUser(String login, String email) {
         return userRepository.findUserByLoginOrEmail(login, email);
     }
+
+    @Override
+    public Optional<User> getUserById(Long id) {
+        return userRepository.findUserById(id);
+    }
 }

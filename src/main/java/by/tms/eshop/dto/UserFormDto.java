@@ -3,7 +3,7 @@ package by.tms.eshop.dto;
 import static by.tms.eshop.utils.Constants.AUTHORIZATION_PATTERN;
 import static by.tms.eshop.utils.Constants.NAMES_PATTERN;
 
-import by.tms.eshop.validator.ExcludeLogValidation;
+import by.tms.eshop.validator.EditValidation;
 import by.tms.eshop.validator.UserBirthdayConstraint;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -22,22 +22,29 @@ import lombok.experimental.SuperBuilder;
 @Setter
 public class UserFormDto {
     private Long id;
+//    @NotBlank(groups = EditValidation.class, message = "Enter password")
     @NotBlank(groups = Default.class, message = "Enter password")
+//    @Pattern(groups = EditValidation.class, regexp = AUTHORIZATION_PATTERN, message = "Incorrect password")
     @Pattern(groups = Default.class, regexp = AUTHORIZATION_PATTERN, message = "Incorrect password")
     private String password;
     @NotBlank(groups = Default.class, message = "Enter login")
     @Pattern(groups = Default.class, regexp = AUTHORIZATION_PATTERN, message = "Incorrect login")
     private String login;
-    @NotBlank(groups = ExcludeLogValidation.class, message = "Enter name")
-    @Pattern(groups = ExcludeLogValidation.class, regexp = NAMES_PATTERN, message = "Incorrect name")
+    @NotBlank(groups = EditValidation.class, message = "Enter name")
+    @Pattern(groups = EditValidation.class, regexp = NAMES_PATTERN, message = "Incorrect name")
     private String name;
-    @NotBlank(groups = ExcludeLogValidation.class, message = "Enter surname")
-    @Pattern(groups = ExcludeLogValidation.class, regexp = NAMES_PATTERN, message = "Incorrect surname")
+    @NotBlank(groups = EditValidation.class, message = "Enter surname")
+    @Pattern(groups = EditValidation.class, regexp = NAMES_PATTERN, message = "Incorrect surname")
     private String surname;
-    @Email(groups = ExcludeLogValidation.class, message = "Incorrect email")
+    @Email(groups = Default.class, message = "Incorrect email")
+//    @Email(groups = ExcludeLogValidation.class, message = "Incorrect email")
     private String email;
-    @UserBirthdayConstraint(groups = ExcludeLogValidation.class)
-    @NotNull(groups = ExcludeLogValidation.class)
+    @UserBirthdayConstraint(groups = Default.class)
+//    @UserBirthdayConstraint(groups = EditValidation.class)
+    @NotNull(groups = Default.class)
+//    @NotNull(groups = EditValidation.class)
     private LocalDate birthday;
     private String verifyPassword;
+
+    private RoleDto roleDto;
 }

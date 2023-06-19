@@ -12,4 +12,6 @@ public interface UserService {
     void addUser(User user);
 
     Optional<User> getVerifyUser(String login, String email);
+
+    Optional<User> getUserById(Long id);
 }

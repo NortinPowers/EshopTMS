@@ -37,6 +37,9 @@ public class AccountController {
         Map<String, Object> models = new HashMap<>();
 //        models.put(USER_DTO, userDto);
         models.put(USER_ORDER, orders);
+//        models.put("userId", getAuthenticationUserId());
+//        User authenticationUser = getAuthenticationUser();
+//        models.put("user", authenticationUser);
         return new ModelAndView(ACCOUNT, MODELS, models);
     }
 }

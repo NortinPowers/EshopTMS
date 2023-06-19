@@ -1,6 +1,8 @@
 package by.tms.eshop.domain;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.io.Serializable;
@@ -31,4 +33,7 @@ public class User extends BaseEntity implements Serializable {
     private List<Order> orders;
     @OneToMany(mappedBy = "user")
     private List<Cart> carts;
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private Role role;
 }

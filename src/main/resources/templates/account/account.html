@@ -1,97 +1,108 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" xmlns:>
 <head>
-    <meta charset="UTF-8">
-    <title>Personal Account</title>
-    <th:block th:insert="~{/include/bootstrap}"/>
-    <th:block th:insert="~{/include/bootstrap-custom}"/>
+  <meta charset="UTF-8">
+  <title>Personal Account</title>
+  <th:block th:insert="~{/include/bootstrap}"/>
+  <th:block th:insert="~{/include/bootstrap-custom}"/>
 </head>
 <body style="background: #f9f9f9">
 <th:block th:insert="~{/include/navigate}"/>
 <div class="card text-center" style="background: #f9f9f9">
-    <div class="card-header text-center">
-        <h2 style="color: #333; text-shadow: #ff1500 1px 0 2px;">Personal data</h2>
+  <div class="card-header text-center">
+    <!--        <th:block th:with="ids=${T(org.springframework.security.core.context.SecurityContextHolder).getContext().getAuthentication().getPrincipal().getUser().getId()}">-->
+    <a th:href="@{/edit-user/{id}(id=${T(org.springframework.security.core.context.SecurityContextHolder).getContext().getAuthentication().getPrincipal().getUser().getId()})}" class="text-decoration-none">
+      <!--            <a th:href="@{/edit-user/{id}(id=${models.userId})}">-->
+      <!--            <a th:href="@{/edit-user/{id}(id=${models.user.id})}" class="text-decoration-none">-->
+      <h2 style="color: #333; text-shadow: #ff1500 1px 0 2px;">Personal data</h2>
+    </a>
+    <!--        </th:block>-->
+  </div>
+  <div class="card-body">
+    <div class="row g-3" style="text-shadow: 1px 0 2px #e6e6e6;">
+      <div class="col-md-5">
+        <p class="form-control border-success rounded-pill form-control form-control-lg"
+           sec:authentication="principal.user.name"></p>
+        <!--                   th:text="${models.user.name}"></p>-->
+        <!--                   th:text="${models.userDto.name}"></p>-->
+      </div>
+      <div class="col-md-5">
+        <p class="form-control border-success rounded-pill form-control form-control-lg"
+           sec:authentication="principal.user.email"></p>
+        <!--                   th:text="${models.user.email}"></p>-->
+        <!--                   th:text="${models.userDto.email}"></p>-->
+      </div>
+      <div class="col-md-5">
+        <p class="form-control border-success rounded-pill form-control form-control-lg"
+           sec:authentication="principal.user.surname"></p>
+        <!--                   th:text="${models.user.surname}"></p>-->
+        <!--                   th:text="${models.userDto.surname}"></p>-->
+      </div>
+      <div class="col-md-5"
+           th:with="userBirthday=${T(org.springframework.security.core.context.SecurityContextHolder).getContext().getAuthentication().getPrincipal().getUser().getBirthday()}">
+        <!--                 th:with="userBirthday=${models.user.birthday}">-->
+
+        <!--                <p class="form-control border-success rounded-pill form-control form-control-lg"-->
+        <!--                   th:text="${#temporals.format(sec:authentication="principal.user.birthday", 'dd MMMM yyyy')}"></p>-->
+        <!--                   th:text="${#temporals.format(models.userDto.birthday, 'dd MMMM yyyy')}"></p>-->
+        <!--                <th:block th:with="userBirthday=${T(org.springframework.security.core.context.SecurityContextHolder).getContext().getAuthentication().getPrincipal().getUser().getBirthday()}">-->
+        <p class="form-control border-success rounded-pill form-control form-control-lg" th:text="${#temporals.format(userBirthday, 'dd MMMM yyyy')}"></p>
+        <!--                </th:block>-->
+      </div>
     </div>
-    <div class="card-body">
-        <div class="row g-3" style="text-shadow: 1px 0 2px #e6e6e6;">
-            <div class="col-md-5">
-                <p class="form-control border-success rounded-pill form-control form-control-lg"
-                   sec:authentication="name"></p>
-<!--                   th:text="${models.userDto.name}"></p>-->
-            </div>
-            <div class="col-md-5">
-                <p class="form-control border-success rounded-pill form-control form-control-lg"
-                   sec:authentication="principal.user.email"></p>
-<!--                   th:text="${models.userDto.email}"></p>-->
-            </div>
-            <div class="col-md-5">
-                <p class="form-control border-success rounded-pill form-control form-control-lg"
-                   sec:authentication="principal.user.surname"></p>
-<!--                   th:text="${models.userDto.surname}"></p>-->
-            </div>
-            <div class="col-md-5"
-                 th:with="userBirthday=${T(org.springframework.security.core.context.SecurityContextHolder).getContext().getAuthentication().getPrincipal().getUser().getBirthday()}">
-<!--                <p class="form-control border-success rounded-pill form-control form-control-lg"-->
-<!--                   th:text="${#temporals.format(sec:authentication="principal.user.birthday", 'dd MMMM yyyy')}"></p>-->
-<!--                   th:text="${#temporals.format(models.userDto.birthday, 'dd MMMM yyyy')}"></p>-->
-<!--                <th:block th:with="userBirthday=${T(org.springframework.security.core.context.SecurityContextHolder).getContext().getAuthentication().getPrincipal().getUser().getBirthday()}">-->
-                    <p class="form-control border-success rounded-pill form-control form-control-lg" th:text="${#temporals.format(userBirthday, 'dd MMMM yyyy')}"></p>
-<!--                </th:block>-->
-            </div>
-        </div>
-    </div>
+  </div>
 </div>
 <div class="card text-center" style="background: #f9f9f9">
-    <div class="card-header text-center">
-        <h2 style="color: #333; text-shadow: #ff1500 1px 0 2px">Order history:</h2>
-    </div>
+  <div class="card-header text-center">
+    <h2 style="color: #333; text-shadow: #ff1500 1px 0 2px">Order history:</h2>
+  </div>
 </div>
 <div th:if="${models.userOrder.size == 0}" class="card text-center" style="background: #ffffff">
-    <div class="card-header text-center">
-        <h4 style="color: #333; text-shadow: #ff1500 1px 0 2px">The order history is empty</h4>
-    </div>
+  <div class="card-header text-center">
+    <h4 style="color: #333; text-shadow: #ff1500 1px 0 2px">The order history is empty</h4>
+  </div>
 </div>
 <div th:unless="${models.userOrder.size == 0}" class="accordion" id="accordionPanelsStayOpenExample">
-    <div th:each="order : ${models.userOrder}" class="accordion-item" style="background: #e6e6e6">
-        <h2 class="accordion-header" id="panelsStayOpen-heading" style="background: #f2f2f2">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                    th:data-bs-target="'#order-' + ${order.id}" aria-expanded="false"
-                    th:aria-controls="'order-' + ${order.id}">
-                <span style="font-weight: bold;">Order:&nbsp</span>
-                <span th:text="${order.name}" style="color: #4d4d4d;font-weight: bold;"></span>
-                <span style="margin-left: 10px;font-weight: bold;">Date:&nbsp</span>
-                <span th:text="${order.date}" style="color: #4d4d4d;font-weight: bold;"></span>
-            </button>
-        </h2>
-        <div th:id="'order-' + ${order.id}" class="accordion-collapse collapse"
-             th:aria-labelledby="'panelsStayOpen-heading-' + ${order.id}" aria-expanded="false"
-             th:aria-controls="'panelsStayOpen-collapse-' + ${order.id}">
-            <div class="accordion-body">
-                <div class="row row-cols-1 row-cols-md-3 g-4 text-center">
-                    <div th:each="product : ${order.products}" class="col">
-                        <div class="card h-100 shadow bg-light rounded">
-                            <div class="row g-0">
-                                <div class="col-md-4">
-                                    <img class="card-img-top"
-                                         th:src="@{/images/__${#strings.toLowerCase(product.productCategory.category)}__/__${product.name}__.jpg}"
-                                         th:alt="${product.name}">
-                                </div>
-                                <div class="col-md-8">
-                                    <div class="card-body">
-                                        <h5 class="card-title" th:text="${product.name}"></h5>
-                                        <p class="card-text" th:text="${product.info}"></p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-footer bg-light">
-                                <h5 th:text="${product.price + '$'}" style="color: #4d4d4d"></h5>
-                            </div>
-                        </div>
-                    </div>
+  <div th:each="order : ${models.userOrder}" class="accordion-item" style="background: #e6e6e6">
+    <h2 class="accordion-header" id="panelsStayOpen-heading" style="background: #f2f2f2">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+              th:data-bs-target="'#order-' + ${order.id}" aria-expanded="false"
+              th:aria-controls="'order-' + ${order.id}">
+        <span style="font-weight: bold;">Order:&nbsp</span>
+        <span th:text="${order.name}" style="color: #4d4d4d;font-weight: bold;"></span>
+        <span style="margin-left: 10px;font-weight: bold;">Date:&nbsp</span>
+        <span th:text="${order.date}" style="color: #4d4d4d;font-weight: bold;"></span>
+      </button>
+    </h2>
+    <div th:id="'order-' + ${order.id}" class="accordion-collapse collapse"
+         th:aria-labelledby="'panelsStayOpen-heading-' + ${order.id}" aria-expanded="false"
+         th:aria-controls="'panelsStayOpen-collapse-' + ${order.id}">
+      <div class="accordion-body">
+        <div class="row row-cols-1 row-cols-md-3 g-4 text-center">
+          <div th:each="product : ${order.products}" class="col">
+            <div class="card h-100 shadow bg-light rounded">
+              <div class="row g-0">
+                <div class="col-md-4">
+                  <img class="card-img-top"
+                       th:src="@{/images/__${#strings.toLowerCase(product.productCategory.category)}__/__${product.name}__.jpg}"
+                       th:alt="${product.name}">
                 </div>
+                <div class="col-md-8">
+                  <div class="card-body">
+                    <h5 class="card-title" th:text="${product.name}"></h5>
+                    <p class="card-text" th:text="${product.info}"></p>
+                  </div>
+                </div>
+              </div>
+              <div class="card-footer bg-light">
+                <h5 th:text="${product.price + '$'}" style="color: #4d4d4d"></h5>
+              </div>
             </div>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 </div>
 </body>
 </html>

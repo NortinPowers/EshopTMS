@@ -17,11 +17,13 @@ import static by.tms.eshop.utils.Constants.RequestParameters.SEARCH;
 import static by.tms.eshop.utils.Constants.RequestParameters.TRUE;
 import static by.tms.eshop.utils.ControllerUtils.applyPriceFilterOnProducts;
 import static by.tms.eshop.utils.ControllerUtils.applyTypeFilterOnProducts;
+import static by.tms.eshop.utils.ControllerUtils.getAuthenticationUser;
 import static by.tms.eshop.utils.ControllerUtils.getPrice;
 
 import by.tms.eshop.domain.User;
 import by.tms.eshop.dto.CartDto;
 import by.tms.eshop.dto.ProductDto;
+import by.tms.eshop.dto.RoleDto;
 import by.tms.eshop.dto.UserFormDto;
 import by.tms.eshop.mapper.UserMapper;
 import by.tms.eshop.model.Location;
@@ -48,6 +50,7 @@ public class ShopFacade {
 //    private final Converter converter;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+    private final RoleService roleService;
 
     public void carriesPurchase(Long userId) {
 //        List<ProductDto> productsDto = cartService.getPurchasedProducts(userId, converter.selectCart());
@@ -116,11 +119,32 @@ public class ShopFacade {
     public void createUser(UserFormDto user) {
 //    public void createUser(HttpServletRequest request, UserFormDto user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        RoleDto roleUser = roleService.getRole("ROLE_USER");
+        user.setRoleDto(roleUser);
         User userEntity = userMapper.convetrToUser(user);
 //        User userEntity = converter.makeUserModelTransfer(user);
         userService.addUser(userEntity);
 //        markUserToLog(converter.makeUserDtoModelTransfer(userEntity));
 //        markUser(request, converter.makeUserDtoModelTransfer(userEntity));
+    }
+
+    public void editUser(UserFormDto user) {
+        User authenticationUser = getAuthenticationUser();
+        authenticationUser.setName(user.getName());
+        authenticationUser.setSurname(user.getSurname());
+        userService.addUser(authenticationUser);
+
+//        if (userService.getUserById(updatedUser.getId()).isPresent()) {
+//            User user = userService.getUserById(updatedUser.getId()).get();
+//            user.setName(updatedUser.getName());
+//            user.setSurname(updatedUser.getSurname());
+//
+//            //update sec!
+//
+//            userService.addUser(user);
+//            user.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+//            user.setBirthday(updatedUser.getBirthday());
+//        }
     }
 
     public List<ProductDto> getFavoriteProducts(Long userId) {
@@ -138,6 +162,17 @@ public class ShopFacade {
             }
         }
         return type;
+    }
+
+    public void getUserEditForm(Long id, ModelAndView modelAndView) {
+        if (userService.getUserById(id).isPresent()) {
+            User user = userService.getUserById(id).get();
+            UserFormDto userFormDto = userMapper.convetrToUserFormDto(user);
+            modelAndView.addObject("user", userFormDto);
+            modelAndView.setViewName("auth/edit");
+        } else {
+            modelAndView.setViewName("account/account");
+        }
     }
 
 //    public void checkLoginUser(HttpServletRequest request, UserFormDto user, ModelAndView modelAndView) {
@@ -166,6 +201,4 @@ public class ShopFacade {
         products = applyTypeFilterOnProducts(type, products);
         return products;
     }
-
-
 }

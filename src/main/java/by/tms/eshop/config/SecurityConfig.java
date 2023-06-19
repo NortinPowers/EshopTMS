@@ -38,6 +38,8 @@ public class SecurityConfig {
 //                .sessionManagement((session) -> session
 //                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(requests -> requests
+                                               .requestMatchers("/admin")
+                                               .hasRole("ADMIN")
                                                .requestMatchers("/", "/eshop", "/search", "/search-filter", "/search-param", "/products-page", "/product/*", "/create-user", SUCCESS_REGISTER)
                                                .permitAll()
                                                .requestMatchers(PathRequest.toStaticResources().atCommonLocations())
