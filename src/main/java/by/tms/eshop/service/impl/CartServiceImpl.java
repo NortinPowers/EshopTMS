@@ -6,7 +6,6 @@ import by.tms.eshop.domain.User;
 import by.tms.eshop.dto.CartDto;
 import by.tms.eshop.dto.ProductDto;
 import by.tms.eshop.mapper.CartMapper;
-import by.tms.eshop.mapper.ProductMapper;
 import by.tms.eshop.model.Location;
 import by.tms.eshop.repository.CartRepository;
 import by.tms.eshop.service.CartService;
@@ -22,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class CartServiceImpl implements CartService {
 
     private final CartRepository cartRepository;
-    private final ProductMapper productMapper;
+//    private final ProductMapper productMapper;
     private final CartMapper cartMapper;
 
 //    @Transactional
