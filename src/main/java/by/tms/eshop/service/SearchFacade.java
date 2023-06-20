@@ -6,11 +6,11 @@ import static by.tms.eshop.utils.Constants.Attributes.FOUND_PRODUCTS;
 import static by.tms.eshop.utils.Constants.Attributes.URL;
 import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_SEARCH_FILTER_TRUE_RESULT_SAVE;
 import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_SEARCH_RESULT_SAVE;
+import static by.tms.eshop.utils.Constants.RequestParameters.FILTER;
 import static by.tms.eshop.utils.Constants.RequestParameters.MAX_PRICE;
 import static by.tms.eshop.utils.Constants.RequestParameters.MIN_PRICE;
-import static by.tms.eshop.utils.ControllerUtils.applyPriceFilterOnProducts;
-import static by.tms.eshop.utils.ControllerUtils.applyTypeFilterOnProducts;
-import static by.tms.eshop.utils.ControllerUtils.getPrice;
+import static by.tms.eshop.utils.Constants.SAVE;
+import static by.tms.eshop.utils.Constants.TRUE;
 
 import by.tms.eshop.dto.ProductDto;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,9 +18,12 @@ import jakarta.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -121,6 +124,12 @@ public class SearchFacade {
         }
     }
 
+    public void processFilter(HttpSession session, String result, String filter) {
+        removeUnsavedAttribute(session, result);
+        session.removeAttribute(FILTER);
+        setFilterAttribute(session, filter);
+    }
+
     private static List<ProductDto> selectSet(Set<ProductDto> foundProducts, Set<ProductDto> filterFoundProducts) {
         List<ProductDto> products = new ArrayList<>();
         if (filterFoundProducts != null) {
@@ -146,6 +155,43 @@ public class SearchFacade {
 
         }
         return endIndex;
+    }
+
+    private BigDecimal getPrice(HttpServletRequest request, String param, BigDecimal defaultValue) {
+        String value = request.getParameter(param);
+        return StringUtils.isNotBlank(value) ? new BigDecimal(value) : defaultValue;
+    }
+
+    private void setFilterAttribute(HttpSession session, String filter) {
+        if (TRUE.equals(filter)) {
+            session.setAttribute(FILTER, new Object());
+        }
+    }
+
+    private void removeUnsavedAttribute(HttpSession session, String filterFlag) {
+        if (!SAVE.equals(filterFlag)) {
+            session.removeAttribute(FOUND_PRODUCTS);
+            session.removeAttribute(FILTER_FOUND_PRODUCTS);
+        }
+    }
+
+    private Set<ProductDto> applyPriceFilterOnProducts(BigDecimal minPrice, BigDecimal maxPrice, Set<ProductDto> products) {
+        return products.stream()
+                       .filter(product -> product.getPrice().compareTo(minPrice) > 0 && product.getPrice().compareTo(maxPrice) < 0)
+                       .collect(Collectors.toCollection(LinkedHashSet::new));
+//        return products;
+    }
+
+    private Set<ProductDto> applyTypeFilterOnProducts(String type, Set<ProductDto> products) {
+        Set<ProductDto> productsByType;
+        if (!ALL.equals(type)) {
+            productsByType = products.stream()
+                                     .filter(product -> product.getCategory().equals(type))
+                                     .collect(Collectors.toCollection(LinkedHashSet::new));
+        } else {
+            productsByType = products;
+        }
+        return productsByType;
     }
 
 }

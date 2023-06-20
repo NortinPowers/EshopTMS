@@ -4,13 +4,13 @@ import static by.tms.eshop.utils.Constants.MappingPath.CREATE_USER;
 import static by.tms.eshop.utils.Constants.MappingPath.LOGIN;
 import static by.tms.eshop.utils.Constants.MappingPath.SUCCESS_REGISTER;
 import static by.tms.eshop.utils.Constants.RequestParameters.ID;
-import static by.tms.eshop.utils.ControllerUtils.fillUserValidationError;
-import static by.tms.eshop.utils.ControllerUtils.fillsEditVerifyErrors;
+import static by.tms.eshop.utils.ValidatorUtils.fillUserValidationError;
+import static by.tms.eshop.utils.ValidatorUtils.fillsEditVerifyErrors;
 
 import by.tms.eshop.dto.UserFormDto;
 import by.tms.eshop.service.ShopFacade;
 import by.tms.eshop.service.UserService;
-import by.tms.eshop.validator.EditValidation;
+import by.tms.eshop.validator.EditValidator;
 import by.tms.eshop.validator.UserValidator;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.groups.Default;
@@ -114,7 +114,7 @@ public class UserController {
 
     @PostMapping("/create-user")
     public ModelAndView createUser(HttpServletRequest request,
-                                   @Validated({Default.class, EditValidation.class}) @ModelAttribute("user") UserFormDto user,
+                                   @Validated({Default.class, EditValidator.class}) @ModelAttribute("user") UserFormDto user,
                                    BindingResult bindingResult,
                                    ModelAndView modelAndView) {
         userValidator.validate(user, bindingResult);
@@ -139,7 +139,7 @@ public class UserController {
     @PostMapping("/edit-user/{id}")
 //    @PatchMapping("/edit-user/{id}")
     public ModelAndView editUser(@PathVariable(ID) Long id,
-                                 @Validated(EditValidation.class) @ModelAttribute("user") UserFormDto user,
+                                 @Validated(EditValidator.class) @ModelAttribute("user") UserFormDto user,
                                  BindingResult bindingResult,
                                  ModelAndView modelAndView) {
         if (bindingResult.hasErrors()) {

@@ -1,6 +1,6 @@
 package by.tms.eshop.service.impl;
 
-import static by.tms.eshop.utils.ControllerUtils.createOrderNumber;
+import static java.util.UUID.randomUUID;
 
 import by.tms.eshop.domain.Order;
 import by.tms.eshop.domain.Product;
@@ -78,5 +78,10 @@ public class OrderServiceImpl implements OrderService {
             orderNumber = createOrderNumber(id);
         }
         return orderNumber;
+    }
+
+    private String createOrderNumber(Long id) {
+        String uuid = randomUUID().toString();
+        return "#" + id + "-" + uuid;
     }
 }

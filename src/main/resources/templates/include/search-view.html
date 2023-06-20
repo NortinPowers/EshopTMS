@@ -1,7 +1,7 @@
 <th:block th:with="products=${page.content}">
   <div th:if="${products != null}">
     <div th:if="${products.size() == 0}">
-      <h5 class="text-center">No suitable products found. Enter or change the search terms!</h5>
+      <h5 class="text-center mt-5">No suitable products found. Enter or change the search terms!</h5>
     </div>
     <div th:if="${products.size() != 0}">
       <div th:each="product : ${products}">

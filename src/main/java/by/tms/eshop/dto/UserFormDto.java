@@ -3,7 +3,7 @@ package by.tms.eshop.dto;
 import static by.tms.eshop.utils.Constants.AUTHORIZATION_PATTERN;
 import static by.tms.eshop.utils.Constants.NAMES_PATTERN;
 
-import by.tms.eshop.validator.EditValidation;
+import by.tms.eshop.validator.EditValidator;
 import by.tms.eshop.validator.UserBirthdayConstraint;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -30,11 +30,11 @@ public class UserFormDto {
     @NotBlank(groups = Default.class, message = "Enter login")
     @Pattern(groups = Default.class, regexp = AUTHORIZATION_PATTERN, message = "Incorrect login")
     private String login;
-    @NotBlank(groups = EditValidation.class, message = "Enter name")
-    @Pattern(groups = EditValidation.class, regexp = NAMES_PATTERN, message = "Incorrect name")
+    @NotBlank(groups = EditValidator.class, message = "Enter name")
+    @Pattern(groups = EditValidator.class, regexp = NAMES_PATTERN, message = "Incorrect name")
     private String name;
-    @NotBlank(groups = EditValidation.class, message = "Enter surname")
-    @Pattern(groups = EditValidation.class, regexp = NAMES_PATTERN, message = "Incorrect surname")
+    @NotBlank(groups = EditValidator.class, message = "Enter surname")
+    @Pattern(groups = EditValidator.class, regexp = NAMES_PATTERN, message = "Incorrect surname")
     private String surname;
     @Email(groups = Default.class, message = "Incorrect email")
 //    @Email(groups = ExcludeLogValidation.class, message = "Incorrect email")

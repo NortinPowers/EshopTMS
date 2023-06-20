@@ -27,6 +27,7 @@
         <commons-lang3.verson>3.12.0</commons-lang3.verson>
         <snakeyaml.version>2.0</snakeyaml.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
+        <thymeleaf-extras.version>3.1.1.RELEASE</thymeleaf-extras.version>
     </properties>
 
     <dependencies>
@@ -123,7 +124,7 @@
         <dependency>
             <groupId>org.thymeleaf.extras</groupId>
             <artifactId>thymeleaf-extras-springsecurity6</artifactId>
-            <version>3.1.1.RELEASE</version>
+            <version>${thymeleaf-extras.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>

@@ -6,8 +6,6 @@ import static by.tms.eshop.utils.Constants.RequestParameters.FILTER;
 import static by.tms.eshop.utils.Constants.RequestParameters.ID;
 import static by.tms.eshop.utils.Constants.RequestParameters.SEARCH_CONDITION;
 import static by.tms.eshop.utils.Constants.RequestParameters.SELECT;
-import static by.tms.eshop.utils.ControllerUtils.removeUnsavedAttribute;
-import static by.tms.eshop.utils.ControllerUtils.setFilterAttribute;
 
 import by.tms.eshop.service.ProductCategoryService;
 import by.tms.eshop.service.SearchFacade;
@@ -37,9 +35,7 @@ public class SearchController {
                                       @RequestParam(required = false) String filter,
                                       @PageableDefault(sort = ID) Pageable pageable,
                                       ModelAndView modelAndView) {
-        removeUnsavedAttribute(session, result);
-        session.removeAttribute(FILTER);
-        setFilterAttribute(session, filter);
+        searchFacade.processFilter(session, result, filter);
 //        ModelMap modelMap = new ModelMap();
 //        modelMap.addAttribute(PRODUCT_CATEGORIES, productCategoryService.getProductCategories());
         modelAndView.addObject(PRODUCT_CATEGORIES, productCategoryService.getProductCategories());
@@ -54,6 +50,12 @@ public class SearchController {
 //        modelAndView.addObject(modelMap);
         return modelAndView;
     }
+
+//    private void processFilter(HttpSession session, String result, String filter) {
+//        searchFacade.removeUnsavedAttribute(session, result);
+//        session.removeAttribute(FILTER);
+//        searchFacade.setFilterAttribute(session, filter);
+//    }
 
 //    private void setPagination(HttpSession session, Pageable pageable, ModelAndView modelAndView) {
 //        Set<ProductDto> foundProducts = (Set<ProductDto>) session.getAttribute(FOUND_PRODUCTS);
