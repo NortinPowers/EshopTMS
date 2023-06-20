@@ -27,11 +27,11 @@ public class ValidatorUtils {
     }
 
     public static void fillsEditVerifyErrors(BindingResult bindingResult, ModelAndView modelAndView) {
-        fillError(PASSWORD, modelAndView, bindingResult);
-        fillError(VERIFY_PASSWORD, modelAndView, bindingResult);
+//        fillError(PASSWORD, modelAndView, bindingResult);
+//        fillError(VERIFY_PASSWORD, modelAndView, bindingResult);
         fillError(NAME, modelAndView, bindingResult);
         fillError(SURNAME, modelAndView, bindingResult);
-        fillError(BIRTHDAY, modelAndView, bindingResult);
+//        fillError(BIRTHDAY, modelAndView, bindingResult);
     }
 
     private void fillError(String field, ModelAndView modelAndView, BindingResult bindingResult) {

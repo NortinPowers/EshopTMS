@@ -12,7 +12,7 @@ public class Constants {
     @SuppressWarnings({"checkstyle:MultipleStringLiterals", "checkstyle:AnnotationLocation"}) public static final String TRUE = "true";
     public static final Long MAX_COMPLETION_TIME = 2000L;
     @SuppressWarnings({"checkstyle:MultipleStringLiterals", "checkstyle:AnnotationLocation"}) public static final String AUTHORIZATION_PATTERN = "[a-zA-Z0-9]{4,30}";
-    public static final String NAMES_PATTERN = "[a-zA-Z0-9]{4,30}";
+    public static final String NAMES_PATTERN = "[a-zA-Z0-9]{3,30}";
     public static final String AND_PAGE = "&page=";
     public static final String AND_SIZE = "&size=";
     public static final Integer SIZE_3 = 3;

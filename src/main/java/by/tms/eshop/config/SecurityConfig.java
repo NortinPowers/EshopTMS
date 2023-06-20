@@ -21,7 +21,7 @@ public class SecurityConfig {
 
     private final CustomUserDetailsService customUserDetailsService;
     private final CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
-    private final LogoutHandler logoutHandler;
+    private final CustomLogoutHandler customLogoutHandler;
 
     @SuppressWarnings({"checkstyle:MultipleStringLiterals", "checkstyle:UnnecessaryParentheses"})
     @Bean
@@ -61,7 +61,7 @@ public class SecurityConfig {
                 .rememberMe(Customizer.withDefaults())
                 .logout((logout) -> logout
 //                        .logoutSuccessUrl("/")
-                        .logoutSuccessHandler(logoutHandler)
+                        .logoutSuccessHandler(customLogoutHandler)
 //                        .clearAuthentication(true)
 //                        .deleteCookies()
 .permitAll())

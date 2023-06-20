@@ -144,7 +144,8 @@ public class UserController {
                                  ModelAndView modelAndView) {
         if (bindingResult.hasErrors()) {
             fillsEditVerifyErrors(bindingResult, modelAndView);
-            modelAndView.setViewName("/edit-user/" + id);
+            modelAndView.setViewName("auth/edit");
+//            modelAndView.setViewName("/edit-user/" + id);
         } else {
             shopFacade.editUser(user);
             modelAndView.setViewName("redirect:/account");

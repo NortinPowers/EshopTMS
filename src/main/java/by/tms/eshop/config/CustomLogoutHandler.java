@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
-public class LogoutHandler implements LogoutSuccessHandler {
+public class CustomLogoutHandler implements LogoutSuccessHandler {
 
     @Override
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response,
