@@ -37,6 +37,28 @@ public class SearchController {
         setFilterAttribute(session, filter);
         modelAndView.addObject(PRODUCT_CATEGORIES, productCategoryService.getProductCategories());
         modelAndView.setViewName(SEARCH_PATH);
+
+//        Set<ProductDto> foundProducts = (Set<ProductDto>) session.getAttribute(FOUND_PRODUCTS);
+//        Set<ProductDto> filterFoundProducts = (Set<ProductDto>) session.getAttribute(FILTER_FOUND_PRODUCTS);
+//        List<ProductDto> products = new ArrayList<>();
+//        if (foundProducts != null) {
+//            if (foundProducts.size() > 0) {
+//                products = new ArrayList<>(foundProducts);
+//            }
+//        }
+//        if (filterFoundProducts != null) {
+//            if (filterFoundProducts.size() > 0) {
+//                products = new ArrayList<>(filterFoundProducts);
+//            }
+//        }
+//        if (products.size() > 0) {
+//            ModelMap modelMap = new ModelMap();
+//            Page<ProductDto> page = new PageImpl<>(products, PageRequest.of(0, 3), products.size());
+//            modelMap.addAttribute("page", page);
+//            modelMap.addAttribute(URL, "/search?result=save?size=5");
+//            return new ModelAndView("search/search", modelMap);
+//        }
+
         return modelAndView;
     }
 

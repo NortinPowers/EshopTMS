@@ -67,12 +67,30 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Set<ProductDto> getFoundedProducts(String condition) {
-        Set<Product> products = productRepository.getProductsByConditionInName(condition);
-        products.addAll(productRepository.getProductsByConditionInInfo(condition));
+        Set<Product> productsByConditionInName = productRepository.getProductsByConditionInName(condition);
+//        Set<ProductDto> productDtos = productsByConditionInName.stream()
+//                                          .map(productMapper::convertToProductDto)
+//                                          .collect(Collectors.toSet());
+//        Set<ProductDto> productDtos = convertToProductDtos(productsByConditionInName);
+        Set<Product> productsByConditionInInfo = productRepository.getProductsByConditionInInfo(condition);
+//        productDtos.addAll(convertToProductDtos(productsByConditionInInfo));
+//        productsByConditionInName.addAll(productRepository.getProductsByConditionInInfo(condition));
+//        return productDtos;
+//        return productsByConditionInName.stream()
+//                       .map(productMapper::convertToProductDto)
+//                       .collect(Collectors.toSet());
+//        return products.stream().map(converter::makeProductDtoModelTransfer).collect(Collectors.toSet());
+
+        Set<ProductDto> products = new LinkedHashSet<>(convertToProductDtos(productsByConditionInName));
+        products.addAll(convertToProductDtos(productsByConditionInInfo));
+//        return convertToProductDtos(products);
+        return products;
+    }
+
+    private Set<ProductDto> convertToProductDtos(Set<Product> products) {
         return products.stream()
                        .map(productMapper::convertToProductDto)
                        .collect(Collectors.toSet());
-//        return products.stream().map(converter::makeProductDtoModelTransfer).collect(Collectors.toSet());
     }
 
     @Override
