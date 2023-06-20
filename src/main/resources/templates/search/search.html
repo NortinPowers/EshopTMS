@@ -1,93 +1,124 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
-    <meta charset="UTF-8">
-    <title>Search</title>
-    <th:block th:insert="~{/include/bootstrap}"/>
+  <meta charset="UTF-8">
+  <title>Search</title>
+  <th:block th:insert="~{/include/bootstrap}"/>
 </head>
 <body>
 <th:block th:insert="~{/include/navigate}"/>
 <div class="container text-center mt-3 w-100 p-0">
-    <div class="row">
-        <div class="col">
-            <div class="container-fluid">
-                <form class="d-flex" role="search" th:action="@{/search-param}" method="post">
-                    <input class="form-control me-2" type="search" name="search-condition" placeholder="Search"
-                           aria-label="Search">
-                    <button class="btn btn-outline-dark" type="submit">Search</button>
-                </form>
-            </div>
-        </div>
+  <div class="row">
+    <div class="col">
+      <div class="container-fluid">
+        <!--                <form class="d-flex" role="search" th:action="@{/search-param?size=5}" method="post">-->
+        <form class="d-flex" role="search" th:action="@{/search-param}" method="post">
+          <input class="form-control me-2" type="search" name="search-condition" placeholder="Search"
+                 aria-label="Search">
+          <button class="btn btn-outline-dark" type="submit">Search</button>
+        </form>
+      </div>
     </div>
+  </div>
 </div>
 <div class="container mt-1 min-vw-100 p-3">
-    <div class="row grid gap-3">
-        <div class="col-5 ml-4">
-            <div class="row ml-3 mr-3">
-                <div class="col-12 border border-secondary rounded rounded-5 shadow p-3 mb-5 bg-body-tertiary rounded"
-                     style="min-width: 23.5rem">
-                    <h3 class="text-start ml-5">Filter:</h3>
-                    <form th:action="@{/search-filter}" method="post">
-                        <div class="row text-center">
-                            <div class="col-sm-12">
-                                <select class="form-select col-8 col-sm-12 p-2 text-center"
-                                        aria-label="Default select example" name="select">
-                                    <option selected value="all">all categories</option>
-                                    <option th:each="category : ${productCategories}" th:value="${category}"
-                                            th:text="${category}"></option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="row mt-3">
-                            <div class="col">
-                                <div class="form-outline">
-                                    <input type="text" id="minPrice" name="min-price"
-                                           class="form-control form-control-lg text-center"
-                                           placeholder="Min Price"/>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="form-outline">
-                                    <input type="text" id="maxPrice" name="max-price"
-                                           class="form-control form-control-lg text-center"
-                                           placeholder="Max price"/>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row mt-3">
-                            <div class="col-6"></div>
-                            <div class="col-6 col-sm-6">
-                                <div>
-                                    <input class="col-sm-12 btn btn-outline-dark" type="submit" value="Filter"/>
-                                </div>
-                                <div>
-                                    <a class="col-sm-12 btn btn-outline-dark mt-2"
-                                       th:href="@{/search}">
-                                        Reset filter
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+  <div class="row grid gap-3">
+    <div class="col-5 ml-4">
+      <div class="row ml-3 mr-3">
+        <div class="col-12 border border-secondary rounded rounded-5 shadow p-3 mb-5 bg-body-tertiary rounded"
+             style="min-width: 23.5rem">
+          <h3 class="text-start ml-5">Filter:</h3>
+          <!--                    <form th:action="@{/search-filter?size=5}" method="post">-->
+          <form th:action="@{/search-filter}" method="post">
+            <div class="row text-center">
+              <div class="col-sm-12">
+                <select class="form-select col-8 col-sm-12 p-2 text-center"
+                        aria-label="Default select example" name="select">
+                  <option selected value="all">all categories</option>
+                  <option th:each="category : ${productCategories}" th:value="${category}"
+                          th:text="${category}"></option>
+                </select>
+              </div>
             </div>
-        </div>
-        <div class="col-6 border border-secondary rounded rounded-5 shadow p-2 ml-5 bg-body-tertiary rounded"
-             style="min-width: 20rem">
-            <div th:with="filter = ${session.get('filter')}">
-                <div th:if="${filter == null}">
-                    <div th:with="products = ${session.foundProducts}">
-                        <th:block th:insert="~{/include/search-view}"/>
-                    </div>
+            <div class="row mt-3">
+              <div class="col">
+                <div class="form-outline">
+                  <input type="text" id="minPrice" name="min-price"
+                         class="form-control form-control-lg text-center"
+                         placeholder="Min Price"/>
                 </div>
-                <div th:if="${filter != null}">
-                    <div th:with="products = ${session.filterFoundProducts}">
-                        <th:block th:insert="~{/include/search-view}"/>
-                    </div>
+              </div>
+              <div class="col">
+                <div class="form-outline">
+                  <input type="text" id="maxPrice" name="max-price"
+                         class="form-control form-control-lg text-center"
+                         placeholder="Max price"/>
                 </div>
+              </div>
             </div>
+            <div class="row mt-3">
+              <div class="col-6"></div>
+              <div class="col-6 col-sm-6">
+                <div>
+                  <input class="col-sm-12 btn btn-outline-dark" type="submit" value="Filter"/>
+                </div>
+                <div>
+                  <a class="col-sm-12 btn btn-outline-dark mt-2"
+                     th:href="@{/search}">
+                    <!--                                       th:href="@{/search?size=5}">-->
+                    Reset filter
+                  </a>
+                </div>
+              </div>
+            </div>
+          </form>
         </div>
+      </div>
     </div>
+    <div class="col-6 border border-secondary rounded rounded-5 shadow p-2 ml-5 bg-body-tertiary rounded"
+         style="min-width: 20rem">
+<!--      <th:block th:with="page=${modelMap.page}">-->
+<!--      <div th:if="${emptyList != null}">-->
+<!--        <h5 class="text-center">No suitable products found. Enter or change the search terms!</h5>-->
+<!--      </div>-->
+        <th:block th:if="${page!=null}">
+<!--          <p>${modelMap.page}</p>-->
+
+          <!--                <div th:each="product : ${page.content}">-->
+          <th:block th:insert="~{/include/search-view}"/>
+          <!--                </div>-->
+<!--          <footer>-->
+<!--            <div class="pagination justify-content-center mt-3">-->
+<!--              <ul class="pagination">-->
+<!--                <li th:class="${page.number == 0 ? 'disabled' : ''}">-->
+<!--                  <a class="page-link" th:href="@{${url}(page=0)}">&laquo;</a>-->
+<!--                </li>-->
+<!--                <li th:each="pageNumber : ${#numbers.sequence(1, page.totalPages)}"-->
+<!--                    th:class="${pageNumber == page.number+1 ? 'active' : ''}">-->
+<!--                  <a class="page-link" th:href="@{${url}(page=${pageNumber-1})}" th:text="${pageNumber}"></a>-->
+<!--                </li>-->
+<!--                <li th:class="${page.number >= page.totalPages-1 ? 'disabled' : ''}">-->
+<!--                  <a class="page-link" th:href="@{${url}(page=${page.totalPages}-1)}">&raquo;</a>-->
+<!--                </li>-->
+<!--              </ul>-->
+<!--            </div>-->
+<!--          </footer>-->
+        </th:block>
+<!--      </th:block>-->
+      <!--            <div th:with="filter = ${session.get('filter')}">-->
+      <!--                <div th:if="${filter == null}">-->
+      <!--                    <div th:with="products = ${session.foundProducts}">-->
+      <!--                        <th:block th:insert="~{/include/search-view}"/>-->
+      <!--                    </div>-->
+      <!--                </div>-->
+      <!--                <div th:if="${filter != null}">-->
+      <!--                    <div th:with="products = ${session.filterFoundProducts}">-->
+      <!--                        <th:block th:insert="~{/include/search-view}"/>-->
+      <!--                    </div>-->
+      <!--                </div>-->
+      <!--            </div>-->
+    </div>
+  </div>
 </div>
 <!--<th:block th:if="${page!=null}">-->
 <!--    <div th:each="product : ${page.content}">-->

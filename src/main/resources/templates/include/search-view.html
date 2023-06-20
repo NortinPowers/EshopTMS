@@ -1,79 +1,97 @@
-<div th:if="${products != null}">
+<th:block th:with="products=${page.content}">
+  <div th:if="${products != null}">
     <div th:if="${products.size() == 0}">
-        <h5 class="text-center">No suitable products found. Enter or change the search terms!</h5>
+      <h5 class="text-center">No suitable products found. Enter or change the search terms!</h5>
     </div>
     <div th:if="${products.size() != 0}">
-        <div th:each="product : ${products}">
-            <div class="card mb-3 ml-1 border border-secondary rounded rounded-5 shadow-sm p-2 bg-body-tertiary rounded mr-1"
-                 style="min-width: 18rem">
-                <div class="container text-center mb-2">
-                    <div class="row">
-                        <div th:with="authorizedUser=${session.userAccessPermission}">
-                            <div th:if="${authorizedUser == null}">
-                                <div class="btn-group btn-group-fill" style="min-width: 17.3rem">
-                                    <a th:href="@{/product/__${product.id}__}"
-                                       class="text-light text-decoration-none btn btn-success btn-block w-auto"
-                                       aria-current="page">
-                                        To product
-                                    </a>
-                                </div>
-                            </div>
-                            <div th:if="${authorizedUser != null}">
-                                <div class="btn-group btn-group-fill">
-                                    <div class="btn btn-success p-2" style="min-width: 6rem">
-                                        <a th:href="@{/product/__${product.id}__}"
-                                           class="text-light text-decoration-none"
-                                           aria-current="page">
-                                            To product
-                                        </a>
-                                    </div>
-                                    <div class="btn btn-success p-2" style="min-width: 5.3rem">
-                                        <a th:href="@{/add-cart(id=${product.id}, shop=true, location='none')}"
-                                           class="text-light text-decoration-none"
-                                           aria-current="page">
-                                            Buy
-                                        </a>
-                                    </div>
-                                    <div class="btn btn-success">
-                                        <a th:href="@{/add-cart(id=${product.id}, shop='none', location='search')}">
-                                            <div class="text-center text-light text-decoration-none p-1">
-                                                <i class="bi bi-cart-plus"></i>
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <div class="btn btn-success">
-                                        <a th:href="@{/add-favorite(id=${product.id}, shop='none', location='search')}">
-                                            <div class="text-center text-light text-decoration-none p-1">
-                                                <i class="bi bi-heart"></i>
-                                            </div>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+      <div th:each="product : ${products}">
+        <div class="card mb-3 ml-1 border border-secondary rounded rounded-5 shadow-sm p-2 bg-body-tertiary rounded mr-1"
+             style="min-width: 18rem">
+          <div class="container text-center mb-2">
+            <div class="row">
+              <div th:with="authorizedUser=${session.userAccessPermission}">
+                <div th:if="${authorizedUser == null}">
+                  <div class="btn-group btn-group-fill" style="min-width: 17.3rem">
+                    <a th:href="@{/product/__${product.id}__}"
+                       class="text-light text-decoration-none btn btn-success btn-block w-auto"
+                       aria-current="page">
+                      To product
+                    </a>
+                  </div>
                 </div>
-                <div class="row g-0">
-                    <div class="col-md-3">
-                        <img th:src="@{/images/__${#strings.toLowerCase(product.category)}__/__${product.name}__.jpg}"
-                             class="img-fluid rounded-start w-100 p-3"
-                             th:alt="${product.name}">
+                <div th:if="${authorizedUser != null}">
+                  <div class="btn-group btn-group-fill">
+                    <div class="btn btn-success p-2" style="min-width: 6rem">
+                      <a th:href="@{/product/__${product.id}__}"
+                         class="text-light text-decoration-none"
+                         aria-current="page">
+                        To product
+                      </a>
                     </div>
-                    <div class="col-md-9">
-                        <div class="card-body">
-                            <h5 class="card-title text-center" th:text="${product.name}"></h5>
-                            <p class="card-text font-italic p-1" th:text="${product.info + '.'}"></p>
+                    <div class="btn btn-success p-2" style="min-width: 5.3rem">
+                      <a th:href="@{/add-cart(id=${product.id}, shop=true, location='none')}"
+                         class="text-light text-decoration-none"
+                         aria-current="page">
+                        Buy
+                      </a>
+                    </div>
+                    <div class="btn btn-success">
+                      <a th:href="@{/add-cart(id=${product.id}, shop='none', location='search')}">
+                        <div class="text-center text-light text-decoration-none p-1">
+                          <i class="bi bi-cart-plus"></i>
                         </div>
+                      </a>
                     </div>
-                </div>
-                <div class="container text-center m-0 p-0">
-                    <div class="row">
-                        <div class="col-sm-12 fst-italic">
-                            <p th:text="${product.price + '$'}"></p>
+                    <div class="btn btn-success">
+                      <a th:href="@{/add-favorite(id=${product.id}, shop='none', location='search')}">
+                        <div class="text-center text-light text-decoration-none p-1">
+                          <i class="bi bi-heart"></i>
                         </div>
+                      </a>
                     </div>
+                  </div>
                 </div>
+              </div>
             </div>
+          </div>
+          <div class="row g-0">
+            <div class="col-md-3">
+              <img th:src="@{/images/__${#strings.toLowerCase(product.category)}__/__${product.name}__.jpg}"
+                   class="img-fluid rounded-start w-100 p-3"
+                   th:alt="${product.name}">
+            </div>
+            <div class="col-md-9">
+              <div class="card-body">
+                <h5 class="card-title text-center" th:text="${product.name}"></h5>
+                <p class="card-text font-italic p-1" th:text="${product.info + '.'}"></p>
+              </div>
+            </div>
+          </div>
+          <div class="container text-center m-0 p-0">
+            <div class="row">
+              <div class="col-sm-12 fst-italic">
+                <p th:text="${product.price + '$'}"></p>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
+      <footer>
+        <div class="pagination justify-content-center mt-3">
+          <ul class="pagination">
+            <li th:class="${page.number == 0 ? 'disabled' : ''}">
+              <a class="page-link" th:href="@{${url}(page=0)}">&laquo;</a>
+            </li>
+            <li th:each="pageNumber : ${#numbers.sequence(1, page.totalPages)}"
+                th:class="${pageNumber == page.number+1 ? 'active' : ''}">
+              <a class="page-link" th:href="@{${url}(page=${pageNumber-1})}" th:text="${pageNumber}"></a>
+            </li>
+            <li th:class="${page.number >= page.totalPages-1 ? 'disabled' : ''}">
+              <a class="page-link" th:href="@{${url}(page=${page.totalPages}-1)}">&raquo;</a>
+            </li>
+          </ul>
+        </div>
+      </footer>
     </div>
-</div>
+  </div>
+</th:block>

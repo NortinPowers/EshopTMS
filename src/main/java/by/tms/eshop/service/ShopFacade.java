@@ -1,24 +1,15 @@
 package by.tms.eshop.service;
 
-import static by.tms.eshop.utils.Constants.ALL;
-import static by.tms.eshop.utils.Constants.Attributes.FILTER_FOUND_PRODUCTS;
-import static by.tms.eshop.utils.Constants.Attributes.FOUND_PRODUCTS;
 import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_CART;
 import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_FAVORITES;
 import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_PRODUCTS_PAGE_CATEGORY_WITH_PARAM;
 import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_PRODUCT_WITH_PARAM;
-import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_SEARCH_FILTER_TRUE_RESULT_SAVE;
 import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_SEARCH_RESULT_SAVE;
 import static by.tms.eshop.utils.Constants.RequestParameters.FAVORITE;
-import static by.tms.eshop.utils.Constants.RequestParameters.MAX_PRICE;
-import static by.tms.eshop.utils.Constants.RequestParameters.MIN_PRICE;
 import static by.tms.eshop.utils.Constants.RequestParameters.PRODUCT_PAGE;
 import static by.tms.eshop.utils.Constants.RequestParameters.SEARCH;
 import static by.tms.eshop.utils.Constants.RequestParameters.TRUE;
-import static by.tms.eshop.utils.ControllerUtils.applyPriceFilterOnProducts;
-import static by.tms.eshop.utils.ControllerUtils.applyTypeFilterOnProducts;
 import static by.tms.eshop.utils.ControllerUtils.getAuthenticationUser;
-import static by.tms.eshop.utils.ControllerUtils.getPrice;
 
 import by.tms.eshop.domain.User;
 import by.tms.eshop.dto.CartDto;
@@ -27,12 +18,8 @@ import by.tms.eshop.dto.RoleDto;
 import by.tms.eshop.dto.UserFormDto;
 import by.tms.eshop.mapper.UserMapper;
 import by.tms.eshop.model.Location;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -47,7 +34,7 @@ public class ShopFacade {
     private final OrderService orderService;
     private final ProductService productService;
     private final UserService userService;
-//    private final Converter converter;
+    //    private final Converter converter;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
     private final RoleService roleService;
@@ -84,31 +71,33 @@ public class ShopFacade {
 //        return path;
     }
 
-    public ModelAndView getSearchFilterResultPagePath(HttpServletRequest request, String category) {
-        BigDecimal minPrice = getPrice(request, MIN_PRICE, BigDecimal.ZERO);
-        BigDecimal maxPrice = getPrice(request, MAX_PRICE, new BigDecimal(Long.MAX_VALUE));
-        ModelAndView modelAndView = new ModelAndView();
-        HttpSession session = request.getSession(false);
-        if (session.getAttribute(FOUND_PRODUCTS) != null) {
-            session.setAttribute(FILTER_FOUND_PRODUCTS, getProductByFilter(session, category, minPrice, maxPrice));
-            modelAndView.setViewName(REDIRECT_TO_SEARCH_FILTER_TRUE_RESULT_SAVE);
-        } else {
-            if (!ALL.equals(category)) {
-                session.setAttribute(FOUND_PRODUCTS, productService.selectProductsFromCategoryByFilter(category, minPrice, maxPrice));
-            } else {
-                session.setAttribute(FOUND_PRODUCTS, productService.selectAllProductsByFilter(minPrice, maxPrice));
-            }
-            modelAndView.setViewName(REDIRECT_TO_SEARCH_RESULT_SAVE);
-        }
-        return modelAndView;
-    }
+//    public ModelAndView getSearchFilterResultPagePath(HttpServletRequest request, String category) {
+//        BigDecimal minPrice = getPrice(request, MIN_PRICE, BigDecimal.ZERO);
+//        BigDecimal maxPrice = getPrice(request, MAX_PRICE, new BigDecimal(Long.MAX_VALUE));
+//        ModelAndView modelAndView = new ModelAndView();
+//        HttpSession session = request.getSession(false);
+//        if (session.getAttribute(FOUND_PRODUCTS) != null) {
+//            session.setAttribute(FILTER_FOUND_PRODUCTS, getProductByFilter(session, category, minPrice, maxPrice));
+//            modelAndView.setViewName(REDIRECT_TO_SEARCH_FILTER_TRUE_RESULT_SAVE + "&size=5");
+////            modelAndView.setViewName(REDIRECT_TO_SEARCH_FILTER_TRUE_RESULT_SAVE);
+//        } else {
+//            if (!ALL.equals(category)) {
+//                session.setAttribute(FOUND_PRODUCTS, productService.selectProductsFromCategoryByFilter(category, minPrice, maxPrice));
+//            } else {
+//                session.setAttribute(FOUND_PRODUCTS, productService.selectAllProductsByFilter(minPrice, maxPrice));
+//            }
+//            modelAndView.setViewName(REDIRECT_TO_SEARCH_RESULT_SAVE + "&size=5");
+////            modelAndView.setViewName(REDIRECT_TO_SEARCH_RESULT_SAVE);
+//        }
+//        return modelAndView;
+//    }
 
-    public void returnProductsBySearchCondition(HttpSession session, String searchCondition) {
-        if (!searchCondition.isEmpty()) {
-            Set<ProductDto> products = productService.getFoundedProducts(searchCondition);
-            session.setAttribute(FOUND_PRODUCTS, products);
-        }
-    }
+//    public void returnProductsBySearchCondition(HttpSession session, String searchCondition) {
+//        if (!searchCondition.isEmpty()) {
+//            Set<ProductDto> products = productService.getFoundedProducts(searchCondition);
+//            session.setAttribute(FOUND_PRODUCTS, products);
+//        }
+//    }
 
 //    public void createAndLoginUser(HttpServletRequest request, UserFormDto user) {
 //        User userEntity = convertor.makeUserModelTransfer(user);
@@ -194,11 +183,11 @@ public class ShopFacade {
 
 //    }
 
-    private Set<ProductDto> getProductByFilter(HttpSession session, String type, BigDecimal minPrice, BigDecimal maxPrice) {
-        Set<ProductDto> products;
-        products = (Set<ProductDto>) session.getAttribute(FOUND_PRODUCTS);
-        products = applyPriceFilterOnProducts(minPrice, maxPrice, products);
-        products = applyTypeFilterOnProducts(type, products);
-        return products;
-    }
+//    private Set<ProductDto> getProductByFilter(HttpSession session, String type, BigDecimal minPrice, BigDecimal maxPrice) {
+//        Set<ProductDto> products;
+//        products = (Set<ProductDto>) session.getAttribute(FOUND_PRODUCTS);
+//        products = applyPriceFilterOnProducts(minPrice, maxPrice, products);
+//        products = applyTypeFilterOnProducts(type, products);
+//        return products;
+//    }
 }
