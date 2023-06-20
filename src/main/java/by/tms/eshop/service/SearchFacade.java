@@ -47,6 +47,7 @@ public class SearchFacade {
         return new ModelAndView(REDIRECT_TO_SEARCH_RESULT_SAVE + "&size=5");
     }
 
+//    public ModelAndView getSearchFilterResultPagePath(String category) {
     public ModelAndView getSearchFilterResultPagePath(HttpServletRequest request, String category) {
         BigDecimal minPrice = getPrice(request, MIN_PRICE, BigDecimal.ZERO);
         BigDecimal maxPrice = getPrice(request, MAX_PRICE, new BigDecimal(Long.MAX_VALUE));
@@ -130,7 +131,7 @@ public class SearchFacade {
         setFilterAttribute(session, filter);
     }
 
-    private static List<ProductDto> selectSet(Set<ProductDto> foundProducts, Set<ProductDto> filterFoundProducts) {
+    private List<ProductDto> selectSet(Set<ProductDto> foundProducts, Set<ProductDto> filterFoundProducts) {
         List<ProductDto> products = new ArrayList<>();
         if (filterFoundProducts != null) {
             products = new ArrayList<>(filterFoundProducts);

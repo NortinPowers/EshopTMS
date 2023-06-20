@@ -9,7 +9,6 @@ import static by.tms.eshop.utils.Constants.RequestParameters.SELECT;
 
 import by.tms.eshop.service.ProductCategoryService;
 import by.tms.eshop.service.SearchFacade;
-import by.tms.eshop.service.ShopFacade;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 @RequiredArgsConstructor
 public class SearchController {
 
-    private final ShopFacade shopFacade;
+//    private final ShopFacade shopFacade;
     private final SearchFacade searchFacade;
     private final ProductCategoryService productCategoryService;
 
@@ -131,8 +130,10 @@ public class SearchController {
     }
 
     @PostMapping("/search-filter")
+//    public ModelAndView showSearchPageByFilter(
     public ModelAndView showSearchPageByFilter(HttpServletRequest request,
                                                @RequestParam(required = false, name = SELECT) String type) {
+//        return searchFacade.getSearchFilterResultPagePath(type);
         return searchFacade.getSearchFilterResultPagePath(request, type);
 //        return shopFacade.getSearchFilterResultPagePath(request, type);
     }
