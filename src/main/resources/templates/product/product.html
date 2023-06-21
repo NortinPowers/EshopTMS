@@ -9,17 +9,18 @@
 <body>
 <th:block th:insert="~{/include/navigate}"/>
 <div class="d-flex justify-content-center">
-  <div class="card mr-5 ml-5 mt-1 shadow bg-body-tertiary rounded" style="max-width: 14rem">
-    <img class="card-img-top" style="max-height: 20rem"
-         th:src="@{/images/__${#strings.toLowerCase(product.category)}__/__${product.name}__.jpg}"
-         th:alt="${product.name}">
-    <div class="card-body">
-      <h5 class="card-title text-wrap" style="text-align: -webkit-center" th:text="${product.name}"></h5>
-      <p class="card-text font-italic" th:text="${product.info + '.'}"></p>
-    </div>
-    <div class="card-footer text-center">
-      <small class="text-muted" style="font-size: 20px" th:text="${product.price + '$'}"></small>
-    </div>
+  <div class="card mr-5 ml-5 mt-2 shadow bg-body-tertiary rounded" style="max-width: 14rem">
+    <th:block th:insert="~{/include/one-product-card.html}"/>
+<!--    <img class="card-img-top" style="max-height: 20rem"-->
+<!--         th:src="@{/images/__${#strings.toLowerCase(product.category)}__/__${product.name}__.jpg}"-->
+<!--         th:alt="${product.name}">-->
+<!--    <div class="card-body">-->
+<!--      <h5 class="card-title text-wrap" style="text-align: -webkit-center" th:text="${product.name}"></h5>-->
+<!--      <p class="card-text font-italic" th:text="${product.info + '.'}"></p>-->
+<!--    </div>-->
+<!--    <div class="card-footer text-center">-->
+<!--      <small class="text-muted" style="font-size: 20px" th:text="${product.price + '$'}"></small>-->
+<!--    </div>-->
     <!--    <th:block th:with="authorizedUser = ${session.userAccessPermission}">-->
     <th:block>
       <div sec:authorize="isAuthenticated()">
@@ -55,5 +56,19 @@
     </th:block>
   </div>
 </div>
+
+<!--<img class="card-img-top" style="max-height: 20rem"-->
+<!--     th:src="@{/images/__${#strings.toLowerCase(product.category)}__/__${product.name}__.jpg}"-->
+<!--     th:alt="${product.name}">-->
+<!--<div class="card-body">-->
+<!--  <h5 class="card-title text-wrap" style="text-align: -webkit-center"-->
+<!--      th:text="${product.name}"></h5>-->
+<!--  <p class="card-text font-italic" th:text="${product.info + '.'}"></p>-->
+<!--</div>-->
+<!--<div class="card-footer text-center">-->
+<!--  <small class="text-muted" style="font-size: 20px" th:text="${product.price + '$'}"></small>-->
+<!--</div>-->
+
+<th:block th:insert="~{/include/contact-info}"/>
 </body>
 </html>

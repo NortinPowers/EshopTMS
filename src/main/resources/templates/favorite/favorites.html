@@ -4,9 +4,31 @@
     <meta charset="UTF-8">
     <title>Favorites</title>
     <th:block th:insert="~{/include/bootstrap}"/>
+
+<!--  <style>-->
+<!--    .footer {-->
+<!--      position: fixed;-->
+<!--      left: 0;-->
+<!--      bottom: 0;-->
+<!--      width: 100%;-->
+<!--      background-color: #f8f8f8;-->
+<!--      padding: 20px;-->
+<!--      text-align: center;-->
+<!--      display: none;-->
+<!--    }-->
+
+<!--    .show-footer {-->
+<!--      display: block;-->
+<!--    }-->
+<!--  </style>-->
+
+
 </head>
 <body>
 <th:block th:insert="~{/include/navigate}"/>
+
+<!--<div class="container">-->
+
 <th:block th:if="${favoriteProducts.size()<1}">
 <h3 class="text-center mt-2 text-dark font-italic">Try clicking on this icon on a product that you like!</h3>
 <div class="text-center">
@@ -15,22 +37,24 @@
     </a>
 </div>
 </th:block>
-<div class="row row-cols-1 row-cols-md-5 g-4 mr-1 ml-1 mt-1">
+<div class="row row-cols-1 row-cols-md-6 g-4 mr-1 ml-1 mt-1">
+
     <div th:each="product : ${favoriteProducts}">
-        <div class="card mr-4 ml-4 mt-4 shadow bg-body-tertiary rounded" style="max-width: 14rem">
+        <div class="card mr-2 ml-2 mt-1 shadow bg-body-tertiary rounded" style="max-width: 14rem">
+          <th:block th:insert="~{/include/one-product-card.html}"/>
 <!--            <a th:href="@{/product/__${product.id}__(location='favorite')}">-->
-                <img class="card-img-top" style="max-height: 20rem"
-                     th:src="@{/images/__${#strings.toLowerCase(product.category)}__/__${product.name}__.jpg}"
-                     th:alt="${product.name}">
-<!--            </a>-->
-            <div class="card-body">
-                <h5 class="card-title text-wrap" style="text-align: -webkit-center"
-                    th:text="${product.name}"></h5>
-                <p class="card-text font-italic" th:text="${product.info + '.'}"></p>
-            </div>
-            <div class="card-footer text-center">
-                <small class="text-muted" style="font-size: 20px" th:text="${product.price + '$'}"></small>
-            </div>
+<!--                <img class="card-img-top" style="max-height: 20rem"-->
+<!--                     th:src="@{/images/__${#strings.toLowerCase(product.category)}__/__${product.name}__.jpg}"-->
+<!--                     th:alt="${product.name}">-->
+<!--&lt;!&ndash;            </a>&ndash;&gt;-->
+<!--            <div class="card-body">-->
+<!--                <h5 class="card-title text-wrap" style="text-align: -webkit-center"-->
+<!--                    th:text="${product.name}"></h5>-->
+<!--                <p class="card-text font-italic" th:text="${product.info + '.'}"></p>-->
+<!--            </div>-->
+<!--            <div class="card-footer text-center">-->
+<!--                <small class="text-muted" style="font-size: 20px" th:text="${product.price + '$'}"></small>-->
+<!--            </div>-->
             <th:block>
 <!--            <th:block th:with="authorizedUser = ${session.userAccessPermission}">-->
 <!--                <div th:if="${authorizedUser != null}">-->
@@ -57,5 +81,34 @@
         </div>
     </div>
 </div>
+
+<!--<th:block th:insert="~{/include/contact-info}"/>-->
+
+<!--<script>-->
+<!--  window.addEventListener('scroll', function() {-->
+<!--    var footer = document.querySelector('.footer');-->
+<!--    var scrollHeight = document.documentElement.scrollHeight;-->
+<!--    var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;-->
+<!--    var clientHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight || 0;-->
+
+<!--    if (scrollHeight - scrollTop - clientHeight <= 0) {-->
+<!--      footer.classList.add('show-footer');-->
+<!--    } else {-->
+<!--      footer.classList.remove('show-footer');-->
+<!--    }-->
+<!--  });-->
+<!--</script>-->
+
+<!--<footer class="footer">-->
+<!--  <div class="container">-->
+<!--    <div class="d-flex justify-content-center mt-2">-->
+<!--      <p>Contact information</p>-->
+<!--      <p class="ml-5 mr-5">Phone: 123-456-7890</p>-->
+<!--      <p>Email: example@example.com</p>-->
+<!--    </div>-->
+<!--  </div>-->
+
+<!--</footer>-->
+
 </body>
 </html>
