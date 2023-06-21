@@ -6,6 +6,7 @@ import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_SOME_ERROR;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
@@ -18,6 +19,18 @@ public class GlobalExceptionHandler {
     public ModelAndView handleDataAccessException(DataAccessException ex) {
         log.error("DataAccess exception", ex);
         return new ModelAndView(REDIRECT_TO_ERROR_500);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public String handleAccessException(AccessDeniedException ex) {
+//    public ModelAndView handleAccessException(AccessDeniedException ex) {
+//        String conversation = MDC.get("CONVERSATION");
+//        if (MDC.get("CONVERSATION") != null) {
+////        if (conversation != null) {
+//            log.error("Access denied to user with uuid [" + MDC.get("CONVERSATION") + "]", ex);
+//        }
+        return "/error-403";
+//        return new ModelAndView(REDIRECT_TO_ESHOP);
     }
 
     @ExceptionHandler(Exception.class)

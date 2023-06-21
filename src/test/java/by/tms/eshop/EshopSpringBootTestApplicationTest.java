@@ -3,6 +3,7 @@ package by.tms.eshop;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import by.tms.eshop.controller.AccountController;
+import by.tms.eshop.controller.AdminController;
 import by.tms.eshop.controller.CartController;
 import by.tms.eshop.controller.ExceptionController;
 import by.tms.eshop.controller.FavoriteController;
@@ -25,6 +26,7 @@ class EshopSpringBootTestApplicationTest {
     @Autowired UserController userController;
     @Autowired ProductsController productsController;
     @Autowired SearchController searchController;
+    @Autowired AdminController adminController;
 
     @Test
     void contextLoads() {
@@ -36,6 +38,7 @@ class EshopSpringBootTestApplicationTest {
         assertThat(userController).isNotNull();
         assertThat(productsController).isNotNull();
         assertThat(searchController).isNotNull();
+        assertThat(adminController).isNotNull();
     }
 
 }

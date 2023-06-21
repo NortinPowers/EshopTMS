@@ -28,12 +28,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 @SpringBootTest
 class ShopFacadeTest {
 
-    private final Long productId = 1L;
-    private final String shopFlagElse = "someFlag";
-    private final String location = "someLocation";
-    private final Integer page = 2;
-    private final String extensionPath = AND_PAGE + page;
-
     @Autowired
     private ShopFacade shopFacade;
 
@@ -42,6 +36,13 @@ class ShopFacadeTest {
 
     @MockBean
     private CartService cartService;
+
+    private final Long productId = 1L;
+    private final String shopFlagElse = "someFlag";
+    private final String location = "someLocation";
+    private final Integer page = 2;
+    private final String extensionPath = AND_PAGE + page;
+
 
     @Test
     void getPathFromAddCartByParametersToCart() {

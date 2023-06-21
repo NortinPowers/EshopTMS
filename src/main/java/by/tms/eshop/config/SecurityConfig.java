@@ -2,6 +2,7 @@ package by.tms.eshop.config;
 
 import static by.tms.eshop.utils.Constants.MappingPath.SUCCESS_REGISTER;
 
+import by.tms.eshop.exception.GlobalExceptionHandler;
 import by.tms.eshop.service.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -22,6 +23,7 @@ public class SecurityConfig {
     private final CustomUserDetailsService customUserDetailsService;
     private final CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
     private final CustomLogoutHandler customLogoutHandler;
+    private final GlobalExceptionHandler globalExceptionHandler;
 
     @SuppressWarnings({"checkstyle:MultipleStringLiterals", "checkstyle:UnnecessaryParentheses"})
     @Bean
@@ -49,6 +51,9 @@ public class SecurityConfig {
                                                .anyRequest()
                                                .authenticated()
                 )
+.exceptionHandling(exceptionHandler -> exceptionHandler
+        .accessDeniedHandler(new CustomAccessDeniedHandler(globalExceptionHandler))
+)
                 .formLogin(form -> form
                                    .loginPage("/login")
 //                                   .loginProcessingUrl("/login")
@@ -61,7 +66,7 @@ public class SecurityConfig {
                 .rememberMe(Customizer.withDefaults())
                 .logout((logout) -> logout
 //                        .logoutSuccessUrl("/")
-                        .logoutSuccessHandler(customLogoutHandler)
+.logoutSuccessHandler(customLogoutHandler)
 //                        .clearAuthentication(true)
 //                        .deleteCookies()
 .permitAll())

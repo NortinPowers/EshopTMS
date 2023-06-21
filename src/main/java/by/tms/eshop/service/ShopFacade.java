@@ -148,15 +148,15 @@ public class ShopFacade {
                        .collect(Collectors.toList());
     }
 
-    public String defineLocation(String location) {
-        String type = "all";
-        if (location != null) {
-            if (FAVORITE.equals(location)) {
-                type = FAVORITE;
-            }
-        }
-        return type;
-    }
+//    public String defineLocation(String location) {
+//        String type = "all";
+//        if (location != null) {
+//            if (FAVORITE.equals(location)) {
+//                type = FAVORITE;
+//            }
+//        }
+//        return type;
+//    }
 
     public void getUserEditForm(Long id, ModelAndView modelAndView) {
         if (userService.getUserById(id).isPresent()) {

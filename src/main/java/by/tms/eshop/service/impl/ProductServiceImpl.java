@@ -15,7 +15,6 @@ import java.math.BigDecimal;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -87,23 +86,26 @@ public class ProductServiceImpl implements ProductService {
         return products;
     }
 
-    private Set<ProductDto> convertToProductDtos(Set<Product> products) {
-        return products.stream()
-                       .map(productMapper::convertToProductDto)
-                       .collect(Collectors.toSet());
-    }
-
     @Override
     public Set<ProductDto> selectAllProductsByFilter(BigDecimal minPrice, BigDecimal maxPrice) {
-        return getProductDtoSet(productRepository.selectAllProductsByFilter(minPrice, maxPrice));
+        return convertToProductDtos(productRepository.selectAllProductsByFilter(minPrice, maxPrice));
+//        return getProductDtoSet(productRepository.selectAllProductsByFilter(minPrice, maxPrice));
     }
 
     @Override
     public Set<ProductDto> selectProductsFromCategoryByFilter(String category, BigDecimal minPrice, BigDecimal maxPrice) {
-        return getProductDtoSet(productRepository.selectProductsFromCategoryByFilter(category, minPrice, maxPrice));
+        return convertToProductDtos(productRepository.selectProductsFromCategoryByFilter(category, minPrice, maxPrice));
+//        return getProductDtoSet(productRepository.selectProductsFromCategoryByFilter(category, minPrice, maxPrice));
     }
 
-    private Set<ProductDto> getProductDtoSet(Set<Product> convertedProducts) {
+//    private Set<ProductDto> convertToProductDtos(Set<Product> products) {
+//        return products.stream()
+//                       .map(productMapper::convertToProductDto)
+//                       .collect(Collectors.toSet());
+//    }
+
+    private Set<ProductDto> convertToProductDtos(Set<Product> convertedProducts) {
+//    private Set<ProductDto> getProductDtoSet(Set<Product> convertedProducts) {
         Set<ProductDto> products = new LinkedHashSet<>();
         for (Product product : convertedProducts) {
             products.add(productMapper.convertToProductDto(product));

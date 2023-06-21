@@ -22,6 +22,7 @@ public class AccountController {
     private final OrderService orderService;
 //    private final Converter converter;
 
+//    @PreAuthorize("isAuthenticated()")
     @GetMapping("/account")
     public ModelAndView showAccountPage() {
 //    public ModelAndView showAccountPage(HttpSession session, Principal principal) {

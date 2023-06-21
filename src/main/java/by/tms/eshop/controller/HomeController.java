@@ -21,6 +21,10 @@ public class HomeController {
 
     @GetMapping(value = {"/", "/eshop"})
     public ModelAndView redirectToEshopPage(ModelAndView modelAndView) {
+//        if (MDC.get("CONVERSATION") != null) {
+////        if (conversation != null) {
+//            System.out.println(MDC.get("CONVERSATION"));
+//        }
         getEshopView(modelAndView);
 
         //user!!

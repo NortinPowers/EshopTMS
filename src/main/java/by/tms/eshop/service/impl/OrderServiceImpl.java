@@ -23,7 +23,7 @@ import org.springframework.stereotype.Service;
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
-//    private final Converter converter;
+    //    private final Converter converter;
     private final ProductMapper productMapper;
     private final OrderMapper orderMapper;
 
@@ -52,8 +52,8 @@ public class OrderServiceImpl implements OrderService {
 //        List<Order> orderById = orderRepository.findOrderByUserId(id);
 //        converter.getOrdersDtosFromOrders(orderById);
         return orderRepository.findOrderByUserId(id).stream()
-              .map(orderMapper::convertToOrderDto)
-              .collect(Collectors.toList());
+                              .map(orderMapper::convertToOrderDto)
+                              .collect(Collectors.toList());
 //        return converter.getOrdersDtosFromOrders(orderRepository.findOrderByUserId(id));
     }
 
@@ -75,13 +75,14 @@ public class OrderServiceImpl implements OrderService {
     private String generateOrderNumber(Long id) {
         String orderNumber = "";
         while (checkOrderNumber(orderNumber) || StringUtils.isEmpty(orderNumber)) {
-            orderNumber = createOrderNumber(id);
+            orderNumber = "#" + id + "-" + randomUUID().toString();
+//            orderNumber = createOrderNumber(id);
         }
         return orderNumber;
     }
 
-    private String createOrderNumber(Long id) {
-        String uuid = randomUUID().toString();
-        return "#" + id + "-" + uuid;
-    }
+//    private String createOrderNumber(Long id) {
+//        String uuid = randomUUID().toString();
+//        return "#" + id + "-" + uuid;
+//    }
 }

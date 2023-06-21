@@ -8,6 +8,7 @@
 </head>
 <body style="background: #f9f9f9">
 <th:block th:insert="~{/include/navigate}"/>
+<!--<th:block  sec:authorize="isAuthenticated()">-->
 <div class="card text-center" style="background: #f9f9f9">
   <div class="card-header text-center">
     <!--        <th:block th:with="ids=${T(org.springframework.security.core.context.SecurityContextHolder).getContext().getAuthentication().getPrincipal().getUser().getId()}">-->
@@ -104,5 +105,6 @@
     </div>
   </div>
 </div>
+<!--</th:block>-->
 </body>
 </html>

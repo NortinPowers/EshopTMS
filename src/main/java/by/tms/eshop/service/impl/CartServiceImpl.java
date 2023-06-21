@@ -162,7 +162,8 @@ public class CartServiceImpl implements CartService {
                 addProduct(userId, productId, location);
             } else {
                 Cart cart = userCart.get();
-                Integer count = userCart.get().getCount();
+                Integer count = cart.getCount();
+//                Integer count = userCart.get().getCount();
                 cart.setCount(++count);
             }
 //            if (checkProduct(userId, productId, location)) {

@@ -69,14 +69,6 @@ public class SearchFacade {
         return modelAndView;
     }
 
-    private Set<ProductDto> getProductByFilter(HttpSession session, String type, BigDecimal minPrice, BigDecimal maxPrice) {
-        Set<ProductDto> products;
-        products = (Set<ProductDto>) session.getAttribute(FOUND_PRODUCTS);
-        products = applyPriceFilterOnProducts(minPrice, maxPrice, products);
-        products = applyTypeFilterOnProducts(type, products);
-        return products;
-    }
-
     public void setPagination(HttpSession session, Pageable pageable, ModelAndView modelAndView) {
         Set<ProductDto> foundProducts = (Set<ProductDto>) session.getAttribute(FOUND_PRODUCTS);
         Set<ProductDto> filterFoundProducts = (Set<ProductDto>) session.getAttribute(FILTER_FOUND_PRODUCTS);
@@ -129,6 +121,14 @@ public class SearchFacade {
         removeUnsavedAttribute(session, result);
         session.removeAttribute(FILTER);
         setFilterAttribute(session, filter);
+    }
+
+    private Set<ProductDto> getProductByFilter(HttpSession session, String type, BigDecimal minPrice, BigDecimal maxPrice) {
+        Set<ProductDto> products;
+        products = (Set<ProductDto>) session.getAttribute(FOUND_PRODUCTS);
+        products = applyPriceFilterOnProducts(minPrice, maxPrice, products);
+        products = applyTypeFilterOnProducts(type, products);
+        return products;
     }
 
     private List<ProductDto> selectSet(Set<ProductDto> foundProducts, Set<ProductDto> filterFoundProducts) {

@@ -44,6 +44,7 @@ public class Constants {
         public static final String FAVORITES = "favorite/favorites";
         public static final String SUCCESS_BUY = "cart/success-buy";
         public static final String ERROR_500 = "error/error-500";
+        public static final String ERROR_403 = "error/error-403";
         public static final String SOME_ERROR = "error/some-error";
         public static final String REDIRECT_TO_CART = "redirect:/cart";
         public static final String REDIRECT_TO_ESHOP = "redirect:/eshop";
