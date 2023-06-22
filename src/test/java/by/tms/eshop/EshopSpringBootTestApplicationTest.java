@@ -40,5 +40,4 @@ class EshopSpringBootTestApplicationTest {
         assertThat(searchController).isNotNull();
         assertThat(adminController).isNotNull();
     }
-
 }

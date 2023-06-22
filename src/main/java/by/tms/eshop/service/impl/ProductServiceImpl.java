@@ -1,9 +1,9 @@
 package by.tms.eshop.service.impl;
 
-import static by.tms.eshop.utils.Constants.Attributes.PAGE;
 import static by.tms.eshop.utils.Constants.Attributes.URL;
 import static by.tms.eshop.utils.Constants.MappingPath.PRODUCT;
 import static by.tms.eshop.utils.Constants.MappingPath.PRODUCTS;
+import static by.tms.eshop.utils.Constants.PAGE;
 
 import by.tms.eshop.domain.Product;
 import by.tms.eshop.dto.ProductDto;
@@ -28,7 +28,6 @@ import org.springframework.web.servlet.ModelAndView;
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
-    //    private final Converter converter;
     private final ProductMapper productMapper;
 
     @Override
@@ -36,27 +35,18 @@ public class ProductServiceImpl implements ProductService {
         ModelMap modelMap = new ModelMap();
         Page<ProductDto> page = productRepository.findAllWithPaginationByProductCategory_Category(category, pageable)
                                                  .map(productMapper::convertToProductDto);
-//                                                 .map(converter::makeProductDtoModelTransfer);
         modelMap.addAttribute(PAGE, page);
         modelMap.addAttribute(URL, "/products-page?category=" + category + "&size=3");
         return new ModelAndView(PRODUCTS, modelMap);
     }
 
     @Override
-//    public ModelAndView getProduct(Long id, String location) {
     public ModelAndView getViewProduct(Long id) {
         Optional<Product> productOptional = productRepository.findById(id);
         ModelMap modelMap = null;
         if (productOptional.isPresent()) {
             modelMap = new ModelMap(Attributes.PRODUCT, productMapper.convertToProductDto(productOptional.get()));
-//            modelMap = new ModelMap(Attributes.PRODUCT, converter.makeProductDtoModelTransfer(productOptional.get()));
         }
-//        ModelAndView modelAndView = new ModelAndView();
-//        modelAndView.addObject(PRODUCT, modelMap);
-//        if (location.equals(FAVORITE)) {
-//            modelAndView.addObject(FAVORITE, true);
-//        }
-//        return modelAndView;
         return new ModelAndView(PRODUCT, modelMap);
     }
 
@@ -76,35 +66,20 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Set<ProductDto> getFoundedProducts(String condition) {
         Set<Product> productsByConditionInName = productRepository.getProductsByConditionInName(condition);
-//        Set<ProductDto> productDtos = productsByConditionInName.stream()
-//                                          .map(productMapper::convertToProductDto)
-//                                          .collect(Collectors.toSet());
-//        Set<ProductDto> productDtos = convertToProductDtos(productsByConditionInName);
         Set<Product> productsByConditionInInfo = productRepository.getProductsByConditionInInfo(condition);
-//        productDtos.addAll(convertToProductDtos(productsByConditionInInfo));
-//        productsByConditionInName.addAll(productRepository.getProductsByConditionInInfo(condition));
-//        return productDtos;
-//        return productsByConditionInName.stream()
-//                       .map(productMapper::convertToProductDto)
-//                       .collect(Collectors.toSet());
-//        return products.stream().map(converter::makeProductDtoModelTransfer).collect(Collectors.toSet());
-
         Set<ProductDto> products = new LinkedHashSet<>(convertToProductDtos(productsByConditionInName));
         products.addAll(convertToProductDtos(productsByConditionInInfo));
-//        return convertToProductDtos(products);
         return products;
     }
 
     @Override
     public Set<ProductDto> selectAllProductsByFilter(BigDecimal minPrice, BigDecimal maxPrice) {
         return convertToProductDtos(productRepository.selectAllProductsByFilter(minPrice, maxPrice));
-//        return getProductDtoSet(productRepository.selectAllProductsByFilter(minPrice, maxPrice));
     }
 
     @Override
     public Set<ProductDto> selectProductsFromCategoryByFilter(String category, BigDecimal minPrice, BigDecimal maxPrice) {
         return convertToProductDtos(productRepository.selectProductsFromCategoryByFilter(category, minPrice, maxPrice));
-//        return getProductDtoSet(productRepository.selectProductsFromCategoryByFilter(category, minPrice, maxPrice));
     }
 
     @Override
@@ -114,18 +89,10 @@ public class ProductServiceImpl implements ProductService {
         product.setPrice(productDto.getPrice());
     }
 
-//    private Set<ProductDto> convertToProductDtos(Set<Product> products) {
-//        return products.stream()
-//                       .map(productMapper::convertToProductDto)
-//                       .collect(Collectors.toSet());
-//    }
-
     private Set<ProductDto> convertToProductDtos(Set<Product> convertedProducts) {
-//    private Set<ProductDto> getProductDtoSet(Set<Product> convertedProducts) {
         Set<ProductDto> products = new LinkedHashSet<>();
         for (Product product : convertedProducts) {
             products.add(productMapper.convertToProductDto(product));
-//            products.add(converter.makeProductDtoModelTransfer(product));
         }
         return products;
     }

@@ -1,31 +1,22 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>EShop</title>
-    <th:block th:insert="~{/include/bootstrap}"/>
+  <meta charset="UTF-8">
+  <title>EShop</title>
+  <th:block th:insert="~{/include/bootstrap}"/>
 </head>
 <body>
 <th:block th:insert="~{/include/navigate}"/>
 <div class="row row-cols-1 row-cols-md-4 g-4 mr-2 ml-2 mt-2">
-    <div th:each="productCategory : ${productCategories}" class="card mr-3 ml-3 mt-3 shadow bg-body-tertiary rounded"
-         style="max-width: 14rem">
-        <div class="card-header bg-danger text-white text-center" th:text="${productCategory}"></div>
-        <a th:href="@{/products-page(category=${productCategory}, size=3)}">
-            <img class="card-img-top" th:src="@{/images/category/__${#strings.toLowerCase(productCategory)}__.jpg}"
-                 th:alt="${productCategory}">
-        </a>
-    </div>
+  <div th:each="productCategory : ${productCategories}" class="card mr-3 ml-3 mt-3 shadow bg-body-tertiary rounded"
+       style="max-width: 14rem">
+    <div class="card-header bg-danger text-white text-center" th:text="${productCategory}"></div>
+    <a th:href="@{/products-page(category=${productCategory}, size = 3)}">
+      <img class="card-img-top" th:src="@{/images/category/__${#strings.toLowerCase(productCategory)}__.jpg}"
+           th:alt="${productCategory}">
+    </a>
+  </div>
 </div>
-<!--<footer class="footer fixed-bottom bg-dark text-light">-->
-<!--    <div class="container">-->
-<!--        <div class="d-flex justify-content-center mt-2">-->
-<!--            <p>Contact information</p>-->
-<!--            <p class="ml-5 mr-5">Phone: 123-456-7890</p>-->
-<!--            <p>Email: example@example.com</p>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</footer>-->
 <th:block th:insert="~{/include/contact-info}"/>
 </body>
 </html>

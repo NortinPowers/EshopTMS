@@ -10,8 +10,8 @@ import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_SEARCH_RESULT
 import static by.tms.eshop.utils.Constants.RequestParameters.FAVORITE;
 import static by.tms.eshop.utils.Constants.RequestParameters.PRODUCT_PAGE;
 import static by.tms.eshop.utils.Constants.RequestParameters.SEARCH;
-import static by.tms.eshop.utils.Constants.RequestParameters.TRUE;
 import static by.tms.eshop.utils.Constants.SIZE_3;
+import static by.tms.eshop.utils.Constants.TRUE;
 
 import by.tms.eshop.dto.CartDto;
 import by.tms.eshop.dto.ProductDto;

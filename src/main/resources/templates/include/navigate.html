@@ -1,5 +1,4 @@
 <th:block xmlns:sec="http://www.w3.org/1999/xhtml">
-  <!--<th:block th:with="authorizedUser=${session.userAccessPermission}" xmlns:sec="http://www.w3.org/1999/xhtml">-->
   <nav class="navbar navbar-dark bg-dark">
     <ul class="nav nav-pills ">
       <li class="nav-item">
@@ -14,7 +13,6 @@
           </div>
         </a>
       </li>
-      <!--            <th:block th:if="${authorizedUser != null}">-->
       <th:block sec:authorize="isAuthenticated()">
         <li class="nav-item">
           <a class="btn btn-outline-info ml-2" href="/favorites">Favorites</a>
@@ -24,7 +22,6 @@
         </li>
       </th:block>
     </ul>
-    <!--        <th:block th:if="${authorizedUser == null}">-->
     <th:block sec:authorize="!isAuthenticated()">
       <h2 style="text-align: center; color: #e5a0a4; margin-right: 11%; text-shadow: 1px 1px 2px red, 0 0 1em #ff004d, 0 0 0.2em #ff0062;">Log in to start shopping</h2>
       <a id="loginButton" class="form-inline my-2 my-lg-0" style="text-decoration: none"
@@ -32,13 +29,10 @@
         <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Login</button>
       </a>
     </th:block>
-    <!--        <th:block th:if="${authorizedUser != null}">-->
     <th:block sec:authorize="isAuthenticated()">
       <h2 style="text-align: center; color: #e5a0a4; margin-right: 11%; text-shadow: 1px 1px 2px red, 0 0 1em #ff004d, 0 0 0.2em #ff0062;">
         Welcome <span sec:authentication="name"></span><span th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">, our lord</span>
       </h2>
-<!--      <h2 style="text-align: center; color: #e5a0a4; margin-right: 11%; text-shadow: 1px 1px 2px red, 0 0 1em #ff004d, 0 0 0.2em #ff0062;" sec:authentication="name"></h2>-->
-<!--        Welcome <span th:remove="tag" sec:authentication="name"></span>! </h2>-->
       <ul class="nav nav-pills ">
         <li class="nav-item" th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
           <a id="adminButton"
@@ -56,19 +50,8 @@
           <form th:action="@{/logout}" method="post">
             <input type="submit" value="Sign Out" class="btn btn-outline-success"/>
           </form>
-          <!--                       th:href="@{/logou/t}">-->
-          <!--                    <a id="exitButton"-->
-          <!--                       th:href="@{/logout}" methods="post">-->
-          <!--                        <button class="btn btn-outline-success" type="submit">Exit</button>-->
-          <!--                    </a>-->
         </li>
       </ul>
-<!--    </th:block>-->
-<!--    <th:block th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">-->
-
-<!--    </th:block>-->
-<!--    <th:block sec:authorize="!isAuthenticated()">-->
-<!--      <h2 style="text-align: center; color: #e5a0a4; margin-right: 11%; text-shadow: 1px 1px 2px red, 0 0 1em #ff004d, 0 0 0.2em #ff0062;">Log in to start shopping</h2>-->
-<!--    </th:block>-->
+    </th:block>
   </nav>
 </th:block>

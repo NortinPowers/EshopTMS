@@ -8,20 +8,12 @@
 </head>
 <body>
 <th:block th:insert="~{/include/navigate}"/>
-<!--<div class="container">-->
-<!--  <div class="d-flex justify-content-center">-->
 <div class="row mr-1 ml-1 mt-1">
   <div class="col-10">
     <div class="row">
       <div th:each="product : ${page.content}">
         <div class="col-3 ml-5">
-          <!--          <div class="col-3 ml-5">-->
           <div class="card mr-5 ml-5 mt-1 shadow bg-body-tertiary rounded" style="max-width: 14rem; height: 35rem; min-width: 14rem;">
-
-            <!--        <a th:href="@{/product/__${product.id}__}">-->
-            <!--        <th:block th:insert="~{/include/one-product-card.html}"/>-->
-            <!--        </a>-->
-
             <a th:href="@{/product/__${product.id}__}">
               <img class="card-img-top" style="max-height: 20rem"
                    th:src="@{/images/__${#strings.toLowerCase(product.category)}__/__${product.name}__.jpg}"
@@ -35,11 +27,8 @@
             <div class="card-footer text-center">
               <small class="text-muted" style="font-size: 20px" th:text="${product.price + '$'}"></small>
             </div>
-
-            <!--      <th:block th:with="authorizedUser = ${session.userAccessPermission}">-->
             <th:block>
               <div sec:authorize="isAuthenticated()">
-                <!--        <div th:if="${authorizedUser != null}">-->
                 <div class="btn-group btn-group-fill">
                   <a th:href="@{/add-cart(id=${product.id}, shop=true, location='none')}"
                      class="btn btn-success active" style="min-width: 8.8rem"
@@ -65,39 +54,10 @@
       </div>
     </div>
   </div>
-  <!--      <th:block th:if="${page.content.size()==1}">-->
-  <!--        <div class="col-3">-->
-  <!--        </div>-->
-  <!--        <div class="col-3">-->
-  <!--        </div>-->
-  <!--      </th:block>-->
-  <!--      <th:block th:if="${page.content.size()==2}">-->
-  <!--        <div class="col-3">-->
-  <!--        </div>-->
-  <!--      </th:block>-->
   <div class="col-2 mt-3">
     <th:block th:insert="~{/include/pagination}"/>
   </div>
 </div>
-<!--  </div>-->
-<!--</div>-->
-<!--<th:block th:insert="~{/include/pagination}"/>-->
-<!--<footer>-->
-<!--  <div class="pagination justify-content-center mt-3 mb-3">-->
-<!--    <ul class="pagination">-->
-<!--      <li th:class="${page.number == 0 ? 'disabled' : ''}">-->
-<!--        <a class="page-link" th:href="@{${url}(page=0)}">&laquo;</a>-->
-<!--      </li>-->
-<!--      <li th:each="pageNumber : ${#numbers.sequence(1, page.totalPages)}"-->
-<!--          th:class="${pageNumber == page.number+1 ? 'active' : ''}">-->
-<!--        <a class="page-link" th:href="@{${url}(page=${pageNumber-1})}" th:text="${pageNumber}"></a>-->
-<!--      </li>-->
-<!--      <li th:class="${page.number >= page.totalPages-1 ? 'disabled' : ''}">-->
-<!--        <a class="page-link" th:href="@{${url}(page=${page.totalPages}-1)}">&raquo;</a>-->
-<!--      </li>-->
-<!--    </ul>-->
-<!--  </div>-->
-<!--</footer>-->
 <th:block th:insert="~{/include/contact-info}"/>
 </body>
 </html>

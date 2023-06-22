@@ -10,7 +10,6 @@ public interface ProductService {
 
     ModelAndView getViewProductsByCategory(String category, Pageable pageable);
 
-    //    ModelAndView getProduct(Long id, String location);
     ModelAndView getViewProduct(Long id);
 
     ProductDto getProductDto(Long id);

@@ -17,13 +17,13 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
-    //    private final Converter converter;
     private final ProductMapper productMapper;
     private final OrderMapper orderMapper;
 
@@ -49,12 +49,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderDto> getOrdersById(Long id) {
-//        List<Order> orderById = orderRepository.findOrderByUserId(id);
-//        converter.getOrdersDtosFromOrders(orderById);
         return orderRepository.findOrderByUserId(id).stream()
                               .map(orderMapper::convertToOrderDto)
                               .collect(Collectors.toList());
-//        return converter.getOrdersDtosFromOrders(orderRepository.findOrderByUserId(id));
     }
 
     @Override
@@ -62,10 +59,10 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.existsByName(number);
     }
 
+    @Transactional
     @Override
     public void saveUserOrder(Long userId, List<ProductDto> productsDto) {
         Long order = createOrder(userId);
-//        List<Product> products = converter.getProductsFromProductsDtos(productsDto);
         List<Product> products = productsDto.stream()
                                             .map(productMapper::convertToProduct)
                                             .toList();
@@ -75,14 +72,8 @@ public class OrderServiceImpl implements OrderService {
     private String generateOrderNumber(Long id) {
         String orderNumber = "";
         while (checkOrderNumber(orderNumber) || StringUtils.isEmpty(orderNumber)) {
-            orderNumber = "#" + id + "-" + randomUUID().toString();
-//            orderNumber = createOrderNumber(id);
+            orderNumber = "#" + id + "-" + randomUUID();
         }
         return orderNumber;
     }
-
-//    private String createOrderNumber(Long id) {
-//        String uuid = randomUUID().toString();
-//        return "#" + id + "-" + uuid;
-//    }
 }

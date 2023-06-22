@@ -77,22 +77,6 @@
         </div>
       </div>
       <th:block th:insert="~{/include/pagination}"/>
-<!--      <footer>-->
-<!--        <div class="pagination justify-content-center mt-3">-->
-<!--          <ul class="pagination">-->
-<!--            <li th:class="${page.number == 0 ? 'disabled' : ''}">-->
-<!--              <a class="page-link" th:href="@{${url}(page=0)}">&laquo;</a>-->
-<!--            </li>-->
-<!--            <li th:each="pageNumber : ${#numbers.sequence(1, page.totalPages)}"-->
-<!--                th:class="${pageNumber == page.number+1 ? 'active' : ''}">-->
-<!--              <a class="page-link" th:href="@{${url}(page=${pageNumber-1})}" th:text="${pageNumber}"></a>-->
-<!--            </li>-->
-<!--            <li th:class="${page.number >= page.totalPages-1 ? 'disabled' : ''}">-->
-<!--              <a class="page-link" th:href="@{${url}(page=${page.totalPages}-1)}">&raquo;</a>-->
-<!--            </li>-->
-<!--          </ul>-->
-<!--        </div>-->
-<!--      </footer>-->
     </div>
   </div>
 </th:block>

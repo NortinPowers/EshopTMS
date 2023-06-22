@@ -6,6 +6,7 @@ import by.tms.eshop.service.UserService;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -18,6 +19,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.findUserByLogin(login);
     }
 
+    @Transactional
     @Override
     public void addUser(User user) {
         userRepository.saveAndFlush(user);

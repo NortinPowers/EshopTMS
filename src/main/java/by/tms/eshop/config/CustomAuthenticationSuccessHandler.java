@@ -1,5 +1,8 @@
 package by.tms.eshop.config;
 
+import static by.tms.eshop.utils.Constants.CONVERSATION;
+import static by.tms.eshop.utils.Constants.ControllerMappingPath.ESHOP;
+
 import by.tms.eshop.security.CustomUserDetail;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,9 +23,9 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
         String userUuid = UUID.randomUUID().toString();
-        MDC.put("CONVERSATION", userUuid);
+        MDC.put(CONVERSATION, userUuid);
         CustomUserDetail principal = (CustomUserDetail) authentication.getPrincipal();
         log.info("The user with a login " + principal.getUser().getLogin() + " is logged in, has been assigned a UUID [" + userUuid + "]");
-        response.sendRedirect("/");
+        response.sendRedirect(ESHOP);
     }
 }

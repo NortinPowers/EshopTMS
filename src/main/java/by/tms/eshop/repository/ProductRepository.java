@@ -2,7 +2,6 @@ package by.tms.eshop.repository;
 
 import by.tms.eshop.domain.Product;
 import java.math.BigDecimal;
-import java.util.Optional;
 import java.util.Set;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,8 +15,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query("SELECT productCategory.category FROM Product WHERE id = :id")
     String getProductCategoryValue(Long id);
-
-    Optional<Product> findById(Long id);
 
     @Query("FROM Product WHERE price >= :minPrice AND price <= :maxPrice AND productCategory.category = :category ORDER BY id")
     Set<Product> selectProductsFromCategoryByFilter(String category, BigDecimal minPrice, BigDecimal maxPrice);

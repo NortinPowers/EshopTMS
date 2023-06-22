@@ -1,5 +1,6 @@
 package by.tms.eshop.exception;
 
+import static by.tms.eshop.utils.Constants.ControllerMappingPath.ERROR_403;
 import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_ERROR_500;
 import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_SOME_ERROR;
 
@@ -23,14 +24,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AccessDeniedException.class)
     public String handleAccessException(AccessDeniedException ex) {
-//    public ModelAndView handleAccessException(AccessDeniedException ex) {
-//        String conversation = MDC.get("CONVERSATION");
-//        if (MDC.get("CONVERSATION") != null) {
-////        if (conversation != null) {
-//            log.error("Access denied to user with uuid [" + MDC.get("CONVERSATION") + "]", ex);
-//        }
-        return "/error-403";
-//        return new ModelAndView(REDIRECT_TO_ESHOP);
+        return ERROR_403;
     }
 
     @ExceptionHandler(Exception.class)

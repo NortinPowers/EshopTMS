@@ -17,75 +17,10 @@
         <th scope="col">Product name</th>
         <th scope="col">Popularity</th>
         <th scope="col">Price</th>
-        <th scope="col">Сhange the price</th>
+        <th scope="col">Change the price</th>
       </tr>
       </thead>
       <tbody class="rounded">
-      <!--    <tr th:each="instance : ${products}">-->
-      <!--    <tr th:each="entry, stats : ${products}" th:with="product=${entry.key}">-->
-      <!--        <th scope="row">-</th>-->
-      <!--        <td class="font-italic" >-->
-      <!--            <a th:href="@{/product/__${instance.key.productDto.id}__}" th:text="${instance.key.productDto.name}" class="text-decoration-none text-light"></a>-->
-      <!--        </td>-->
-      <!--        <td class="font-italic" th:text="${instance.value}"></td>-->
-      <!--        <td class="font-italic" th:text="${instance.key.productDto.price}"></td>-->
-      <!--        <td>-->
-      <!--            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">-->
-      <!--                <p th:text="${instance.get('count')}"></p>-->
-      <!--                Launch demo modal-->
-      <!--            </button>-->
-      <!--        </td>-->
-      <!--    </tr>-->
-      <!--    </tbody>-->
-
-      <!--    <tbody class="rounded">-->
-      <!--    <tr th:each="instance : ${mostFavorite}">-->
-      <!--        <th scope="row">-</th>-->
-      <!--        <td class="font-italic" >-->
-      <!--            <a th:href="@{/product/__${instance.productDto.id}__}" th:text="${instance.productDto.name}" class="text-decoration-none text-light"></a>-->
-      <!--        </td>-->
-      <!--        <td class="font-italic">some</td>-->
-      <!--        <td class="font-italic" th:text="${instance.productDto.price}"></td>-->
-      <!--        <td>-->
-      <!--            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">-->
-      <!--                Launch demo modal-->
-      <!--            </button>-->
-      <!--        </td>-->
-      <!--    </tr>-->
-
-      <!--    <tbody class="rounded">-->
-      <!--    <tr th:each="instance : ${mostFavorite}">-->
-      <!--        <th scope="row">-</th>-->
-      <!--        <td class="font-italic" th:text="${instance}">-->
-      <!--        </td>-->
-      <!--        <td class="font-italic">some</td>-->
-      <!--        <td class="font-italic"> some</td>-->
-      <!--        <td>-->
-      <!--            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">-->
-      <!--                Launch demo modal-->
-      <!--            </button>-->
-      <!--        </td>-->
-      <!--    </tr>-->
-      <!--    </tbody>-->
-
-
-      <!--    <tbody class="rounded">-->
-      <!--    <tr th:each="instance : ${mostFavorite.instanceMap}">-->
-      <!--        <th scope="row">-</th>-->
-      <!--        <td class="font-italic" >-->
-      <!--            <a th:href="@{/product/__${instance.key.productDto.id}__}" th:text="${instance.key.productDto.name}" class="text-decoration-none text-light"></a>-->
-      <!--        </td>-->
-      <!--        <td class="font-italic" th:text="${instance.value}"></td>-->
-      <!--        <td class="font-italic" th:text="${instance.key.productDto.price}"></td>-->
-      <!--        <td>-->
-      <!--            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">-->
-      <!--                Launch demo modal-->
-      <!--            </button>-->
-      <!--        </td>-->
-      <!--    </tr>-->
-      <!--    </tbody>-->
-
-
       <tr th:each="productMap : ${products}">
         <th:block th:each="productWithCout : ${productMap}">
           <th:block th:with="product=${productWithCout.getKey()},count=${productWithCout.getValue()}">
@@ -121,24 +56,21 @@
     <img class="card-img w-50" th:src="@{/images/decoration/no-favorite.jpg}" alt="no-favorite">
   </div>
 </th:block>
-
-
-  <div id="successNotificationModal" class="modal fade" th:if="${success}">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content bg-dark text-white">
-        <div class="modal-header">
-          <h5 class="modal-title">Successful change</h5>
-          <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body text-center mt-2">
-          <p>The price has been successfully changed!</p>
-        </div>
+<div id="successNotificationModal" class="modal fade" th:if="${success}">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content bg-dark text-white">
+      <div class="modal-header">
+        <h5 class="modal-title">Successful change</h5>
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body text-center mt-2">
+        <p>The price has been successfully changed!</p>
       </div>
     </div>
   </div>
-
+</div>
 <div id="errorNotificationModal" class="modal fade" th:if="${error}">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content bg-dark text-white">
@@ -154,93 +86,11 @@
     </div>
   </div>
 </div>
-
-<!--  <div id="errorNotificationModal" class="modal fade" th:if="${error}">-->
-<!--    <div class="modal-dialog modal-dialog-centered">-->
-<!--      <div class="modal-content">-->
-<!--        <div class="modal-header">-->
-<!--          <h5 class="modal-title">Unsuccessful change</h5>-->
-<!--        </div>-->
-<!--        <div class="modal-body">-->
-<!--          <p>Failed to change the price, double-check the entered parameters</p>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--  </div>-->
-
-  <script>
-    $(document).ready(function () {
-      // Показать модальное окно успешной регистрации
-      $('#successNotificationModal').modal('show');
-
-      // Показать модальное окно неуспешной регистрации
-      $('#errorNotificationModal').modal('show');
-    });
-  </script>
-
-
-  <!--  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">-->
-  <!--    Launch demo modal-->
-  <!--  </button>-->
-
-  <!--  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">-->
-  <!--    <div class="modal-dialog modal-dialog-centered">-->
-  <!--      <div class="modal-content bg-dark text-white">-->
-  <!--        <div class="modal-header">-->
-  <!--          <h5 class="modal-title" id="exampleModalLabel">Form for change the price</h5>-->
-  <!--          <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">-->
-  <!--            <span aria-hidden="true">&times;</span>-->
-  <!--          </button>-->
-  <!--        </div>-->
-  <!--        <form th:action="@{/admin/price}" method="post">-->
-  <!--          <div class="modal-body">-->
-  <!--            <div>-->
-  <!--              <p th:text="${product.name}"></p>-->
-  <!--              <p class="text-light font-italic">Enter a new price:</p>-->
-  <!--            </div>-->
-  <!--            <div class="form-outline">-->
-  <!--              <input type="text" id="price" name="price"-->
-  <!--                     class="form-control form-control-lg text-center bg-secondary text-white"-->
-  <!--                     placeholder="New price"/>-->
-  <!--            </div>-->
-  <!--          </div>-->
-  <!--          <div class="modal-footer">-->
-  <!--            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>-->
-  <!--            <button  type="submit" class="btn btn-primary">Save changes</button>-->
-  <!--          </div>-->
-  <!--        </form>-->
-  <!--      </div>-->
-  <!--    </div>-->
-  <!--  </div>-->
-
-  <!--  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">-->
-  <!--    <div class="modal-dialog modal-dialog-centered">-->
-  <!--      <div class="modal-content">-->
-  <!--        <div class="modal-header">-->
-  <!--          <h5 class="modal-title" id="exampleModalLabel">Form for change the price</h5>-->
-  <!--          <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
-  <!--            <span aria-hidden="true">&times;</span>-->
-  <!--          </button>-->
-  <!--        </div>-->
-  <!--        <form th:action="@{/admin/price}" method="post">-->
-  <!--          <div class="modal-body">-->
-  <!--            <div class="form-outline">-->
-  <!--              <input type="text" id="price" name="price"-->
-  <!--                     class="form-control form-control-lg text-center"-->
-  <!--                     placeholder="New price"/>-->
-  <!--            </div>-->
-  <!--          </div>-->
-  <!--          <div class="modal-footer">-->
-  <!--            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>-->
-  <!--            <button  type="submit" class="btn btn-primary">Save changes</button>-->
-  <!--          </div>-->
-  <!--        </form>-->
-  <!--      </div>-->
-  <!--    </div>-->
-  <!--  </div>-->
-
-
-
-<!--<th:block th:insert="~{/include/contact-info}"/>-->
+<script>
+  $(document).ready(function () {
+    $('#successNotificationModal').modal('show');
+    $('#errorNotificationModal').modal('show');
+  });
+</script>
 </body>
 </html>

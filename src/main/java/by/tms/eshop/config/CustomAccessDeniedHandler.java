@@ -16,22 +16,12 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
 
     private final GlobalExceptionHandler globalExceptionHandler;
 
-//    public CustomAccessDeniedHandler(GlobalExceptionHandler globalExceptionHandler) {
-//        this.globalExceptionHandler = globalExceptionHandler;
-//    }
-
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException ex) throws IOException, ServletException {
-//        ModelAndView modelAndView = globalExceptionHandler.handleAccessException(ex);
         String path = globalExceptionHandler.handleAccessException(ex);
-
         response.setStatus(HttpStatus.FORBIDDEN.value());
         request.setAttribute(View.RESPONSE_STATUS_ATTRIBUTE, HttpStatus.FORBIDDEN);
-        request.setAttribute("Access denied message", ex);
-
+        request.setAttribute("Access denied", ex);
         response.sendRedirect(path);
-//
-//        RequestDispatcher dispatcher = request.getRequestDispatcher(modelAndView.getViewName());
-//        dispatcher.forward(request, response);
     }
 }

@@ -11,7 +11,6 @@ import lombok.Setter;
 @EqualsAndHashCode
 @Builder
 public class ProductDto {
-//public class ProductDto implements Serializable {
 
     private Long id;
     private String name;

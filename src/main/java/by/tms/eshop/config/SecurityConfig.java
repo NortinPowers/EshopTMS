@@ -1,9 +1,18 @@
 package by.tms.eshop.config;
 
+import static by.tms.eshop.utils.Constants.ControllerMappingPath.ADMIN;
+import static by.tms.eshop.utils.Constants.ControllerMappingPath.ANY_PRODUCT;
+import static by.tms.eshop.utils.Constants.ControllerMappingPath.ESHOP;
+import static by.tms.eshop.utils.Constants.ControllerMappingPath.LOGIN;
+import static by.tms.eshop.utils.Constants.ControllerMappingPath.PRODUCTS_PAGE;
+import static by.tms.eshop.utils.Constants.ControllerMappingPath.REGISTRATION;
+import static by.tms.eshop.utils.Constants.ControllerMappingPath.ROOT;
+import static by.tms.eshop.utils.Constants.ControllerMappingPath.SEARCH;
+import static by.tms.eshop.utils.Constants.ControllerMappingPath.SEARCH_FILTER;
+import static by.tms.eshop.utils.Constants.ControllerMappingPath.SEARCH_PARAM;
 import static by.tms.eshop.utils.Constants.MappingPath.SUCCESS_REGISTER;
 
 import by.tms.eshop.exception.GlobalExceptionHandler;
-import by.tms.eshop.service.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -20,91 +29,40 @@ import org.springframework.security.web.SecurityFilterChain;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final CustomUserDetailsService customUserDetailsService;
     private final CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
     private final CustomLogoutHandler customLogoutHandler;
     private final GlobalExceptionHandler globalExceptionHandler;
 
-    @SuppressWarnings({"checkstyle:MultipleStringLiterals", "checkstyle:UnnecessaryParentheses"})
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-//        SecurityContextRepository repo = new HttpSessionSecurityContextRepository();
         return http
-//                .userDetailsService(customUserDetailsService)
-
-//                .sessionManagement((session) -> session
-//                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
-//                .securityContext((context) -> context
-//                        .securityContextRepository(repo)
-//                )
-//                .sessionManagement((session) -> session
-//                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(requests -> requests
-                                               .requestMatchers("/admin")
-                                               .hasRole("ADMIN")
-                                               .requestMatchers("/", "/eshop", "/search", "/search-filter", "/search-param", "/products-page", "/product/*", "/create-user", SUCCESS_REGISTER)
-                                               .permitAll()
-                                               .requestMatchers(PathRequest.toStaticResources().atCommonLocations())
-                                               .permitAll()
-//                        .requestMatchers("/error-500", "/some-error")
-//                        .permitAll()
-                                               .anyRequest()
-//                                               .hasRole("USER")
-                                               .authenticated()
-
+                        .requestMatchers(ADMIN)
+                        .hasRole("ADMIN")
+                        .requestMatchers(ROOT, ESHOP, SEARCH, SEARCH_FILTER, SEARCH_PARAM, PRODUCTS_PAGE, ANY_PRODUCT, REGISTRATION, SUCCESS_REGISTER)
+                        .permitAll()
+                        .requestMatchers(PathRequest.toStaticResources().atCommonLocations())
+                        .permitAll()
+                        .anyRequest()
+                        .authenticated()
                 )
-.exceptionHandling(exceptionHandler -> exceptionHandler
-        .accessDeniedHandler(new CustomAccessDeniedHandler(globalExceptionHandler))
-)
+                .exceptionHandling(exceptionHandler -> exceptionHandler
+                        .accessDeniedHandler(new CustomAccessDeniedHandler(globalExceptionHandler))
+                )
                 .formLogin(form -> form
-                                   .loginPage("/login")
-//                                   .loginProcessingUrl("/login")
-//                        .usernameParameter("login")
-                                   .successHandler(customAuthenticationSuccessHandler)
-//                                   .successForwardUrl("/")
-//                        .failureForwardUrl("/login")
-                                   .permitAll()
+                        .loginPage(LOGIN)
+                        .successHandler(customAuthenticationSuccessHandler)
+                        .permitAll()
                 )
                 .rememberMe(Customizer.withDefaults())
-                .logout((logout) -> logout
-//                        .logoutSuccessUrl("/")
-.logoutSuccessHandler(customLogoutHandler)
-//                        .clearAuthentication(true)
-//                        .deleteCookies()
-.permitAll())
+                .logout(logout -> logout
+                        .logoutSuccessHandler(customLogoutHandler)
+                        .permitAll())
                 .build();
-//                .logout(LogoutConfigurer::permitAll);
-//        return http.build();
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-//        return NoOpPasswordEncoder.getInstance();
     }
-
-//    @Bean
-//    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-//        return authenticationConfiguration.getAuthenticationManager();
-//    }
-
-//    @EventListener
-//    public void setupSecurityContext(ContextRefreshedEvent event) {
-//        SecurityContextHolder.setStrategyName(SecurityContextHolder.MODE_INHERITABLETHREADLOCAL);
-//        SecurityContextHolder.getContext().setAuthentication(new SystemAuthentication());
-//    }
-//    @Bean
-//    public UserDetailsService userDetailsService() {
-//        return customUserDetailsService;
-
-//    }
-//        @Bean
-//    public UserDetailsService userDetailsService() {
-//            UserDetails user =
-//                User.withDefaultPasswordEncoder()
-//                    .username("q")
-//                    .password("q")
-//                    .roles("USER")
-//                    .build();
-//        return new InMemoryUserDetailsManager(user);
 }
