@@ -60,6 +60,14 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public ProductDto getProductDto(Long id) {
+        Optional<Product> productOptional = productRepository.findById(id);
+        return productOptional
+                .map(productMapper::convertToProductDto)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+    }
+
+    @Override
     public String getProductCategoryValue(Long id) {
         return productRepository.getProductCategoryValue(id);
     }

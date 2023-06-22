@@ -6,11 +6,13 @@ import by.tms.eshop.domain.User;
 import by.tms.eshop.dto.CartDto;
 import by.tms.eshop.dto.ProductDto;
 import by.tms.eshop.mapper.CartMapper;
+import by.tms.eshop.mapper.ProductMapper;
 import by.tms.eshop.model.Location;
 import by.tms.eshop.repository.CartRepository;
 import by.tms.eshop.service.CartService;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,7 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class CartServiceImpl implements CartService {
 
     private final CartRepository cartRepository;
-//    private final ProductMapper productMapper;
+    private final ProductMapper productMapper;
     private final CartMapper cartMapper;
 
 //    @Transactional
@@ -143,6 +145,49 @@ public class CartServiceImpl implements CartService {
 //            }
 //        }
         return productDtos;
+    }
+
+//    @Override
+//    public List<Map<ProductDto, Long>> getMostFavorite() {
+//        List<Map<Product, Long>> mostFavorites = cartRepository.getMostFavorite();
+//        return mostFavorites.stream()
+//                                                                       .map(m -> m.entrySet().stream()
+//                                                                                  .collect(Collectors.toMap(
+//                                                                                          e -> productMapper.convertToProductDto(e.getKey()),
+//                                                                                          Map.Entry::getValue)))
+//                                                                       .toList();
+//    }
+
+//    @Override
+//    public List<ProductDto> getMostFavorite() {
+//        List<Product> mostFavorites = cartRepository.getMostFavorite();
+//        return mostFavorites.stream()
+//                            .map(productMapper::convertToProductDto)
+//                            .toList();
+//    }
+
+//    @Override
+//    public List<Long> getMostFavorite() {
+//        return cartRepository.getMostFavorite();
+//    }
+//    @Override
+//    public List<Map<Long, Long>> getMostFavorite() {
+//        return cartRepository.getMostFavorite();
+//    }
+
+//    @Override
+//    public Map<Product, Long> getMostFavorite() {
+//        return cartRepository.getMostFavorite();
+//    }
+
+//    @Override
+//    public Map<Long, Long> getMostFavorite() {
+//        return cartRepository.getMostFavorite();
+//    }
+
+    @Override
+    public List<Map<Long, Long>> getMostFavorite() {
+        return cartRepository.getMostFavorite();
     }
 
     @Transactional

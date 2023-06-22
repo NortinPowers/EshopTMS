@@ -49,7 +49,9 @@ public class SecurityConfig {
 //                        .requestMatchers("/error-500", "/some-error")
 //                        .permitAll()
                                                .anyRequest()
+//                                               .hasRole("USER")
                                                .authenticated()
+
                 )
 .exceptionHandling(exceptionHandler -> exceptionHandler
         .accessDeniedHandler(new CustomAccessDeniedHandler(globalExceptionHandler))

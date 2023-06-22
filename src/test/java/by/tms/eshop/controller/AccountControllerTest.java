@@ -10,6 +10,7 @@ import by.tms.eshop.domain.Role;
 import by.tms.eshop.domain.User;
 import by.tms.eshop.security.CustomUserDetail;
 import by.tms.eshop.service.OrderService;
+import by.tms.eshop.utils.ControllerUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,6 +32,8 @@ class AccountControllerTest {
     @MockBean
     private OrderService orderService;
 
+    @MockBean
+    private ControllerUtils controllerUtils;
 
     @Value("${application.base-url}")
     private String baseUrl;
@@ -50,7 +53,9 @@ class AccountControllerTest {
         User user = new User();
         user.setLogin("test");
         user.setPassword("test");
-        user.setRole(Role.builder().role("ROLE_USER").build());
+        user.setRole(Role.builder()
+                         .role("ROLE_USER")
+                         .build());
         CustomUserDetail customUserDetail  = new CustomUserDetail(user);
 //        Mockito.when(orderService.getOrdersById(1L)).thenReturn(Collections.emptyList());
         mockMvc.perform(get("/account").with(user(customUserDetail)))
@@ -63,4 +68,34 @@ class AccountControllerTest {
                .andExpect(view().name("account/account"));
 
     }
+
+//    @Test
+////    @WithMockUser(roles = "USER")
+//    @WithMockUser
+//    void showAccountPageRedirectAllowedNew() throws Exception {
+////        User user = new User();
+////        user.setLogin("test");
+////        user.setPassword("test");
+////        user.setRole(Role.builder().role("ROLE_USER").build());
+////        CustomUserDetail customUserDetail  = new CustomUserDetail(user);
+////        Mockito.when(orderService.getOrdersById(1L)).thenReturn(Collections.emptyList());
+//        Mockito.when(getAuthenticationUser()).thenReturn(User.builder()
+//                                                                                                         .login("user")
+//                                                                                                         .password("test")
+//                                                                                                         .role(Role.builder()
+//                                                                                                                   .role("ROLE_USER")
+//                                                                                                                   .build())
+//                                                                                                         .build());
+//        Mockito.when(getAuthenticationUserId()).thenReturn(1L);
+//        mockMvc.perform(get("/account"))
+//               .andDo(print())
+//
+////        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//////        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+////        mockMvc.perform(get("/account").with(user(((UserDetails) authentication.getPrincipal()).getUsername())))
+//
+//               .andExpect(status().isOk())
+//               .andExpect(view().name("account/account"));
+//
+//    }
 }
