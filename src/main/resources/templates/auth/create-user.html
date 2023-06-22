@@ -4,21 +4,22 @@
     <meta charset="UTF-8">
   <title>Register</title>
   <link rel="stylesheet" href="/css/register.css">
-  <style>
-    span.error {
-      color: red;
-    }
-  </style>
+<!--  <style>-->
+<!--    span.error {-->
+<!--      color: red;-->
+<!--    }-->
+<!--  </style>-->
 </head>
 <body>
 <div class="login-box">
-    <form th:action="@{/create-user}" method="post" class="registration">
+    <form th:action="@{/create-user}" th:method="post" class="registration" th:object="${user}">
         <h1>Register form</h1>
         <div class="user-box">
             <label for="login">
                 <span>Login</span>
                 <input type="text" name="login" required="" id="login">
-                <span class="error" th:text="${loginError}"></span>
+<!--                <span class="error" th:text="${loginError}"></span>-->
+                <div style="color:red" th:if="${#fields.hasErrors('login')}" th:errors="*{login}"></div>
                 <ul class="input-requirements">
                     <li>At least 4 characters long</li>
                     <li>Must only contain letters and numbers (no special characters)</li>
@@ -29,7 +30,8 @@
             <label for="password">
                 <span>Password</span>
                 <input type="password" name="password" required="" id="password">
-                <span class="error" th:text="${passwordError}"></span>
+<!--                <span class="error" th:text="${passwordError}"></span>-->
+                <div style="color:red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
                 <ul class="input-requirements">
                     <li>At least 4 characters long (and less than 30 characters)</li>
                     <li>Contains at least 1 number</li>
@@ -42,7 +44,8 @@
             <label for="password_repeat">
                 <span>Confirm password</span>
                 <input type="password" name="verifyPassword" required="" id="password_repeat">
-                <span class="error" th:text="${verifyPasswordError}"></span>
+<!--                <span class="error" th:text="${verifyPasswordError}"></span>-->
+                <div style="color:red" th:if="${#fields.hasErrors('verifyPassword')}" th:errors="*{verifyPassword}"></div>
                 <ul class="input-requirements">
                     <li>Must repeat the password</li>
                 </ul>
@@ -52,7 +55,8 @@
             <label for="name">
                 <span>Name</span>
                 <input type="text" name="name" required="" id="name">
-                <span class="error" th:text="${nameError}"></span>
+<!--                <span class="error" th:text="${nameError}"></span>-->
+                <div style="color:red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
                 <ul class="input-requirements">
                     <li>At least 3 characters long</li>
                     <li>Must only contain letters (no special characters)</li>
@@ -63,7 +67,8 @@
             <label for="surname">
                 <span>Surname</span>
                 <input type="text" name="surname" required="" id="surname">
-                <span class="error" th:text="${surnameError}"></span>
+<!--                <span class="error" th:text="${surnameError}"></span>-->
+                <div style="color:red" th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}"></div>
                 <ul class="input-requirements">
                     <li>At least 3 characters long</li>
                     <li>Must only contain letters (no special characters)</li>
@@ -74,7 +79,8 @@
             <label for="email">
                 <span>Email</span>
                 <input type="text" name="email" required="" id="email">
-                <span class="error" th:text="${emailError}"></span>
+<!--                <span class="error" th:text="${emailError}"></span>-->
+                <div style="color:red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
                 <ul class="input-requirements">
                     <li>Must comply with the standard of email addresses</li>
                 </ul>
@@ -84,7 +90,8 @@
             <label for="birthday">
                 <span>birthday</span>
                 <input type="date" name="birthday" required="" id="birthday">
-                <span class="error" th:text="${birthdayError}"></span>
+<!--                <span class="error" th:text="${birthdayError}"></span>-->
+                <div style="color:red" th:if="${#fields.hasErrors('birthday')}" th:errors="*{birthday}"></div>
                 <ul class="input-requirements">
                     <li>The user must be over 18 years old</li>
                 </ul>

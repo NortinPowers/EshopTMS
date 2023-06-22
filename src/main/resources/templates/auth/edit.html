@@ -4,11 +4,11 @@
   <meta charset="UTF-8">
   <title>Edit</title>
   <link rel="stylesheet" href="/css/register.css">
-  <style>
-    span.error {
-      color: red;
-    }
-  </style>
+<!--  <style>-->
+<!--    span.error {-->
+<!--      color: red;-->
+<!--    }-->
+<!--  </style>-->
 </head>
 <body>
 <div class="login-box">
@@ -42,8 +42,8 @@
       <label for="name">
         <span>Name</span>
         <input type="text" name="name" required="" id="name" th:field="${user.name}">
-        <span class="error" th:text="${nameError}"></span>
-<!--        <div style="color:red" th:if="${#fields.hasErrors('user.name')}" th:errors="*{user.name}"></div>-->
+<!--        <span class="error" th:text="${nameError}"></span>-->
+        <div style="color:red" th:if="${#fields.hasErrors('user.name')}" th:errors="*{user.name}"></div>
         <ul class="input-requirements">
           <li>At least 3 characters long</li>
           <li>Must only contain letters (no special characters)</li>
@@ -55,7 +55,8 @@
       <label for="surname">
         <span>Surname</span>
         <input type="text" name="surname" required="" id="surname" th:field="${user.surname}">
-        <span class="error" th:text="${surnameError}"></span>
+<!--        <span class="error" th:text="${surnameError}"></span>-->
+        <div style="color:red" th:if="${#fields.hasErrors('user.surname')}" th:errors="*{user.surname}"></div>
         <ul class="input-requirements">
           <li>At least 3 characters long</li>
           <li>Must only contain letters (no special characters)</li>

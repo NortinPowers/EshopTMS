@@ -4,8 +4,6 @@ import static by.tms.eshop.utils.Constants.MappingPath.CREATE_USER;
 import static by.tms.eshop.utils.Constants.MappingPath.LOGIN;
 import static by.tms.eshop.utils.Constants.MappingPath.SUCCESS_REGISTER;
 import static by.tms.eshop.utils.Constants.RequestParameters.ID;
-import static by.tms.eshop.utils.ValidatorUtils.fillUserValidationError;
-import static by.tms.eshop.utils.ValidatorUtils.fillsEditVerifyErrors;
 
 import by.tms.eshop.dto.UserFormDto;
 import by.tms.eshop.service.ShopFacade;
@@ -108,7 +106,7 @@ public class UserController {
 //    }
 
     @GetMapping("/create-user")
-    public ModelAndView create() {
+    public ModelAndView create(@ModelAttribute("user") UserFormDto user) {
         return new ModelAndView(CREATE_USER);
     }
 
@@ -119,7 +117,7 @@ public class UserController {
                                    ModelAndView modelAndView) {
         userValidator.validate(user, bindingResult);
         if (bindingResult.hasErrors()) {
-            fillUserValidationError(bindingResult, modelAndView);
+//            fillUserValidationError(bindingResult, modelAndView);
             modelAndView.setViewName(CREATE_USER);
         } else {
             shopFacade.createUser(user);
@@ -143,7 +141,7 @@ public class UserController {
                                  BindingResult bindingResult,
                                  ModelAndView modelAndView) {
         if (bindingResult.hasErrors()) {
-            fillsEditVerifyErrors(bindingResult, modelAndView);
+//            fillsEditVerifyErrors(bindingResult, modelAndView);
             modelAndView.setViewName("auth/edit");
 //            modelAndView.setViewName("/edit-user/" + id);
         } else {
