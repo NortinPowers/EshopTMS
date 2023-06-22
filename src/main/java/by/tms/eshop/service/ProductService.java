@@ -8,10 +8,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 public interface ProductService {
 
-    ModelAndView getProductsByCategory(String category, Pageable pageable);
+    ModelAndView getViewProductsByCategory(String category, Pageable pageable);
 
     //    ModelAndView getProduct(Long id, String location);
-    ModelAndView getProduct(Long id);
+    ModelAndView getViewProduct(Long id);
 
     ProductDto getProductDto(Long id);
 
@@ -22,4 +22,6 @@ public interface ProductService {
     Set<ProductDto> selectAllProductsByFilter(BigDecimal minPrice, BigDecimal maxPrice);
 
     Set<ProductDto> selectProductsFromCategoryByFilter(String category, BigDecimal minPrice, BigDecimal maxPrice);
+
+    void changePrice(ProductDto productDto);
 }

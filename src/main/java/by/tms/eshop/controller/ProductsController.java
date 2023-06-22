@@ -23,7 +23,7 @@ public class ProductsController {
     @GetMapping("/products-page")
     public ModelAndView showProductsPage(@RequestParam(CATEGORY) String category,
                                          @PageableDefault(sort = ID) Pageable pageable) {
-        return productService.getProductsByCategory(category, pageable);
+        return productService.getViewProductsByCategory(category, pageable);
     }
 
     @GetMapping("/product/{id}")
@@ -31,7 +31,7 @@ public class ProductsController {
 //                                        @RequestParam(name = LOCATION, required = false) String location) {
 //        String type = shopFacade.defineLocation(location);
 //        return productService.getProduct(id, type);
-        return productService.getProduct(id);
+        return productService.getViewProduct(id);
     }
 
 //    private static String defineLocation(String location) {

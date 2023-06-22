@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
+  <meta charset="UTF-8">
   <title>Edit</title>
   <link rel="stylesheet" href="/css/register.css">
   <style>
@@ -12,69 +12,71 @@
 </head>
 <body>
 <div class="login-box">
-<!--    <form th:action="@{/edit-user/{id}(id=${user.id})}" th:method="patch" class="registration">-->
-    <form th:action="@{/edit-user/{id}(id=${user.id})}" th:method="post" class="registration">
-        <h1>Edit form</h1>
-<!--        <div class="user-box">-->
-<!--            <label for="password">-->
-<!--                <span>Password</span>-->
-<!--                <input type="password" name="password" required="" id="password" th:field="${user.password}">-->
-<!--                <span class="error" th:text="${passwordError}"></span>-->
-<!--                <ul class="input-requirements">-->
-<!--                    <li>At least 4 characters long (and less than 30 characters)</li>-->
-<!--                    <li>Contains at least 1 number</li>-->
-<!--                    <li>Contains at least 1 lowercase letter</li>-->
-<!--                    <li>Contains at least 1 uppercase letter</li>-->
-<!--                </ul>-->
-<!--            </label>-->
-<!--        </div>-->
-<!--        <div class="user-box">-->
-<!--            <label for="password_repeat">-->
-<!--                <span>Confirm password</span>-->
-<!--                <input type="password" name="verifyPassword" required="" id="password_repeat" th:field="${user.password}">-->
-<!--                <span class="error" th:text="${verifyPasswordError}"></span>-->
-<!--                <ul class="input-requirements">-->
-<!--                    <li>Must repeat the password</li>-->
-<!--                </ul>-->
-<!--            </label>-->
-<!--        </div>-->
-        <div class="user-box">
-            <label for="name">
-                <span>Name</span>
-                <input type="text" name="name" required="" id="name" th:field="${user.name}">
-                <span class="error" th:text="${nameError}"></span>
-                <ul class="input-requirements">
-                    <li>At least 3 characters long</li>
-                    <li>Must only contain letters (no special characters)</li>
-                </ul>
-            </label>
-        </div>
-        <div class="user-box">
-            <label for="surname">
-                <span>Surname</span>
-                <input type="text" name="surname" required="" id="surname" th:field="${user.surname}">
-                <span class="error" th:text="${surnameError}"></span>
-                <ul class="input-requirements">
-                    <li>At least 3 characters long</li>
-                    <li>Must only contain letters (no special characters)</li>
-                </ul>
-            </label>
-        </div>
-<!--        <div class="user-box">-->
-<!--            <label for="birthday">-->
-<!--                <span>birthday</span>-->
-<!--                <input type="date" name="birthday" required="" id="birthday" th:field="${user.birthday}">-->
-<!--                <span class="error" th:text="${birthdayError}"></span>-->
-<!--                <ul class="input-requirements">-->
-<!--                    <li>The user must be over 18 years old</li>-->
-<!--                </ul>-->
-<!--            </label>-->
-<!--        </div>-->
-        <div style="margin-top: 15px">
-            <input type="submit" value="Save" class='validateBtn'/>
-        </div>
-        <a th:href="@{/account}" class="buttonType">Back</a>
-    </form>
+  <!--    <form th:action="@{/edit-user/{id}(id=${user.id})}" th:method="patch" class="registration">-->
+  <form th:action="@{/edit-user/{id}(id=${user.id})}" th:method="post" class="registration">
+    <h1>Edit form</h1>
+    <!--        <div class="user-box">-->
+    <!--            <label for="password">-->
+    <!--                <span>Password</span>-->
+    <!--                <input type="password" name="password" required="" id="password" th:field="${user.password}">-->
+    <!--                <span class="error" th:text="${passwordError}"></span>-->
+    <!--                <ul class="input-requirements">-->
+    <!--                    <li>At least 4 characters long (and less than 30 characters)</li>-->
+    <!--                    <li>Contains at least 1 number</li>-->
+    <!--                    <li>Contains at least 1 lowercase letter</li>-->
+    <!--                    <li>Contains at least 1 uppercase letter</li>-->
+    <!--                </ul>-->
+    <!--            </label>-->
+    <!--        </div>-->
+    <!--        <div class="user-box">-->
+    <!--            <label for="password_repeat">-->
+    <!--                <span>Confirm password</span>-->
+    <!--                <input type="password" name="verifyPassword" required="" id="password_repeat" th:field="${user.password}">-->
+    <!--                <span class="error" th:text="${verifyPasswordError}"></span>-->
+    <!--                <ul class="input-requirements">-->
+    <!--                    <li>Must repeat the password</li>-->
+    <!--                </ul>-->
+    <!--            </label>-->
+    <!--        </div>-->
+    <div class="user-box">
+      <label for="name">
+        <span>Name</span>
+        <input type="text" name="name" required="" id="name" th:field="${user.name}">
+        <span class="error" th:text="${nameError}"></span>
+<!--        <div style="color:red" th:if="${#fields.hasErrors('user.name')}" th:errors="*{user.name}"></div>-->
+        <ul class="input-requirements">
+          <li>At least 3 characters long</li>
+          <li>Must only contain letters (no special characters)</li>
+        </ul>
+      </label>
+
+    </div>
+    <div class="user-box">
+      <label for="surname">
+        <span>Surname</span>
+        <input type="text" name="surname" required="" id="surname" th:field="${user.surname}">
+        <span class="error" th:text="${surnameError}"></span>
+        <ul class="input-requirements">
+          <li>At least 3 characters long</li>
+          <li>Must only contain letters (no special characters)</li>
+        </ul>
+      </label>
+    </div>
+    <!--        <div class="user-box">-->
+    <!--            <label for="birthday">-->
+    <!--                <span>birthday</span>-->
+    <!--                <input type="date" name="birthday" required="" id="birthday" th:field="${user.birthday}">-->
+    <!--                <span class="error" th:text="${birthdayError}"></span>-->
+    <!--                <ul class="input-requirements">-->
+    <!--                    <li>The user must be over 18 years old</li>-->
+    <!--                </ul>-->
+    <!--            </label>-->
+    <!--        </div>-->
+    <div style="margin-top: 15px">
+      <input type="submit" value="Save" class='validateBtn'/>
+    </div>
+    <a th:href="@{/account}" class="buttonType">Back</a>
+  </form>
 </div>
 <script type="text/javascript" src="/js/edit-validate.js"></script>
 </body>

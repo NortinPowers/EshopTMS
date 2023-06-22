@@ -31,7 +31,7 @@ public class ProductServiceImpl implements ProductService {
     private final ProductMapper productMapper;
 
     @Override
-    public ModelAndView getProductsByCategory(String category, Pageable pageable) {
+    public ModelAndView getViewProductsByCategory(String category, Pageable pageable) {
         ModelMap modelMap = new ModelMap();
         Page<ProductDto> page = productRepository.findAllWithPaginationByProductCategory_Category(category, pageable)
                                                  .map(productMapper::convertToProductDto);
@@ -43,7 +43,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
 //    public ModelAndView getProduct(Long id, String location) {
-    public ModelAndView getProduct(Long id) {
+    public ModelAndView getViewProduct(Long id) {
         Optional<Product> productOptional = productRepository.findById(id);
         ModelMap modelMap = null;
         if (productOptional.isPresent()) {
@@ -104,6 +104,12 @@ public class ProductServiceImpl implements ProductService {
     public Set<ProductDto> selectProductsFromCategoryByFilter(String category, BigDecimal minPrice, BigDecimal maxPrice) {
         return convertToProductDtos(productRepository.selectProductsFromCategoryByFilter(category, minPrice, maxPrice));
 //        return getProductDtoSet(productRepository.selectProductsFromCategoryByFilter(category, minPrice, maxPrice));
+    }
+
+    @Override
+    public void changePrice(ProductDto productDto) {
+        Product product = productRepository.getReferenceById(productDto.getId());
+        product.setPrice(productDto.getPrice());
     }
 
 //    private Set<ProductDto> convertToProductDtos(Set<Product> products) {
