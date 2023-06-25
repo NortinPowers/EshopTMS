@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Info</title>
+  <th:block th:insert="~{/include/bootstrap}"/>
+</head>
+<body>
+<th:block th:insert="~{/include/navigate}"/>
+<h1 class="text-center mt-2">Hello, administrator!</h1>
+<th:block th:if="${products != null}">
+  <th:block th:if="${products.size() > 0}">
+    <table class="table table-sm table-dark w-75 ml-5 mt-5 rounded" style="text-align: center">
+      <thead>
+      <tr style="text-align: center">
+        <th scope="col">#</th>
+        <th scope="col">Product name</th>
+        <th scope="col">Popularity</th>
+        <th scope="col">Price</th>
+        <th scope="col">Change the price</th>
+      </tr>
+      </thead>
+      <tbody class="rounded">
+      <tr th:each="productMap : ${products}">
+        <th:block th:each="productWithCout : ${productMap}">
+          <th:block th:with="product=${productWithCout.getKey()},count=${productWithCout.getValue()}">
+            <th scope="row">-</th>
+            <td class="font-italic">
+              <a th:href="@{/product/__${product.id}__}" th:text="${product.name}" class="text-decoration-none text-light"></a>
+            </td>
+            <td class="font-italic" th:text="${count}"></td>
+            <td class="font-italic" th:text="${product.price}"></td>
+            <td class="text-right">
+              <form th:action="@{/admin/price}" method="post">
+                <div class="row">
+                  <div class="form-outline col-7 ml-4">
+                    <input type="number" id="price" name="price" required="" min="0" step="0.01"
+                           class="form-control text-center bg-secondary text-white font-weight-bold"
+                           placeholder="New price"/>
+                    <input type="hidden" id="id" name="id" th:value="${product.id}">
+                  </div>
+                  <button type="submit" class="btn btn-outline-light col-4">Set new price</button>
+                </div>
+              </form>
+            </td>
+          </th:block>
+        </th:block>
+      </tr>
+      </tbody>
+    </table>
+  </th:block>
+</th:block>
+<th:block th:if="${products == null}">
+  <div class="text-center">
+    <h3>Nobody likes anything or nasty Hobbits demolished the database</h3>
+    <img class="card-img w-50" th:src="@{/images/decoration/no-favorite.jpg}" alt="no-favorite">
+  </div>
+</th:block>
+<div id="successNotificationModal" class="modal fade" th:if="${success}">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content bg-dark text-white">
+      <div class="modal-header">
+        <h5 class="modal-title">Successful change</h5>
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body text-center mt-2">
+        <p>The price has been successfully changed!</p>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="errorNotificationModal" class="modal fade" th:if="${error}">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content bg-dark text-white">
+      <div class="modal-header">
+        <h5 class="modal-title">Unsuccessful change</h5>
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body text-center mt-2">
+        <p>Failed to change the price, double-check the entered parameters.</p>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  $(document).ready(function () {
+    $('#successNotificationModal').modal('show');
+    $('#errorNotificationModal').modal('show');
+  });
+</script>
+</body>
+</html>

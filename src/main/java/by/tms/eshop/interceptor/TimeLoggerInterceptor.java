@@ -1,13 +1,13 @@
 package by.tms.eshop.interceptor;
 
+import static by.tms.eshop.utils.Constants.Attributes.START_TIME;
+import static by.tms.eshop.utils.Constants.MAX_COMPLETION_TIME;
+
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
-
-import static by.tms.eshop.utils.Constants.Attributes.START_TIME;
-import static by.tms.eshop.utils.Constants.MAX_COMPLETION_TIME;
 
 @Component
 @Slf4j

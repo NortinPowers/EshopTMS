@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.0.6</version>
+        <version>3.1.0</version>
         <relativePath/>
     </parent>
     <groupId>by.tms</groupId>
@@ -16,15 +16,18 @@
 
     <properties>
         <java.version>20</java.version>
+        <maven.compiler.version>20</maven.compiler.version>
         <aspectjweaver.version>1.9.19</aspectjweaver.version>
-        <spotbugs.maven.plugin.version>4.7.3.4</spotbugs.maven.plugin.version>
-        <spotbugs.version>4.7.3</spotbugs.version>
-        <checkstyle.maven.plugin.version>3.2.2</checkstyle.maven.plugin.version>
-        <checkstyle.version>10.11.0</checkstyle.version>
-        <pmd.maven.plugin.version>3.20.0</pmd.maven.plugin.version>
+        <checkstyle.version>10.9.3</checkstyle.version>
         <pmd.version>6.55.0</pmd.version>
+        <maven-pmd-plugin.version>3.20.0</maven-pmd-plugin.version>
+        <checkstyle.version>10.11.0</checkstyle.version>
+        <maven-checkstyle-plugin.version>3.2.1</maven-checkstyle-plugin.version>
+        <spotbugs-maven-plugin.version>4.7.3.2</spotbugs-maven-plugin.version>
         <commons-lang3.verson>3.12.0</commons-lang3.verson>
         <snakeyaml.version>2.0</snakeyaml.version>
+        <mapstruct.version>1.5.5.Final</mapstruct.version>
+        <thymeleaf-extras.version>3.1.1.RELEASE</thymeleaf-extras.version>
     </properties>
 
     <dependencies>
@@ -110,6 +113,29 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.thymeleaf.extras</groupId>
+            <artifactId>thymeleaf-extras-springsecurity6</artifactId>
+            <version>${thymeleaf-extras.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>${mapstruct.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -133,59 +159,63 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
                     <useIncrementalCompilation>false</useIncrementalCompilation>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                        <path>
+                            <groupId>org.mapstruct</groupId>
+                            <artifactId>mapstruct-processor</artifactId>
+                            <version>${mapstruct.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
+                    <compilerArgs>
+                        <compilerArg>
+                            -Amapstruct.defaultComponentModel=spring
+                        </compilerArg>
+                    </compilerArgs>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>com.github.spotbugs</groupId>
-                <artifactId>spotbugs-maven-plugin</artifactId>
-                <version>${spotbugs.maven.plugin.version}</version>
-                <configuration>
-                    <effort>Max</effort>
-                    <threshold>Medium</threshold>
-                    <onlyAnalyze>com.-</onlyAnalyze>
-                    <maxHeap>1024</maxHeap>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <dependencies>
-                    <dependency>
-                        <groupId>com.github.spotbugs</groupId>
-                        <artifactId>spotbugs</artifactId>
-                        <version>${spotbugs.version}</version>
-                    </dependency>
-                </dependencies>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-pmd-plugin</artifactId>
-                <version>${pmd.maven.plugin.version}</version>
-                <executions>
-                    <execution>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                    </execution>
-                </executions>
+                <version>${maven-pmd-plugin.version}</version>
                 <configuration>
                     <failOnViolation>false</failOnViolation>
                     <printFailingErrors>true</printFailingErrors>
-                    <rulesets>
-                        <ruleset>./codequality/pmd-ruleset.xml</ruleset>
-                        <ruleset>./codequality/rulesets.xml</ruleset>
-                    </rulesets>
-                    <targetJdk>${maven.compiler.target}</targetJdk>
+                    <targetJdk>${maven.compiler.version}</targetJdk>
                     <linkXRef>false</linkXRef>
                     <excludeRoots>
                         <excludeRoot>target/generated-sources</excludeRoot>
                     </excludeRoots>
+                    <rulesets>
+                        <ruleset>${basedir}/config/pmd/rulesets.xml</ruleset>
+                    </rulesets>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>pmd-check</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                        <configuration>
+                            <excludeFromFailureFile>${basedir}/config/pmd/exclude-pmd.properties</excludeFromFailureFile>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>pmd-cpd-check</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>cpd-check</goal>
+                        </goals>
+                        <configuration>
+                            <excludeFromFailureFile>${basedir}/config/pmd/exclude-cpd.properties</excludeFromFailureFile>
+                        </configuration>
+                    </execution>
+                </executions>
                 <dependencies>
                     <dependency>
                         <groupId>net.sourceforge.pmd</groupId>
@@ -210,9 +240,29 @@
                 </dependencies>
             </plugin>
             <plugin>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs-maven-plugin</artifactId>
+                <version>${spotbugs-maven-plugin.version}</version>
+                <configuration>
+                    <effort>Max</effort>
+                    <threshold>Medium</threshold>
+                    <excludeFilterFile>${basedir}/config/spotbugs/spotbugs-exclude.xml</excludeFilterFile>
+                    <maxHeap>1024</maxHeap>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>spotbugs-check</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>${checkstyle.maven.plugin.version}</version>
+                <version>${maven-checkstyle-plugin.version}</version>
                 <dependencies>
                     <dependency>
                         <groupId>com.puppycrawl.tools</groupId>
@@ -228,9 +278,15 @@
                             <goal>check</goal>
                         </goals>
                         <configuration>
-                            <configLocation>codequality/checkstyle.xml</configLocation>
+                            <includes>**/*</includes>
+<!--                            <resourceIncludes>**/*</resourceIncludes>-->
+                            <configLocation>config/checkstyle/checkstyle.xml</configLocation>
+                            <suppressionsLocation>config/checkstyle/suppressions.xml</suppressionsLocation>
+                            <inputEncoding>UTF-8</inputEncoding>
                             <consoleOutput>true</consoleOutput>
                             <failsOnError>true</failsOnError>
+                            <failOnViolation>true</failOnViolation>
+                            <logViolationsToConsole>true</logViolationsToConsole>
                         </configuration>
                     </execution>
                 </executions>

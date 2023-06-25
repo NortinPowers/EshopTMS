@@ -1,0 +1,11 @@
+<img class="card-img-top" style="max-height: 20rem"
+     th:src="@{/images/__${#strings.toLowerCase(product.category)}__/__${product.name}__.jpg}"
+     th:alt="${product.name}">
+<div class="card-body">
+  <h5 class="card-title text-wrap" style="text-align: -webkit-center"
+      th:text="${product.name}"></h5>
+  <p class="card-text font-italic" style="font-size: small" th:text="${product.info + '.'}"></p>
+</div>
+<div class="card-footer text-center">
+  <small class="text-muted" style="font-size: 20px" th:text="${product.price + '$'}"></small>
+</div>

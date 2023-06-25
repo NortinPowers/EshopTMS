@@ -1,10 +1,9 @@
 package by.tms.eshop.dto;
 
+import java.time.LocalDate;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-
-import java.time.LocalDate;
 
 @Getter
 @EqualsAndHashCode

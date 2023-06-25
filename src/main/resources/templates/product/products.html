@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
   <meta charset="UTF-8">
   <title>Products</title>
@@ -7,61 +8,56 @@
 </head>
 <body>
 <th:block th:insert="~{/include/navigate}"/>
-<div class="row row-cols-1 row-cols-md-5 g-4 mr-3 ml-3 mt-1">
-  <div th:each="product : ${page.content}">
-    <div class="card mr-1 ml-1 mt-1 shadow bg-body-tertiary rounded" style="max-width: 14rem; height: 34rem; min-width: 14rem;">
-      <a th:href="@{/product/__${product.id}__}">
-        <img class="card-img-top" style="max-height: 20rem"
-             th:src="@{/images/__${#strings.toLowerCase(product.category)}__/__${product.name}__.jpg}"
-             th:alt="${product.name}">
-      </a>
-      <div class="card-body">
-        <h5 class="card-title text-nowrap" style="text-align: -webkit-center"
-            th:text="${product.name}"></h5>
-        <p class="card-text font-italic" th:text="${product.info + '.'}"></p>
-      </div>
-      <div class="card-footer text-center">
-        <small class="text-muted" style="font-size: 20px" th:text="${product.price + '$'}"></small>
-      </div>
-      <th:block th:with="authorizedUser = ${session.userAccessPermission}">
-        <div th:if="${authorizedUser != null}">
-          <div class="btn-group btn-group-fill">
-            <a th:href="@{/add-cart(id=${product.id}, shop=true, location='none')}"
-               class="btn btn-success active" style="min-width: 8.8rem"
-               aria-current="page">Buy</a>
-            <a th:href="@{/add-cart(id=${product.id}, shop='none', location='none')}"
-               class="btn btn-success">
-              <div class="text-center mt-1">
-                <i class="bi bi-cart-plus"></i>
-              </div>
+<div class="row mr-1 ml-1 mt-1">
+  <div class="col-10">
+    <div class="row">
+      <div th:each="product : ${page.content}">
+        <div class="col-3 ml-5">
+          <div class="card mr-5 ml-5 mt-1 shadow bg-body-tertiary rounded" style="max-width: 14rem; height: 35rem; min-width: 14rem;">
+            <a th:href="@{/product/__${product.id}__}">
+              <img class="card-img-top" style="max-height: 20rem"
+                   th:src="@{/images/__${#strings.toLowerCase(product.category)}__/__${product.name}__.jpg}"
+                   th:alt="${product.name}">
             </a>
-            <a th:href="@{/add-favorite(id=${product.id}, shop='none', location='none')}"
-               class="btn btn-success">
-              <div class="text-center mt-1">
-                <i class="bi bi-heart"></i>
+            <div class="card-body">
+              <h5 class="card-title text-wrap" style="text-align: -webkit-center"
+                  th:text="${product.name}"></h5>
+              <p class="card-text font-italic" style="font-size: small" th:text="${product.info + '.'}"></p>
+            </div>
+            <div class="card-footer text-center">
+              <small class="text-muted" style="font-size: 20px" th:text="${product.price + '$'}"></small>
+            </div>
+            <th:block>
+              <div sec:authorize="isAuthenticated()">
+                <div class="btn-group btn-group-fill">
+                  <a th:href="@{/add-cart(id=${product.id}, shop=true, location='none')}"
+                     class="btn btn-success active" style="min-width: 8.8rem"
+                     aria-current="page">Buy
+                  </a>
+                  <a th:href="@{/add-cart(id=${product.id}, shop='none', location='none', page=${page.number})}"
+                     class="btn btn-success">
+                    <div class="text-center mt-1">
+                      <i class="bi bi-cart-plus"></i>
+                    </div>
+                  </a>
+                  <a th:href="@{/add-favorite(id=${product.id}, shop='none', location='none', page=${page.number})}"
+                     class="btn btn-success">
+                    <div class="text-center mt-1">
+                      <i class="bi bi-heart"></i>
+                    </div>
+                  </a>
+                </div>
               </div>
-            </a>
+            </th:block>
           </div>
         </div>
-      </th:block>
+      </div>
     </div>
   </div>
-</div>
-<footer>
-  <div class="pagination justify-content-center mt-5 mb-3">
-    <ul class="pagination">
-      <li th:class="${page.number == 0 ? 'disabled' : ''}">
-        <a class="page-link" th:href="@{${url}(page=0)}">&laquo;</a>
-      </li>
-      <li th:each="pageNumber : ${#numbers.sequence(1, page.totalPages)}"
-          th:class="${pageNumber == page.number+1 ? 'active' : ''}">
-        <a class="page-link" th:href="@{${url}(page=${pageNumber-1})}" th:text="${pageNumber}"></a>
-      </li>
-      <li th:class="${page.number >= page.totalPages-1 ? 'disabled' : ''}">
-        <a class="page-link" th:href="@{${url}(page=${page.totalPages}-1)}">&raquo;</a>
-      </li>
-    </ul>
+  <div class="col-2 mt-3">
+    <th:block th:insert="~{/include/pagination}"/>
   </div>
-</footer>
+</div>
+<th:block th:insert="~{/include/contact-info}"/>
 </body>
 </html>

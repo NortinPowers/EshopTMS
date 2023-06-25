@@ -1,26 +1,28 @@
 package by.tms.eshop.repository;
 
 import by.tms.eshop.domain.Cart;
-import by.tms.eshop.dto.LocationDto;
-import by.tms.eshop.dto.ProductDto;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.springframework.data.jpa.repository.JpaRepository;
-
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
-public interface CartRepository extends JpaRepository<Cart, Long>, CartCustomizedRepository {
+public interface CartRepository extends JpaRepository<Cart, Long> {
 
-    void addSelectedProduct(Long userId, Long productId, LocationDto locationDto);
+    @Query("FROM Cart WHERE user.id = :userId AND product.id = :productId AND favorite = true")
+    Optional<Cart> getUserFavorite(Long userId, Long productId);
 
-    void deleteProduct(Long userId, Long productId, LocationDto locationDto);
+    @Query("FROM Cart WHERE user.id = :userId AND product.id = :productId AND cart = true")
+    Optional<Cart> getUserCart(Long userId, Long productId);
 
-    List<ImmutablePair<ProductDto, Integer>> getSelectedProducts(Long userId, LocationDto locationDto);
+    @Query("FROM Cart WHERE user.id = :userId AND favorite = true")
+    List<Cart> getFavoriteProducts(Long userId);
 
-    boolean checkProduct(Long userId, Long productId, LocationDto locationDto);
+    @Query("FROM Cart WHERE user.id = :userId AND cart = true order by product.name")
+    List<Cart> getCartProducts(Long userId);
 
-    Integer getCartProductCount(Long userId, Long productId);
+    void deleteCartByUserIdAndCart(Long userId, Boolean cart);
 
-    void deleteCartByUserId(Long userId);
-
-    List<ProductDto> getPurchasedProducts(Long userId, LocationDto locationDto);
+    @Query("SELECT new map(product.id as productId, COUNT(product.id) as count) FROM Cart WHERE favorite = true GROUP BY product.id ORDER BY COUNT(product.id) DESC LIMIT 3")
+    List<Map<Long, Long>> getMostFavorite();
 }

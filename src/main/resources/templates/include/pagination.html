@@ -1,0 +1,16 @@
+<footer>
+  <div class="pagination justify-content-center mt-3 mb-3">
+    <ul class="pagination border-dark text-dark">
+      <li th:class="${page.number == 0 ? 'disabled' : ''}">
+        <a class="page-link text-dark" th:href="@{${url}(page = 0)}">&laquo;</a>
+      </li>
+      <li th:each="pageNumber : ${#numbers.sequence(1, page.totalPages)}"
+          th:class="${pageNumber == page.number + 1 ? 'active' : ''}">
+        <a class="page-link text-dark" th:href="@{${url}(page=${pageNumber - 1})}" th:text="${pageNumber}"></a>
+      </li>
+      <li th:class="${page.number >= page.totalPages - 1 ? 'disabled' : ''}">
+        <a class="page-link text-dark" th:href="@{${url}(page=${page.totalPages} - 1)}">&raquo;</a>
+      </li>
+    </ul>
+  </div>
+</footer>

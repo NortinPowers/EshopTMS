@@ -1,14 +1,18 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Something went wrong</title>
-    <th:block th:insert="~{/include/bootstrap}"/>
+  <title>Something went wrong</title>
+  <th:block th:insert="~{/include/bootstrap}"/>
 </head>
 <body>
 <th:block th:insert="~{/include/navigate}"/>
 <h2 class="text-center mt-2 text-danger-emphasis">Sorry! Something went wrong. We are already trying to fix it!</h2>
 <div class="text-center">
-    <img class="card-img-top w-75" src="/images/error/500.png" alt="error-500">
+  <img class="card-img-top w-75" th:src="@{/images/error/500.png}" alt="error-500">
 </div>
 </body>
 </html>
+
+
+
+

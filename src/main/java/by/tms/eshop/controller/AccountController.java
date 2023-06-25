@@ -1,15 +1,12 @@
 package by.tms.eshop.controller;
 
 import static by.tms.eshop.utils.Constants.Attributes.MODELS;
-import static by.tms.eshop.utils.Constants.Attributes.USER_DTO;
 import static by.tms.eshop.utils.Constants.Attributes.USER_ORDER;
 import static by.tms.eshop.utils.Constants.MappingPath.ACCOUNT;
-import static by.tms.eshop.utils.ControllerUtils.getUserDto;
+import static by.tms.eshop.utils.ControllerUtils.getAuthenticationUserId;
 
 import by.tms.eshop.dto.OrderDto;
-import by.tms.eshop.dto.UserDto;
 import by.tms.eshop.service.OrderService;
-import jakarta.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,11 +22,9 @@ public class AccountController {
     private final OrderService orderService;
 
     @GetMapping("/account")
-    public ModelAndView showAccountPage(HttpSession session) {
-        UserDto userDto = getUserDto(session);
-        List<OrderDto> orders = orderService.getOrdersById(userDto.getId());
+    public ModelAndView showAccountPage() {
+        List<OrderDto> orders = orderService.getOrdersById(getAuthenticationUserId());
         Map<String, Object> models = new HashMap<>();
-        models.put(USER_DTO, userDto);
         models.put(USER_ORDER, orders);
         return new ModelAndView(ACCOUNT, MODELS, models);
     }

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+  <title>Login</title>
+  <link rel="stylesheet" href="/css/page.css">
+  <style>
+    div.error {
+      color: #f57b07;
+      padding-left: 35px;
+      font-size: large;
+    }
+  </style>
+</head>
+<body>
+<div class="login-box">
+  <h2>Login</h2>
+  <form th:action="@{/login}" method="post">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+    <div class="user-box">
+      <input type="text" name="username" id="login" required="">
+      <label for="login">Username</label>
+    </div>
+    <div class="user-box">
+      <input type="password" name="password" id="password" required="">
+      <label for="password">Password</label>
+    </div>
+    <div class="error" th:if="${param.error}">Invalid username or password.</div>
+    <div class="error" th:if="${param.logout}">You have been logged out.</div>
+    <div style="margin-top: 15px">
+      <input type="submit" value="Submit"/>
+    </div>
+    <a th:href="@{/create-user}" class="button">Register</a>
+    <a th:href="@{/eshop}" class="button">Back</a>
+  </form>
+</div>
+</body>
+</html>

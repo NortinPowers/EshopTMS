@@ -1,15 +1,18 @@
 package by.tms.eshop.domain;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.List;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-
-import java.time.LocalDate;
-import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -17,7 +20,8 @@ import java.util.List;
 @SuperBuilder
 @Getter
 @Setter
-public class User extends BaseEntity {
+@EqualsAndHashCode(callSuper = true)
+public class User extends BaseEntity implements Serializable {
 
     private String password;
     private String login;
@@ -29,4 +33,7 @@ public class User extends BaseEntity {
     private List<Order> orders;
     @OneToMany(mappedBy = "user")
     private List<Cart> carts;
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private Role role;
 }

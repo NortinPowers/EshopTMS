@@ -2,24 +2,21 @@ package by.tms.eshop.controller;
 
 import static by.tms.eshop.utils.Constants.Attributes.CART_PRODUCTS;
 import static by.tms.eshop.utils.Constants.Attributes.FULL_PRICE;
-import static by.tms.eshop.utils.Constants.BUY;
 import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_CART;
 import static by.tms.eshop.utils.Constants.MappingPath.SHOPPING_CART;
-import static by.tms.eshop.utils.Constants.MappingPath.SUCCESS_BUY;
+import static by.tms.eshop.utils.Constants.PAGE;
 import static by.tms.eshop.utils.Constants.RequestParameters.ID;
 import static by.tms.eshop.utils.Constants.RequestParameters.LOCATION;
 import static by.tms.eshop.utils.Constants.RequestParameters.SHOP;
+import static by.tms.eshop.utils.ControllerUtils.getAuthenticationUserId;
 import static by.tms.eshop.utils.ControllerUtils.getProductsPrice;
-import static by.tms.eshop.utils.ControllerUtils.getUserId;
-import static by.tms.eshop.utils.DtoUtils.selectCart;
 
-import by.tms.eshop.dto.ProductDto;
+import by.tms.eshop.dto.CartDto;
+import by.tms.eshop.model.Location;
 import by.tms.eshop.service.CartService;
 import by.tms.eshop.service.ShopFacade;
-import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,9 +31,8 @@ public class CartController {
     private final ShopFacade shopFacade;
 
     @GetMapping("/cart")
-    public ModelAndView showCardPage(HttpSession session, ModelAndView modelAndView) {
-        Long userId = getUserId(session);
-        List<ImmutablePair<ProductDto, Integer>> cartProducts = cartService.getSelectedProducts(userId, selectCart());
+    public ModelAndView showCardPage(ModelAndView modelAndView) {
+        List<CartDto> cartProducts = cartService.getSelectedProducts(getAuthenticationUserId(), Location.CART);
         modelAndView.addObject(CART_PRODUCTS, cartProducts);
         modelAndView.addObject(FULL_PRICE, getProductsPrice(cartProducts));
         modelAndView.setViewName(SHOPPING_CART);
@@ -44,31 +40,23 @@ public class CartController {
     }
 
     @PostMapping("/cart-processing")
-    public ModelAndView showCartProcessingPage(HttpSession session,
-                                               @RequestParam String buy,
+    public ModelAndView showCartProcessingPage(@RequestParam String buy,
                                                ModelAndView modelAndView) {
-        if (buy.equalsIgnoreCase(BUY)) {
-            shopFacade.carriesPurchase(getUserId(session));
-            modelAndView.setViewName(SUCCESS_BUY);
-        } else {
-            modelAndView.setViewName(REDIRECT_TO_CART);
-        }
-        return modelAndView;
+        return shopFacade.getPageByParam(buy, modelAndView);
     }
 
     @GetMapping("/add-cart")
-    public ModelAndView AddProductToCart(HttpSession session,
-                                         @RequestParam(name = ID) Long productId,
+    public ModelAndView addProductToCart(@RequestParam(name = ID) Long productId,
                                          @RequestParam(name = SHOP) String shopFlag,
-                                         @RequestParam(name = LOCATION) String location) {
-        cartService.addSelectedProduct(getUserId(session), productId, selectCart());
-        return new ModelAndView(shopFacade.getPathFromAddCartByParameters(productId, shopFlag, location));
+                                         @RequestParam(name = LOCATION) String location,
+                                         @RequestParam(name = PAGE, required = false) Integer page) {
+        cartService.addSelectedProduct(getAuthenticationUserId(), productId, Location.CART);
+        return new ModelAndView(shopFacade.getPathFromAddCartByParameters(productId, shopFlag, location, page));
     }
 
     @GetMapping("/delete-cart")
-    public ModelAndView deleteProductFromCart(HttpSession session,
-                                              @RequestParam(name = ID) Long productId) {
-        cartService.deleteProduct(getUserId(session), productId, selectCart());
+    public ModelAndView deleteProductFromCart(@RequestParam(name = ID) Long productId) {
+        cartService.deleteProduct(getAuthenticationUserId(), productId, Location.CART);
         return new ModelAndView(REDIRECT_TO_CART);
     }
 }
