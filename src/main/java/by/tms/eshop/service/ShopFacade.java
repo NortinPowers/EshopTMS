@@ -19,10 +19,10 @@ import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_PRODUCT_WITH_
 import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_SEARCH_RESULT_SAVE;
 import static by.tms.eshop.utils.Constants.MappingPath.SUCCESS_BUY;
 import static by.tms.eshop.utils.Constants.PRODUCT_ID;
+import static by.tms.eshop.utils.Constants.PRODUCT_PAGE_SIZE;
 import static by.tms.eshop.utils.Constants.RequestParameters.FAVORITE;
 import static by.tms.eshop.utils.Constants.RequestParameters.PRODUCT_PAGE;
 import static by.tms.eshop.utils.Constants.RequestParameters.SEARCH;
-import static by.tms.eshop.utils.Constants.SIZE_3;
 import static by.tms.eshop.utils.Constants.TRUE;
 import static by.tms.eshop.utils.ControllerUtils.getAuthenticationUser;
 import static by.tms.eshop.utils.ControllerUtils.getAuthenticationUserId;
@@ -79,7 +79,7 @@ public class ShopFacade {
             path = REDIRECT_TO_PRODUCT_WITH_PARAM + productId;
         } else {
             String productCategory = productService.getProductCategoryValue(productId);
-            path = REDIRECT_TO_PRODUCTS_PAGE_CATEGORY_WITH_PARAM + productCategory + AND_SIZE + SIZE_3;
+            path = REDIRECT_TO_PRODUCTS_PAGE_CATEGORY_WITH_PARAM + productCategory + AND_SIZE + PRODUCT_PAGE_SIZE;
         }
         return getPathByPagination(page, path);
     }

@@ -7,7 +7,7 @@ import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_PRODUCT_WITH_
 import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_SEARCH_RESULT_SAVE;
 import static by.tms.eshop.utils.Constants.RequestParameters.PRODUCT_PAGE;
 import static by.tms.eshop.utils.Constants.RequestParameters.SEARCH;
-import static by.tms.eshop.utils.Constants.SIZE_3;
+import static by.tms.eshop.utils.Constants.PRODUCT_PAGE_SIZE;
 
 import by.tms.eshop.dto.CartDto;
 import by.tms.eshop.dto.ProductDto;
@@ -40,8 +40,8 @@ class ControllerUtilsTest {
     @Test
     void getPathFromAddFavoriteByParametersToProducts() {
         String location = "someLocation";
-        Assertions.assertEquals(REDIRECT_TO_PRODUCTS_PAGE_CATEGORY_WITH_PARAM + productCategory + AND_SIZE + SIZE_3, ControllerUtils.getPathFromAddFavoriteByParameters(productId, location, productCategory, null));
-        Assertions.assertEquals(REDIRECT_TO_PRODUCTS_PAGE_CATEGORY_WITH_PARAM + productCategory + AND_SIZE + SIZE_3 + extensionPath, ControllerUtils.getPathFromAddFavoriteByParameters(productId, location, productCategory, page));
+        Assertions.assertEquals(REDIRECT_TO_PRODUCTS_PAGE_CATEGORY_WITH_PARAM + productCategory + AND_SIZE + PRODUCT_PAGE_SIZE, ControllerUtils.getPathFromAddFavoriteByParameters(productId, location, productCategory, null));
+        Assertions.assertEquals(REDIRECT_TO_PRODUCTS_PAGE_CATEGORY_WITH_PARAM + productCategory + AND_SIZE + PRODUCT_PAGE_SIZE + extensionPath, ControllerUtils.getPathFromAddFavoriteByParameters(productId, location, productCategory, page));
     }
 
     @Test

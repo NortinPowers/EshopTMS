@@ -15,8 +15,8 @@ public class Constants {
     public static final String NAMES_PATTERN = "[a-zA-Z0-9]{3,30}";
     public static final String AND_PAGE = "&page=";
     public static final String AND_SIZE = "&size=";
-    public static final String AND_SIZE_5 = "&size=5";
-    public static final Integer SIZE_3 = 3;
+    public static final Integer PRODUCT_PAGE_SIZE = 3;
+    public static final Integer SEARCH_PAGE_SIZE = 5;
     public static final String PAGE = "page";
     public static final String PRODUCT_ID = "productId";
     public static final String COUNT = "count";

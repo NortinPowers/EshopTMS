@@ -29,15 +29,47 @@ class EshopSpringBootTestApplicationTest {
     @Autowired AdminController adminController;
 
     @Test
-    void contextLoads() {
+    void contextLoads_accountController_notNull() {
         assertThat(accountController).isNotNull();
+    }
+
+    @Test
+    void contextLoads_cartController_notNull() {
         assertThat(cartController).isNotNull();
+    }
+
+    @Test
+    void contextLoads_exceptionController_notNull() {
         assertThat(exceptionController).isNotNull();
+    }
+
+    @Test
+    void contextLoads_favoriteController_notNull() {
         assertThat(favoriteController).isNotNull();
+    }
+
+    @Test
+    void contextLoads_homeController_notNull() {
         assertThat(homeController).isNotNull();
+    }
+
+    @Test
+    void contextLoads_userController_notNull() {
         assertThat(userController).isNotNull();
+    }
+
+    @Test
+    void contextLoads_productsController_notNull() {
         assertThat(productsController).isNotNull();
+    }
+
+    @Test
+    void contextLoads_searchController_notNull() {
         assertThat(searchController).isNotNull();
+    }
+
+    @Test
+    void contextLoads_adminController_notNull() {
         assertThat(adminController).isNotNull();
     }
 }

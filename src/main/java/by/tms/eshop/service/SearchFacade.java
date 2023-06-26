@@ -1,7 +1,7 @@
 package by.tms.eshop.service;
 
 import static by.tms.eshop.utils.Constants.ALL;
-import static by.tms.eshop.utils.Constants.AND_SIZE_5;
+import static by.tms.eshop.utils.Constants.AND_SIZE;
 import static by.tms.eshop.utils.Constants.Attributes.FILTER_FOUND_PRODUCTS;
 import static by.tms.eshop.utils.Constants.Attributes.FOUND_PRODUCTS;
 import static by.tms.eshop.utils.Constants.Attributes.URL;
@@ -12,6 +12,7 @@ import static by.tms.eshop.utils.Constants.RequestParameters.FILTER;
 import static by.tms.eshop.utils.Constants.RequestParameters.MAX_PRICE;
 import static by.tms.eshop.utils.Constants.RequestParameters.MIN_PRICE;
 import static by.tms.eshop.utils.Constants.SAVE;
+import static by.tms.eshop.utils.Constants.SEARCH_PAGE_SIZE;
 import static by.tms.eshop.utils.Constants.TRUE;
 
 import by.tms.eshop.dto.ProductDto;
@@ -45,7 +46,7 @@ public class SearchFacade {
             Set<ProductDto> products = productService.getFoundedProducts(searchCondition);
             session.setAttribute(FOUND_PRODUCTS, products);
         }
-        return new ModelAndView(REDIRECT_TO_SEARCH_RESULT_SAVE + AND_SIZE_5);
+        return new ModelAndView(REDIRECT_TO_SEARCH_RESULT_SAVE + AND_SIZE + SEARCH_PAGE_SIZE);
     }
 
     public ModelAndView getSearchFilterResultPagePath(HttpServletRequest request, String category) {
@@ -55,14 +56,14 @@ public class SearchFacade {
         HttpSession session = request.getSession(false);
         if (session.getAttribute(FOUND_PRODUCTS) != null) {
             session.setAttribute(FILTER_FOUND_PRODUCTS, getProductByFilter(session, category, minPrice, maxPrice));
-            modelAndView.setViewName(REDIRECT_TO_SEARCH_FILTER_TRUE_RESULT_SAVE + AND_SIZE_5);
+            modelAndView.setViewName(REDIRECT_TO_SEARCH_FILTER_TRUE_RESULT_SAVE + AND_SIZE + SEARCH_PAGE_SIZE);
         } else {
             if (!ALL.equals(category)) {
                 session.setAttribute(FOUND_PRODUCTS, productService.selectProductsFromCategoryByFilter(category, minPrice, maxPrice));
             } else {
                 session.setAttribute(FOUND_PRODUCTS, productService.selectAllProductsByFilter(minPrice, maxPrice));
             }
-            modelAndView.setViewName(REDIRECT_TO_SEARCH_RESULT_SAVE + AND_SIZE_5);
+            modelAndView.setViewName(REDIRECT_TO_SEARCH_RESULT_SAVE + AND_SIZE + SEARCH_PAGE_SIZE);
         }
         return modelAndView;
     }

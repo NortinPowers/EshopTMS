@@ -5,9 +5,9 @@ import static by.tms.eshop.utils.Constants.AND_SIZE;
 import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_PRODUCTS_PAGE_CATEGORY_WITH_PARAM;
 import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_PRODUCT_WITH_PARAM;
 import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_SEARCH_RESULT_SAVE;
+import static by.tms.eshop.utils.Constants.PRODUCT_PAGE_SIZE;
 import static by.tms.eshop.utils.Constants.RequestParameters.PRODUCT_PAGE;
 import static by.tms.eshop.utils.Constants.RequestParameters.SEARCH;
-import static by.tms.eshop.utils.Constants.SIZE_3;
 
 import by.tms.eshop.domain.User;
 import by.tms.eshop.dto.CartDto;
@@ -50,7 +50,7 @@ public class ControllerUtils {
         } else if (Objects.equals(location, PRODUCT_PAGE)) {
             path = REDIRECT_TO_PRODUCT_WITH_PARAM + productId;
         } else {
-            path = REDIRECT_TO_PRODUCTS_PAGE_CATEGORY_WITH_PARAM + productCategory + AND_SIZE + SIZE_3;
+            path = REDIRECT_TO_PRODUCTS_PAGE_CATEGORY_WITH_PARAM + productCategory + AND_SIZE + PRODUCT_PAGE_SIZE;
         }
         return getPathByPagination(page, path);
     }

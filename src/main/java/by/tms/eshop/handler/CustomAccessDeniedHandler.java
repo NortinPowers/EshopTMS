@@ -1,4 +1,4 @@
-package by.tms.eshop.config;
+package by.tms.eshop.handler;
 
 import by.tms.eshop.exception.GlobalExceptionHandler;
 import jakarta.servlet.ServletException;

@@ -10,7 +10,7 @@ import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_SEARCH_RESULT
 import static by.tms.eshop.utils.Constants.RequestParameters.FAVORITE;
 import static by.tms.eshop.utils.Constants.RequestParameters.PRODUCT_PAGE;
 import static by.tms.eshop.utils.Constants.RequestParameters.SEARCH;
-import static by.tms.eshop.utils.Constants.SIZE_3;
+import static by.tms.eshop.utils.Constants.PRODUCT_PAGE_SIZE;
 import static by.tms.eshop.utils.Constants.TRUE;
 
 import by.tms.eshop.dto.CartDto;
@@ -73,8 +73,8 @@ class ShopFacadeTest {
     void getPathFromAddCartByParametersToProducts() {
         String productCategory = "someCategory";
         Mockito.when(productService.getProductCategoryValue(productId)).thenReturn(productCategory);
-        Assertions.assertEquals(REDIRECT_TO_PRODUCTS_PAGE_CATEGORY_WITH_PARAM + productCategory + AND_SIZE + SIZE_3, shopFacade.getPathFromAddCartByParameters(productId, shopFlagElse, location, null));
-        Assertions.assertEquals(REDIRECT_TO_PRODUCTS_PAGE_CATEGORY_WITH_PARAM + productCategory + AND_SIZE + SIZE_3 + extensionPath, shopFacade.getPathFromAddCartByParameters(productId, shopFlagElse, location, page));
+        Assertions.assertEquals(REDIRECT_TO_PRODUCTS_PAGE_CATEGORY_WITH_PARAM + productCategory + AND_SIZE + PRODUCT_PAGE_SIZE, shopFacade.getPathFromAddCartByParameters(productId, shopFlagElse, location, null));
+        Assertions.assertEquals(REDIRECT_TO_PRODUCTS_PAGE_CATEGORY_WITH_PARAM + productCategory + AND_SIZE + PRODUCT_PAGE_SIZE + extensionPath, shopFacade.getPathFromAddCartByParameters(productId, shopFlagElse, location, page));
     }
 
     @Test
