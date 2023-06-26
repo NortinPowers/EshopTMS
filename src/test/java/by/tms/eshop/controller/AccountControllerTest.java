@@ -20,7 +20,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@TestPropertySource(locations="classpath:application-test.properties")
+@TestPropertySource(locations = "classpath:application-test.properties")
 class AccountControllerTest {
 
     @Autowired
@@ -31,21 +31,22 @@ class AccountControllerTest {
 
     @Test
     @WithAnonymousUser
-    void showAccountPageRedirectDenied() throws Exception {
+    void test_showAccountPageRedirect_anonymous_denied() throws Exception {
         mockMvc.perform(get("/account"))
                .andExpect(status().is3xxRedirection())
-               .andExpect(redirectedUrl( baseUrl+"/login"));
+               .andExpect(redirectedUrl(baseUrl + "/login"));
     }
 
     @Test
-    void showAccountPageRedirectAllowed() throws Exception {
+    void test_showAccountPageRedirect_roleUser_allowed() throws Exception {
         User user = new User();
         user.setLogin("test");
         user.setPassword("test");
         user.setRole(Role.builder()
                          .role("ROLE_USER")
                          .build());
-        CustomUserDetail customUserDetail  = new CustomUserDetail(user);
+        CustomUserDetail customUserDetail = new CustomUserDetail(user);
+
         mockMvc.perform(get("/account").with(user(customUserDetail)))
                .andExpect(status().isOk())
                .andExpect(view().name("account/account"));
