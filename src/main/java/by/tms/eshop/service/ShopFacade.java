@@ -27,7 +27,6 @@ import static by.tms.eshop.utils.Constants.TRUE;
 import static by.tms.eshop.utils.ControllerUtils.getAuthenticationUser;
 import static by.tms.eshop.utils.ControllerUtils.getAuthenticationUserId;
 import static by.tms.eshop.utils.ControllerUtils.getPathByPagination;
-import static by.tms.eshop.utils.ControllerUtils.getPathFromAddFavoriteByParameters;
 
 import by.tms.eshop.domain.User;
 import by.tms.eshop.dto.CartDto;
@@ -79,6 +78,18 @@ public class ShopFacade {
             path = REDIRECT_TO_PRODUCT_WITH_PARAM + productId;
         } else {
             String productCategory = productService.getProductCategoryValue(productId);
+            path = REDIRECT_TO_PRODUCTS_PAGE_CATEGORY_WITH_PARAM + productCategory + AND_SIZE + PRODUCT_PAGE_SIZE;
+        }
+        return getPathByPagination(page, path);
+    }
+
+    public String getPathFromAddFavoriteByParameters(Long productId, String location, String productCategory, Integer page) {
+        String path;
+        if (Objects.equals(location, SEARCH)) {
+            path = REDIRECT_TO_SEARCH_RESULT_SAVE;
+        } else if (Objects.equals(location, PRODUCT_PAGE)) {
+            path = REDIRECT_TO_PRODUCT_WITH_PARAM + productId;
+        } else {
             path = REDIRECT_TO_PRODUCTS_PAGE_CATEGORY_WITH_PARAM + productCategory + AND_SIZE + PRODUCT_PAGE_SIZE;
         }
         return getPathByPagination(page, path);

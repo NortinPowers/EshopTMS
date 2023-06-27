@@ -8,11 +8,18 @@ import static by.tms.eshop.test_utils.Constants.PRODUCT_ID;
 import static by.tms.eshop.test_utils.Constants.ROLE_USER;
 import static by.tms.eshop.test_utils.Constants.SECRET_QWERTY;
 import static by.tms.eshop.utils.Constants.AND_SIZE;
+import static by.tms.eshop.utils.Constants.Attributes.PRODUCT_CATEGORIES;
+import static by.tms.eshop.utils.Constants.Attributes.USER;
+import static by.tms.eshop.utils.Constants.BUY;
+import static by.tms.eshop.utils.Constants.MappingPath.ACCOUNT;
+import static by.tms.eshop.utils.Constants.MappingPath.EDIT;
+import static by.tms.eshop.utils.Constants.MappingPath.ESHOP;
 import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_CART;
 import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_FAVORITES;
 import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_PRODUCTS_PAGE_CATEGORY_WITH_PARAM;
 import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_PRODUCT_WITH_PARAM;
 import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_SEARCH_RESULT_SAVE;
+import static by.tms.eshop.utils.Constants.MappingPath.SUCCESS_BUY;
 import static by.tms.eshop.utils.Constants.PRODUCT_PAGE_SIZE;
 import static by.tms.eshop.utils.Constants.RequestParameters.FAVORITE;
 import static by.tms.eshop.utils.Constants.RequestParameters.PRODUCT_PAGE;
@@ -35,9 +42,10 @@ import by.tms.eshop.model.Location;
 import by.tms.eshop.security.CustomUserDetail;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -45,6 +53,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.servlet.ModelAndView;
 
 @SpringBootTest
 class ShopFacadeTest {
@@ -56,6 +65,9 @@ class ShopFacadeTest {
     private ProductService productService;
 
     @MockBean
+    private ProductCategoryService productCategoryService;
+
+    @MockBean
     private CartService cartService;
 
     @MockBean
@@ -65,69 +77,91 @@ class ShopFacadeTest {
     private UserService userService;
 
     @MockBean
+    private OrderService orderService;
+
+    @MockBean
     private UserMapper userMapper;
 
     @MockBean
     private PasswordEncoder passwordEncoder;
 
+    @MockBean
+    private SecurityContext securityContext;
+
+    @MockBean
+    Authentication authentication;
+
+    @MockBean
+    CustomUserDetail customUserDetail;
+
+    @MockBean
+    User userMock;
+
     private final String shopFlagElse = "someFlag";
     private final String shopFlagTrue = TRUE;
     private final User user = User.builder().build();
+    private final UserFormDto userFormDto = UserFormDto.builder().build();
+    private ModelAndView modelAndView = new ModelAndView();
 
-    @Test
-    void test_getPathFromAddCartByParameters_toCart_pageNull() {
-        assertEquals(REDIRECT_TO_CART, shopFacade.getPathFromAddCartByParameters(PRODUCT_ID, shopFlagTrue, LOCATION, null));
-    }
+    @Nested
+    class PathFromAddCart {
 
-    @Test
-    void test_getPathFromAddCartByParameters_toCart_pageNotNull() {
-        assertEquals(REDIRECT_TO_CART + EXTENSION_PATH, shopFacade.getPathFromAddCartByParameters(PRODUCT_ID, shopFlagTrue, LOCATION, PAGE));
-    }
+        @Test
+        void test_getPathFromAddCartByParameters_toCart_pageNull() {
+            assertEquals(REDIRECT_TO_CART, shopFacade.getPathFromAddCartByParameters(PRODUCT_ID, shopFlagTrue, LOCATION, null));
+        }
 
-    @Test
-    void test_getPathFromAddCartByParameters_toFavorites_pageNull() {
-        assertEquals(REDIRECT_TO_FAVORITES, shopFacade.getPathFromAddCartByParameters(PRODUCT_ID, shopFlagElse, FAVORITE, null));
-    }
+        @Test
+        void test_getPathFromAddCartByParameters_toCart_pageNotNull() {
+            assertEquals(REDIRECT_TO_CART + EXTENSION_PATH, shopFacade.getPathFromAddCartByParameters(PRODUCT_ID, shopFlagTrue, LOCATION, PAGE));
+        }
 
-    @Test
-    void test_getPathFromAddCartByParameters_toFavorites_pageNotNull() {
-        assertEquals(REDIRECT_TO_FAVORITES + EXTENSION_PATH, shopFacade.getPathFromAddCartByParameters(PRODUCT_ID, shopFlagElse, FAVORITE, PAGE));
-    }
+        @Test
+        void test_getPathFromAddCartByParameters_toFavorites_pageNull() {
+            assertEquals(REDIRECT_TO_FAVORITES, shopFacade.getPathFromAddCartByParameters(PRODUCT_ID, shopFlagElse, FAVORITE, null));
+        }
 
-    @Test
-    void test_getPathFromAddCartByParameters_toSearch_pageNull() {
-        assertEquals(REDIRECT_TO_SEARCH_RESULT_SAVE, shopFacade.getPathFromAddCartByParameters(PRODUCT_ID, shopFlagElse, SEARCH, null));
-    }
+        @Test
+        void test_getPathFromAddCartByParameters_toFavorites_pageNotNull() {
+            assertEquals(REDIRECT_TO_FAVORITES + EXTENSION_PATH, shopFacade.getPathFromAddCartByParameters(PRODUCT_ID, shopFlagElse, FAVORITE, PAGE));
+        }
 
-    @Test
-    void test_getPathFromAddCartByParameters_toSearch_pageNotNull() {
-        assertEquals(REDIRECT_TO_SEARCH_RESULT_SAVE + EXTENSION_PATH, shopFacade.getPathFromAddCartByParameters(PRODUCT_ID, shopFlagElse, SEARCH, PAGE));
-    }
+        @Test
+        void test_getPathFromAddCartByParameters_toSearch_pageNull() {
+            assertEquals(REDIRECT_TO_SEARCH_RESULT_SAVE, shopFacade.getPathFromAddCartByParameters(PRODUCT_ID, shopFlagElse, SEARCH, null));
+        }
 
-    @Test
-    void test_getPathFromAddCartByParameters_toProduct_pageNull() {
-        assertEquals(REDIRECT_TO_PRODUCT_WITH_PARAM + PRODUCT_ID, shopFacade.getPathFromAddCartByParameters(PRODUCT_ID, shopFlagElse, PRODUCT_PAGE, null));
-    }
+        @Test
+        void test_getPathFromAddCartByParameters_toSearch_pageNotNull() {
+            assertEquals(REDIRECT_TO_SEARCH_RESULT_SAVE + EXTENSION_PATH, shopFacade.getPathFromAddCartByParameters(PRODUCT_ID, shopFlagElse, SEARCH, PAGE));
+        }
 
-    @Test
-    void test_getPathFromAddCartByParameters_toProduct_pageNotNull() {
-        assertEquals(REDIRECT_TO_PRODUCT_WITH_PARAM + PRODUCT_ID + EXTENSION_PATH, shopFacade.getPathFromAddCartByParameters(PRODUCT_ID, shopFlagElse, PRODUCT_PAGE, PAGE));
-    }
+        @Test
+        void test_getPathFromAddCartByParameters_toProduct_pageNull() {
+            assertEquals(REDIRECT_TO_PRODUCT_WITH_PARAM + PRODUCT_ID, shopFacade.getPathFromAddCartByParameters(PRODUCT_ID, shopFlagElse, PRODUCT_PAGE, null));
+        }
 
-    @Test
-    void test_getPathFromAddCartByParameters_toProducts_pageNull() {
-        when(productService.getProductCategoryValue(PRODUCT_ID)).thenReturn(PRODUCT_CATEGORY);
+        @Test
+        void test_getPathFromAddCartByParameters_toProduct_pageNotNull() {
+            assertEquals(REDIRECT_TO_PRODUCT_WITH_PARAM + PRODUCT_ID + EXTENSION_PATH, shopFacade.getPathFromAddCartByParameters(PRODUCT_ID, shopFlagElse, PRODUCT_PAGE, PAGE));
+        }
 
-        assertEquals(REDIRECT_TO_PRODUCTS_PAGE_CATEGORY_WITH_PARAM + PRODUCT_CATEGORY + AND_SIZE + PRODUCT_PAGE_SIZE, shopFacade.getPathFromAddCartByParameters(PRODUCT_ID, shopFlagElse, LOCATION, null));
-        verify(productService, atLeastOnce()).getProductCategoryValue(any());
-    }
 
-    @Test
-    void test_getPathFromAddCartByParameters_toProducts_pageNotNull() {
-        when(productService.getProductCategoryValue(PRODUCT_ID)).thenReturn(PRODUCT_CATEGORY);
+        @Test
+        void test_getPathFromAddCartByParameters_toProducts_pageNull() {
+            when(productService.getProductCategoryValue(PRODUCT_ID)).thenReturn(PRODUCT_CATEGORY);
 
-        assertEquals(REDIRECT_TO_PRODUCTS_PAGE_CATEGORY_WITH_PARAM + PRODUCT_CATEGORY + AND_SIZE + PRODUCT_PAGE_SIZE + EXTENSION_PATH, shopFacade.getPathFromAddCartByParameters(PRODUCT_ID, shopFlagElse, LOCATION, PAGE));
-        verify(productService, atLeastOnce()).getProductCategoryValue(any());
+            assertEquals(REDIRECT_TO_PRODUCTS_PAGE_CATEGORY_WITH_PARAM + PRODUCT_CATEGORY + AND_SIZE + PRODUCT_PAGE_SIZE, shopFacade.getPathFromAddCartByParameters(PRODUCT_ID, shopFlagElse, LOCATION, null));
+            verify(productService, atLeastOnce()).getProductCategoryValue(any());
+        }
+
+        @Test
+        void test_getPathFromAddCartByParameters_toProducts_pageNotNull() {
+            when(productService.getProductCategoryValue(PRODUCT_ID)).thenReturn(PRODUCT_CATEGORY);
+
+            assertEquals(REDIRECT_TO_PRODUCTS_PAGE_CATEGORY_WITH_PARAM + PRODUCT_CATEGORY + AND_SIZE + PRODUCT_PAGE_SIZE + EXTENSION_PATH, shopFacade.getPathFromAddCartByParameters(PRODUCT_ID, shopFlagElse, LOCATION, PAGE));
+            verify(productService, atLeastOnce()).getProductCategoryValue(any());
+        }
     }
 
     @Test
@@ -157,9 +191,7 @@ class ShopFacadeTest {
     @Test
     void test_createUser_setRoleAndPassword() {
         var captor = ArgumentCaptor.forClass(UserFormDto.class);
-        UserFormDto userFormDto = UserFormDto.builder()
-                                             .password("qwerty")
-                                             .build();
+        userFormDto.setPassword("qwerty");
 
         when(passwordEncoder.encode(userFormDto.getPassword())).thenReturn(SECRET_QWERTY);
         when(roleService.getRole(ROLE_USER)).thenReturn(RoleDto.builder().role(ROLE_USER).build());
@@ -176,15 +208,7 @@ class ShopFacadeTest {
 
     @Test
     public void test_EditUser_setNameAndSurname() {
-        SecurityContext securityContext = Mockito.mock(SecurityContext.class);
         SecurityContextHolder.setContext(securityContext);
-        Authentication authentication = Mockito.mock(Authentication.class);
-        CustomUserDetail customUserDetail = Mockito.mock(CustomUserDetail.class);
-        User userMock = Mockito.mock(User.class);
-
-        UserFormDto userFormDto = new UserFormDto();
-        userFormDto.setName("testName");
-        userFormDto.setSurname("testSurname");
 
         when(securityContext.getAuthentication()).thenReturn(authentication);
         when(authentication.getPrincipal()).thenReturn(customUserDetail);
@@ -196,5 +220,154 @@ class ShopFacadeTest {
         verify(userService).addUser(userMock);
 
         SecurityContextHolder.clearContext();
+    }
+
+    @Test
+    void test_carriesPurchase() {
+        List<ProductDto> productsDto = List.of(ProductDto.builder().build());
+        Long userId = 1L;
+        Location location = Location.CART;
+
+        when(cartService.getPurchasedProducts(userId, location)).thenReturn(productsDto);
+        doNothing().when(orderService).saveUserOrder(userId, productsDto);
+        doNothing().when(cartService).deleteCartProductsAfterBuy(userId);
+        shopFacade.carriesPurchase(userId);
+
+        verify(cartService, atLeastOnce()).getPurchasedProducts(userId, location);
+        verify(orderService, atLeastOnce()).saveUserOrder(userId, productsDto);
+        verify(cartService, atLeastOnce()).deleteCartProductsAfterBuy(userId);
+    }
+
+    @Nested
+    class PathFromAddFavorite {
+
+        @Test
+        void test_getPathFromAddFavoriteByParameters_toSearch_pageNull() {
+            assertEquals(REDIRECT_TO_SEARCH_RESULT_SAVE, shopFacade.getPathFromAddFavoriteByParameters(PRODUCT_ID, SEARCH, PRODUCT_CATEGORY, null));
+        }
+
+        @Test
+        void test_getPathFromAddFavoriteByParameters_toSearch_pageNotNull() {
+            assertEquals(REDIRECT_TO_SEARCH_RESULT_SAVE + EXTENSION_PATH, shopFacade.getPathFromAddFavoriteByParameters(PRODUCT_ID, SEARCH, PRODUCT_CATEGORY, PAGE));
+        }
+
+        @Test
+        void test_getPathFromAddFavoriteByParameters_toProduct_pageNull() {
+            assertEquals(REDIRECT_TO_PRODUCT_WITH_PARAM + PRODUCT_ID, shopFacade.getPathFromAddFavoriteByParameters(PRODUCT_ID, PRODUCT_PAGE, PRODUCT_CATEGORY, null));
+        }
+
+        @Test
+        void test_getPathFromAddFavoriteByParameters_toProduct_pageNotNull() {
+            assertEquals(REDIRECT_TO_PRODUCT_WITH_PARAM + PRODUCT_ID + EXTENSION_PATH, shopFacade.getPathFromAddFavoriteByParameters(PRODUCT_ID, PRODUCT_PAGE, PRODUCT_CATEGORY, PAGE));
+        }
+
+        @Test
+        void test_getPathFromAddFavoriteByParameters_toProducts_pageNull() {
+            assertEquals(REDIRECT_TO_PRODUCTS_PAGE_CATEGORY_WITH_PARAM + PRODUCT_CATEGORY + AND_SIZE + PRODUCT_PAGE_SIZE, shopFacade.getPathFromAddFavoriteByParameters(PRODUCT_ID, LOCATION, PRODUCT_CATEGORY, null));
+        }
+
+        @Test
+        void test_getPathFromAddFavoriteByParameters_toProducts_pageNotNull() {
+            assertEquals(REDIRECT_TO_PRODUCTS_PAGE_CATEGORY_WITH_PARAM + PRODUCT_CATEGORY + AND_SIZE + PRODUCT_PAGE_SIZE + EXTENSION_PATH, shopFacade.getPathFromAddFavoriteByParameters(PRODUCT_ID, LOCATION, PRODUCT_CATEGORY, PAGE));
+        }
+    }
+
+    @Test
+    void test_getModelAndViewByParams_setViewName() {
+        Long productId = 1L;
+        String category = "someCategory";
+        String currentLocation = SEARCH;
+        Integer page = null;
+
+        when(productService.getProductCategoryValue(any())).thenReturn(category);
+        shopFacade.getPathFromAddFavoriteByParameters(productId, currentLocation, category, page);
+
+        modelAndView = shopFacade.getModelAndViewByParams(productId, currentLocation, page);
+        assertEquals(REDIRECT_TO_SEARCH_RESULT_SAVE, modelAndView.getViewName());
+    }
+
+    @Nested
+    class PageByParam {
+
+        @Test
+        void test_getPageByParam_paramBuy() {
+            SecurityContextHolder.setContext(securityContext);
+
+            String param = BUY;
+
+            when(securityContext.getAuthentication()).thenReturn(authentication);
+            when(authentication.getPrincipal()).thenReturn(customUserDetail);
+            when(customUserDetail.getUser()).thenReturn(userMock);
+
+            modelAndView = shopFacade.getPageByParam(param, new ModelAndView());
+            assertEquals(SUCCESS_BUY, modelAndView.getViewName());
+
+            SecurityContextHolder.clearContext();
+        }
+
+        @Test
+        void test_getPageByParam_paramNotBuy() {
+            SecurityContextHolder.setContext(securityContext);
+
+            String param = "any";
+
+            when(securityContext.getAuthentication()).thenReturn(authentication);
+            when(authentication.getPrincipal()).thenReturn(customUserDetail);
+            when(customUserDetail.getUser()).thenReturn(userMock);
+
+            modelAndView = shopFacade.getPageByParam(param, new ModelAndView());
+            assertEquals(REDIRECT_TO_CART, modelAndView.getViewName());
+
+            SecurityContextHolder.clearContext();
+        }
+    }
+
+    @Test
+    void test_getEshopView() {
+        List<String> productCategories = List.of("tv", "phone");
+
+        when(productCategoryService.getProductCategories()).thenReturn(productCategories);
+        shopFacade.getEshopView(modelAndView);
+
+        assertEquals(productCategories, modelAndView.getModelMap().get(PRODUCT_CATEGORIES));
+        assertEquals(ESHOP, modelAndView.getViewName());
+    }
+
+    @Nested
+    class UserEditForm{
+
+        @Test
+        void test_getUserEditForm_userIsPresent() {
+            Long userId = 1L;
+            user.setId(userId);
+            user.setName("name");
+            userFormDto.setId(userId);
+            userFormDto.setName(user.getName());
+
+            when(userService.getUserById(userId)).thenReturn(Optional.of(user));
+            when(userMapper.convetrToUserFormDto(user)).thenReturn(userFormDto);
+            shopFacade.getUserEditForm(userId, modelAndView);
+
+            assertEquals(userFormDto, modelAndView.getModelMap().get(USER));
+            assertEquals(EDIT, modelAndView.getViewName());
+        }
+
+        @Test
+        void test_getUserEditForm_userIsNotPresent() {
+            Long userId = 1L;
+
+            when(userService.getUserById(userId)).thenReturn(Optional.empty());
+            shopFacade.getUserEditForm(userId, modelAndView);
+
+            assertEquals(ACCOUNT, modelAndView.getViewName());
+        }
+    }
+
+    @Test
+    void getAdminPage() {
+    }
+
+    @Test
+    void setPriceAndRedirectAttributes() {
     }
 }

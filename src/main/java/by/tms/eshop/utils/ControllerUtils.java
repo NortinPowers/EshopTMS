@@ -1,20 +1,12 @@
 package by.tms.eshop.utils;
 
 import static by.tms.eshop.utils.Constants.AND_PAGE;
-import static by.tms.eshop.utils.Constants.AND_SIZE;
-import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_PRODUCTS_PAGE_CATEGORY_WITH_PARAM;
-import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_PRODUCT_WITH_PARAM;
-import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_SEARCH_RESULT_SAVE;
-import static by.tms.eshop.utils.Constants.PRODUCT_PAGE_SIZE;
-import static by.tms.eshop.utils.Constants.RequestParameters.PRODUCT_PAGE;
-import static by.tms.eshop.utils.Constants.RequestParameters.SEARCH;
 
 import by.tms.eshop.domain.User;
 import by.tms.eshop.dto.CartDto;
 import by.tms.eshop.security.CustomUserDetail;
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Objects;
 import lombok.experimental.UtilityClass;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -39,18 +31,6 @@ public class ControllerUtils {
 
     public static Long getAuthenticationUserId() {
         return getAuthenticationUser().getId();
-    }
-
-    public static String getPathFromAddFavoriteByParameters(Long productId, String location, String productCategory, Integer page) {
-        String path;
-        if (Objects.equals(location, SEARCH)) {
-            path = REDIRECT_TO_SEARCH_RESULT_SAVE;
-        } else if (Objects.equals(location, PRODUCT_PAGE)) {
-            path = REDIRECT_TO_PRODUCT_WITH_PARAM + productId;
-        } else {
-            path = REDIRECT_TO_PRODUCTS_PAGE_CATEGORY_WITH_PARAM + productCategory + AND_SIZE + PRODUCT_PAGE_SIZE;
-        }
-        return getPathByPagination(page, path);
     }
 
     public static String getPathByPagination(Integer page, String path) {
