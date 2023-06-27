@@ -8,8 +8,10 @@ import static by.tms.eshop.test_utils.Constants.PRODUCT_ID;
 import static by.tms.eshop.test_utils.Constants.ROLE_USER;
 import static by.tms.eshop.test_utils.Constants.SECRET_QWERTY;
 import static by.tms.eshop.utils.Constants.AND_SIZE;
+import static by.tms.eshop.utils.Constants.Attributes.ERROR;
 import static by.tms.eshop.utils.Constants.Attributes.PRODUCTS;
 import static by.tms.eshop.utils.Constants.Attributes.PRODUCT_CATEGORIES;
+import static by.tms.eshop.utils.Constants.Attributes.SUCCESS;
 import static by.tms.eshop.utils.Constants.Attributes.USER;
 import static by.tms.eshop.utils.Constants.BUY;
 import static by.tms.eshop.utils.Constants.MappingPath.ACCOUNT;
@@ -28,9 +30,11 @@ import static by.tms.eshop.utils.Constants.RequestParameters.PRODUCT_PAGE;
 import static by.tms.eshop.utils.Constants.RequestParameters.SEARCH;
 import static by.tms.eshop.utils.Constants.TRUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -57,6 +61,8 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
 
 @SpringBootTest
 class ShopFacadeTest {
@@ -105,6 +111,7 @@ class ShopFacadeTest {
     private final User user = User.builder().build();
     private final UserFormDto userFormDto = UserFormDto.builder().build();
     private ModelAndView modelAndView = new ModelAndView();
+    private final RedirectAttributes attr = new RedirectAttributesModelMap();
 
     @Nested
     class PathFromAddCart {
@@ -366,9 +373,9 @@ class ShopFacadeTest {
         }
     }
 
-//    @Disabled
+    //    @Disabled
     @Test
-    void getAdminPage() {
+    void test_getAdminPage() {
         Long productOneId = 1L;
         Long productOneCount = 3L;
         Map<Long, Long> mostFavoriteOne = Map.of(productOneId, productOneCount);
@@ -394,8 +401,40 @@ class ShopFacadeTest {
         assertEquals(ADMIN_INFO, modelAndView.getViewName());
     }
 
-    @Test
-    void setPriceAndRedirectAttributes() {
+//    public void setPriceAndRedirectAttributes(ProductDto product, RedirectAttributes attr) {
+//        boolean isValidPrice = isValidPrice(product);
+//        addRedirectAttribute(attr, isValidPrice);
+//        changePriceIfValid(product, isValidPrice);
+//    }
+
+    @Nested
+    class PriceAndRedirectAttributes {
+
+        @Test
+        void test_setPriceAndRedirectAttributes_validPrice() {
+            ProductDto productDto = ProductDto.builder()
+                                              .price(BigDecimal.TEN)
+                                              .build();
+
+            doNothing().when(productService).changePrice(productDto);
+            shopFacade.setPriceAndRedirectAttributes(productDto, attr);
+
+            assertTrue(attr.getFlashAttributes().containsKey(SUCCESS));
+            verify(productService, atLeastOnce()).changePrice(productDto);
+        }
+
+        @Test
+        void test_setPriceAndRedirectAttributes_invalidPrice() {
+            ProductDto productDto = ProductDto.builder()
+                                              .price(BigDecimal.ZERO)
+                                              .build();
+
+            doNothing().when(productService).changePrice(productDto);
+            shopFacade.setPriceAndRedirectAttributes(productDto, attr);
+
+            assertTrue(attr.getFlashAttributes().containsKey(ERROR));
+            verify(productService, never()).changePrice(productDto);
+        }
     }
 
     private static ProductDto getProductDto(Long id) {
