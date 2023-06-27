@@ -5,6 +5,7 @@ import static by.tms.eshop.utils.Constants.AND_SIZE;
 import static by.tms.eshop.utils.Constants.Attributes.FILTER_FOUND_PRODUCTS;
 import static by.tms.eshop.utils.Constants.Attributes.FOUND_PRODUCTS;
 import static by.tms.eshop.utils.Constants.Attributes.URL;
+import static by.tms.eshop.utils.Constants.ControllerMappingPath.SEARCH_PARAM_RESULT_PAGINATION;
 import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_SEARCH_FILTER_TRUE_RESULT_SAVE;
 import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_SEARCH_RESULT_SAVE;
 import static by.tms.eshop.utils.Constants.PAGE;
@@ -79,10 +80,10 @@ public class SearchFacade {
                 endIndex = getEndIndex(pageable, products, startIndex);
                 Page<ProductDto> page = PageableExecutionUtils.getPage(products.subList(startIndex, endIndex), PageRequest.of(pageable.getPageNumber(), 5), products::size);
                 modelAndView.addObject(PAGE, page);
-                modelAndView.addObject(URL, "/search?result=save&size=5&filter=true");
+                modelAndView.addObject(URL, SEARCH_PARAM_RESULT_PAGINATION);
             } else {
                 Page<ProductDto> page = new PageImpl<>(Collections.emptyList());
-                modelAndView.addObject("page", page);
+                modelAndView.addObject(PAGE, page);
             }
         }
     }
@@ -114,7 +115,7 @@ public class SearchFacade {
     private int getEndIndex(Pageable pageable, List<ProductDto> products, int startIndex) {
         int endIndex;
         if (startIndex == 0) {
-            endIndex = 5;
+            endIndex = SEARCH_PAGE_SIZE;
         } else {
             endIndex = startIndex + pageable.getPageSize();
         }

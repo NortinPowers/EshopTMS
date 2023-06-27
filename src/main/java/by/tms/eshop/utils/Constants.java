@@ -18,8 +18,8 @@ public class Constants {
     public static final Integer PRODUCT_PAGE_SIZE = 3;
     public static final Integer SEARCH_PAGE_SIZE = 5;
     public static final String PAGE = "page";
-    public static final String PRODUCT_ID = "productId";
-    public static final String COUNT = "count";
+//    public static final String PRODUCT_ID = "productId";
+//    public static final String COUNT = "count";
     public static final String CATEGORY = "category";
 
     @UtilityClass
@@ -61,6 +61,7 @@ public class Constants {
         public static final String SEARCH = "/search";
         public static final String SEARCH_FILTER = "/search-filter";
         public static final String SEARCH_PARAM = "/search-param";
+        public static final String SEARCH_PARAM_RESULT_PAGINATION = "/search?result=save&size=5&filter=true";
         public static final String PRODUCTS_PAGE = "/products-page";
         public static final String ANY_PRODUCT = "/product/*";
         public static final String REGISTRATION = "/create-user";

@@ -98,23 +98,23 @@ class ShopFacadeTest {
     private SecurityContext securityContext;
 
     @MockBean
-    Authentication authentication;
+    private Authentication authentication;
 
     @MockBean
-    CustomUserDetail customUserDetail;
+    private CustomUserDetail customUserDetail;
 
     @MockBean
-    User userMock;
+    private User userMock;
 
-    private final String shopFlagElse = "someFlag";
-    private final String shopFlagTrue = TRUE;
     private final User user = User.builder().build();
     private final UserFormDto userFormDto = UserFormDto.builder().build();
     private ModelAndView modelAndView = new ModelAndView();
-    private final RedirectAttributes attr = new RedirectAttributesModelMap();
 
     @Nested
     class PathFromAddCart {
+
+        private final String shopFlagElse = "someFlag";
+        private final String shopFlagTrue = TRUE;
 
         @Test
         void test_getPathFromAddCartByParameters_toCart_pageNull() {
@@ -401,14 +401,10 @@ class ShopFacadeTest {
         assertEquals(ADMIN_INFO, modelAndView.getViewName());
     }
 
-//    public void setPriceAndRedirectAttributes(ProductDto product, RedirectAttributes attr) {
-//        boolean isValidPrice = isValidPrice(product);
-//        addRedirectAttribute(attr, isValidPrice);
-//        changePriceIfValid(product, isValidPrice);
-//    }
-
     @Nested
     class PriceAndRedirectAttributes {
+
+        private final RedirectAttributes attr = new RedirectAttributesModelMap();
 
         @Test
         void test_setPriceAndRedirectAttributes_validPrice() {
