@@ -8,10 +8,12 @@ import static by.tms.eshop.test_utils.Constants.PRODUCT_ID;
 import static by.tms.eshop.test_utils.Constants.ROLE_USER;
 import static by.tms.eshop.test_utils.Constants.SECRET_QWERTY;
 import static by.tms.eshop.utils.Constants.AND_SIZE;
+import static by.tms.eshop.utils.Constants.Attributes.PRODUCTS;
 import static by.tms.eshop.utils.Constants.Attributes.PRODUCT_CATEGORIES;
 import static by.tms.eshop.utils.Constants.Attributes.USER;
 import static by.tms.eshop.utils.Constants.BUY;
 import static by.tms.eshop.utils.Constants.MappingPath.ACCOUNT;
+import static by.tms.eshop.utils.Constants.MappingPath.ADMIN_INFO;
 import static by.tms.eshop.utils.Constants.MappingPath.EDIT;
 import static by.tms.eshop.utils.Constants.MappingPath.ESHOP;
 import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_CART;
@@ -42,6 +44,7 @@ import by.tms.eshop.model.Location;
 import by.tms.eshop.security.CustomUserDetail;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -274,8 +277,8 @@ class ShopFacadeTest {
 
     @Test
     void test_getModelAndViewByParams_setViewName() {
-        Long productId = 1L;
-        String category = "someCategory";
+        Long productId = PRODUCT_ID;
+        String category = PRODUCT_CATEGORY;
         String currentLocation = SEARCH;
         Integer page = null;
 
@@ -299,7 +302,7 @@ class ShopFacadeTest {
             when(authentication.getPrincipal()).thenReturn(customUserDetail);
             when(customUserDetail.getUser()).thenReturn(userMock);
 
-            modelAndView = shopFacade.getPageByParam(param, new ModelAndView());
+            shopFacade.getPageByParam(param, modelAndView);
             assertEquals(SUCCESS_BUY, modelAndView.getViewName());
 
             SecurityContextHolder.clearContext();
@@ -315,7 +318,7 @@ class ShopFacadeTest {
             when(authentication.getPrincipal()).thenReturn(customUserDetail);
             when(customUserDetail.getUser()).thenReturn(userMock);
 
-            modelAndView = shopFacade.getPageByParam(param, new ModelAndView());
+            shopFacade.getPageByParam(param, modelAndView);
             assertEquals(REDIRECT_TO_CART, modelAndView.getViewName());
 
             SecurityContextHolder.clearContext();
@@ -329,12 +332,12 @@ class ShopFacadeTest {
         when(productCategoryService.getProductCategories()).thenReturn(productCategories);
         shopFacade.getEshopView(modelAndView);
 
-        assertEquals(productCategories, modelAndView.getModelMap().get(PRODUCT_CATEGORIES));
+        assertEquals(productCategories, modelAndView.getModel().get(PRODUCT_CATEGORIES));
         assertEquals(ESHOP, modelAndView.getViewName());
     }
 
     @Nested
-    class UserEditForm{
+    class UserEditForm {
 
         @Test
         void test_getUserEditForm_userIsPresent() {
@@ -348,7 +351,7 @@ class ShopFacadeTest {
             when(userMapper.convetrToUserFormDto(user)).thenReturn(userFormDto);
             shopFacade.getUserEditForm(userId, modelAndView);
 
-            assertEquals(userFormDto, modelAndView.getModelMap().get(USER));
+            assertEquals(userFormDto, modelAndView.getModel().get(USER));
             assertEquals(EDIT, modelAndView.getViewName());
         }
 
@@ -363,11 +366,41 @@ class ShopFacadeTest {
         }
     }
 
+//    @Disabled
     @Test
     void getAdminPage() {
+        Long productOneId = 1L;
+        Long productOneCount = 3L;
+        Map<Long, Long> mostFavoriteOne = Map.of(productOneId, productOneCount);
+        Long productTwoId = 2L;
+        Long productTwoCount = 2L;
+        Map<Long, Long> mostFavoriteTwo = Map.of(productTwoId, productTwoCount);
+        List<Map<Long, Long>> mostFavorites = List.of(mostFavoriteOne, mostFavoriteTwo);
+        ProductDto productDtoOne = getProductDto(productOneId);
+        ProductDto productDtoTwo = getProductDto(productTwoId);
+        List<Map<ProductDto, Long>> productsWithCount = List.of(Map.of(productDtoOne, productOneCount), Map.of(productDtoTwo, productTwoCount));
+
+        when(cartService.getMostFavorite()).thenReturn(mostFavorites);
+        when(productService.getProductDto(productOneId)).thenReturn(productDtoOne);
+        when(productService.getProductDto(productTwoId)).thenReturn(productDtoTwo);
+        shopFacade.getAdminPage(modelAndView);
+
+        assertEquals(productsWithCount, modelAndView.getModel().get(PRODUCTS));
+        //need your comment: PRODUCTS -> [{null=null},{null=null}] if
+        // productWithCount.put(productService.getProductDto(mostFavorite.get(PRODUCT_ID)), mostFavorite.get(COUNT)); in stream
+        //  where PRODUCT_ID and COUNT : productId and count
+        // @Query("SELECT new map(product.id as productId, COUNT(product.id) as count) FROM Cart WHERE favorite = true GROUP BY product.id ORDER BY COUNT(product.id) DESC LIMIT 3")
+        //    List<Map<Long, Long>> getMostFavorite();
+        assertEquals(ADMIN_INFO, modelAndView.getViewName());
     }
 
     @Test
     void setPriceAndRedirectAttributes() {
+    }
+
+    private static ProductDto getProductDto(Long id) {
+        return ProductDto.builder()
+                         .id(id)
+                         .build();
     }
 }
