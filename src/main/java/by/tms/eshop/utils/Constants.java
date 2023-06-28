@@ -18,8 +18,8 @@ public class Constants {
     public static final Integer PRODUCT_PAGE_SIZE = 3;
     public static final Integer SEARCH_PAGE_SIZE = 5;
     public static final String PAGE = "page";
-//    public static final String PRODUCT_ID = "productId";
-//    public static final String COUNT = "count";
+    public static final String PRODUCT_ID = "productId";
+    public static final String COUNT = "count";
     public static final String CATEGORY = "category";
 
     @UtilityClass

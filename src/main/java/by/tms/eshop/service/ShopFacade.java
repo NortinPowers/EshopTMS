@@ -7,6 +7,7 @@ import static by.tms.eshop.utils.Constants.Attributes.PRODUCT_CATEGORIES;
 import static by.tms.eshop.utils.Constants.Attributes.SUCCESS;
 import static by.tms.eshop.utils.Constants.Attributes.USER;
 import static by.tms.eshop.utils.Constants.BUY;
+import static by.tms.eshop.utils.Constants.COUNT;
 import static by.tms.eshop.utils.Constants.MappingPath.ACCOUNT;
 import static by.tms.eshop.utils.Constants.MappingPath.ADMIN_INFO;
 import static by.tms.eshop.utils.Constants.MappingPath.EDIT;
@@ -17,6 +18,7 @@ import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_PRODUCTS_PAGE
 import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_PRODUCT_WITH_PARAM;
 import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_SEARCH_RESULT_SAVE;
 import static by.tms.eshop.utils.Constants.MappingPath.SUCCESS_BUY;
+import static by.tms.eshop.utils.Constants.PRODUCT_ID;
 import static by.tms.eshop.utils.Constants.PRODUCT_PAGE_SIZE;
 import static by.tms.eshop.utils.Constants.RequestParameters.FAVORITE;
 import static by.tms.eshop.utils.Constants.RequestParameters.PRODUCT_PAGE;
@@ -38,7 +40,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -152,9 +153,10 @@ public class ShopFacade {
         List<Map<ProductDto, Long>> productsWithCount = mostFavorites.stream()
                                                                      .map(mostFavorite -> {
                                                                          Map<ProductDto, Long> productWithCount = new HashMap<>();
-                                                                         Optional<Long> productId = mostFavorite.keySet().stream().findFirst();
-                                                                         productId.ifPresent(id -> productWithCount.put(productService.getProductDto(id), mostFavorite.get(id)));
+//                                                                         Optional<Long> productId = mostFavorite.keySet().stream().findFirst();
+//                                                                         productId.ifPresent(value -> productWithCount.put(productService.getProductDto(value), mostFavorite.get(value)));
 //   not working in test                                                 productWithCount.put(productService.getProductDto(mostFavorite.get(PRODUCT_ID)), mostFavorite.get(COUNT));
+                                                                         productWithCount.put(productService.getProductDto(mostFavorite.get(PRODUCT_ID)), mostFavorite.get(COUNT));
                                                                          return productWithCount;
                                                                      })
                                                                      .toList();
