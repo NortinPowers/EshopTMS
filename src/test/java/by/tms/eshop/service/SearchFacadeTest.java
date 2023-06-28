@@ -131,8 +131,31 @@ class SearchFacadeTest {
         }
     }
 
-    @Test
-    void setPagination() {
+    @Nested
+    class Pagination{
+
+        @Test
+        void test_setPagination_NullSessionAttribute() {
+        }
+        @Test
+        void test_setPagination_NotNullFoundProducts() {
+        }
+        @Test
+        void test_setPagination_NotNullFoundProductsButEmpty() {
+        }
+        @Test
+        void test_setPagination_NotNullFilterFoundProducts() {
+        }
+        @Test
+        void test_setPagination_NotNullFilterFoundProductsButEmpty() {
+        }
+        @Test
+        void test_setPagination_NotNullFoundProductsAndFilterFoundProducts() {
+        }
+        @Test
+        void test_setPagination_NotNullFoundProductsAndFilterFoundProductsButEmpty() {
+        }
+
     }
 
     @Test
