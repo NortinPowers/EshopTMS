@@ -50,7 +50,6 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -374,31 +373,21 @@ class ShopFacadeTest {
         }
     }
 
-    @Disabled
     @Test
     void test_getAdminPage() {
         Long productOneId = 1L;
         Long productOneCount = 3L;
         Map<Long, Long> mostFavoriteOne = Map.of(productOneId, productOneCount);
-        Long productTwoId = 2L;
-        Long productTwoCount = 2L;
-        Map<Long, Long> mostFavoriteTwo = Map.of(productTwoId, productTwoCount);
-        List<Map<Long, Long>> mostFavorites = List.of(mostFavoriteOne, mostFavoriteTwo);
+        List<Map<Long, Long>> mostFavorites = List.of(mostFavoriteOne);
         ProductDto productDtoOne = getProductDto(productOneId);
-        ProductDto productDtoTwo = getProductDto(productTwoId);
-        List<Map<ProductDto, Long>> productsWithCount = List.of(Map.of(productDtoOne, productOneCount), Map.of(productDtoTwo, productTwoCount));
+        List<Map<ProductDto, Long>> productsWithCount = List.of(Map.of(productDtoOne, productOneCount));
 
         when(cartService.getMostFavorite()).thenReturn(mostFavorites);
-        when(productService.getProductDto(productOneId)).thenReturn(productDtoOne);
-        when(productService.getProductDto(productTwoId)).thenReturn(productDtoTwo);
+        when(productService.getProductDto(any())).thenReturn(productDtoOne);
+        when(productService.getCount(any())).thenReturn(productOneCount);
         shopFacade.getAdminPage(modelAndView);
 
         assertEquals(productsWithCount, modelAndView.getModel().get(PRODUCTS));
-        //need your comment: PRODUCTS -> [{null=null},{null=null}] if
-        // productWithCount.put(productService.getProductDto(mostFavorite.get(PRODUCT_ID)), mostFavorite.get(COUNT)); in stream
-        //  where PRODUCT_ID and COUNT : productId and count
-        // @Query("SELECT new map(product.id as productId, COUNT(product.id) as count) FROM Cart WHERE favorite = true GROUP BY product.id ORDER BY COUNT(product.id) DESC LIMIT 3")
-        //    List<Map<Long, Long>> getMostFavorite();
         assertEquals(ADMIN_INFO, modelAndView.getViewName());
     }
 

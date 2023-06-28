@@ -153,10 +153,8 @@ public class ShopFacade {
         List<Map<ProductDto, Long>> productsWithCount = mostFavorites.stream()
                                                                      .map(mostFavorite -> {
                                                                          Map<ProductDto, Long> productWithCount = new HashMap<>();
-//                                                                         Optional<Long> productId = mostFavorite.keySet().stream().findFirst();
-//                                                                         productId.ifPresent(value -> productWithCount.put(productService.getProductDto(value), mostFavorite.get(value)));
-//   not working in test                                                 productWithCount.put(productService.getProductDto(mostFavorite.get(PRODUCT_ID)), mostFavorite.get(COUNT));
-                                                                         productWithCount.put(productService.getProductDto(mostFavorite.get(PRODUCT_ID)), mostFavorite.get(COUNT));
+                                                                         productWithCount.put(productService.getProductDto(mostFavorite.get(PRODUCT_ID)), productService.getCount(mostFavorite.get(COUNT)));
+//                                                                         productWithCount.put(productService.getProductDto(mostFavorite.get(PRODUCT_ID)), mostFavorite.get(COUNT));
                                                                          return productWithCount;
                                                                      })
                                                                      .toList();

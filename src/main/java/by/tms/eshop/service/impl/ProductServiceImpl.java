@@ -89,6 +89,11 @@ public class ProductServiceImpl implements ProductService {
         product.setPrice(productDto.getPrice());
     }
 
+    @Override
+    public Long getCount(Long count) {
+        return count;
+    }
+
     private Set<ProductDto> convertToProductDtos(Set<Product> convertedProducts) {
         Set<ProductDto> products = new LinkedHashSet<>();
         for (Product product : convertedProducts) {
