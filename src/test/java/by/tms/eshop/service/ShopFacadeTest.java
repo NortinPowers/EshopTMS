@@ -240,7 +240,7 @@ class ShopFacadeTest {
     }
 
     @Nested
-    class PathFromAddCart {
+    class TestGetPathFromAddCart {
 
         private final String shopFlagElse = "someFlag";
         private final String shopFlagTrue = TRUE;
@@ -303,7 +303,7 @@ class ShopFacadeTest {
     }
 
     @Nested
-    class PathFromAddFavorite {
+    class TestGetPathFromAddFavorite {
 
         @Test
         void test_getPathFromAddFavoriteByParameters_toSearch_pageNull() {
@@ -337,7 +337,7 @@ class ShopFacadeTest {
     }
 
     @Nested
-    class PageByParam {
+    class TestGetPageByParam {
 
         @Test
         void test_getPageByParam_paramBuy() {
@@ -375,7 +375,7 @@ class ShopFacadeTest {
     }
 
     @Nested
-    class UserEditForm {
+    class TestGetUserEditForm {
 
         @Test
         void test_getUserEditForm_userIsPresent() {
@@ -407,7 +407,7 @@ class ShopFacadeTest {
     }
 
     @Nested
-    class PriceAndRedirectAttributes {
+    class TestSetPriceAndRedirectAttributes {
 
         private final RedirectAttributes attr = new RedirectAttributesModelMap();
 

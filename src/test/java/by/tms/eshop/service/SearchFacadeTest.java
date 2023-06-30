@@ -69,7 +69,7 @@ class SearchFacadeTest {
     }
 
     @Nested
-    class ProductsPageBySearchCondition {
+    class TestGetProductsPageBySearchCondition {
 
         private String searchCondition;
 
@@ -103,7 +103,7 @@ class SearchFacadeTest {
     }
 
     @Nested
-    class SearchFilterResultPagePath {
+    class TestGetSearchFilterResultPagePath {
 
         private final BigDecimal minPrice = new BigDecimal("500");
         private final BigDecimal maxPrice = new BigDecimal("1000");
@@ -158,7 +158,7 @@ class SearchFacadeTest {
     }
 
     @Nested
-    class Pagination {
+    class TestSetPagination {
 
         private final Pageable pageable = PageRequest.of(0, 3);
 
@@ -246,7 +246,7 @@ class SearchFacadeTest {
     }
 
     @Nested
-    class Filter {
+    class TestProcessFilter {
 
         private String filterFlag = SAVE;
         private String filter = "false";

@@ -162,7 +162,7 @@ class ProductServiceImplTest {
     }
 
     @Nested
-    class ViewProductsByCategory {
+    class TestGetViewProductsByCategory {
 
         private final Pageable pageable = PageRequest.of(0, 3);
 
@@ -202,7 +202,7 @@ class ProductServiceImplTest {
     }
 
     @Nested
-    class ViewProduct {
+    class TestGetViewProduct {
 
         @Test
         void tets_getViewProduct_productIsPresent() {
@@ -227,7 +227,7 @@ class ProductServiceImplTest {
     }
 
     @Nested
-    class ProductDtoTest {
+    class TestGetProductDtoTest {
 
         @Test
         void test_getProductDto_isPresent() {
