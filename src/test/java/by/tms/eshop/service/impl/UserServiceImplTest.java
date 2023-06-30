@@ -33,6 +33,7 @@ class UserServiceImplTest {
         String login = user.getLogin();
 
         when(userRepository.findUserByLogin(login)).thenReturn(Optional.of(user));
+
         Optional<User> userByLogin = userService.getUserByLogin(login);
 
         verify(userRepository, atLeastOnce()).findUserByLogin(login);
@@ -42,6 +43,7 @@ class UserServiceImplTest {
     @Test
     void test_addUser() {
         when(userRepository.saveAndFlush(user)).thenReturn(user);
+
         userService.addUser(user);
 
         verify(userRepository, atLeastOnce()).saveAndFlush(user);
@@ -53,6 +55,7 @@ class UserServiceImplTest {
         String email = user.getEmail();
 
         when(userRepository.findUserByLoginOrEmail(login, email)).thenReturn(Optional.of(user));
+
         Optional<User> verifyUser = userService.getVerifyUser(login, email);
 
         verify(userRepository, atLeastOnce()).findUserByLoginOrEmail(login, email);
@@ -64,6 +67,7 @@ class UserServiceImplTest {
         Long id = user.getId();
 
         when(userRepository.findUserById(id)).thenReturn(Optional.of(user));
+
         Optional<User> userByLogin = userService.getUserById(id);
 
         verify(userRepository, atLeastOnce()).findUserById(id);

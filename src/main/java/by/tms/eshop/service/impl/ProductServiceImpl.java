@@ -3,6 +3,7 @@ package by.tms.eshop.service.impl;
 import static by.tms.eshop.utils.Constants.Attributes.URL;
 import static by.tms.eshop.utils.Constants.MappingPath.PRODUCT;
 import static by.tms.eshop.utils.Constants.MappingPath.PRODUCTS;
+import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_ESHOP;
 import static by.tms.eshop.utils.Constants.PAGE;
 
 import by.tms.eshop.domain.Product;
@@ -35,9 +36,13 @@ public class ProductServiceImpl implements ProductService {
         ModelMap modelMap = new ModelMap();
         Page<ProductDto> page = productRepository.findAllWithPaginationByProductCategory_Category(category, pageable)
                                                  .map(productMapper::convertToProductDto);
-        modelMap.addAttribute(PAGE, page);
-        modelMap.addAttribute(URL, "/products-page?category=" + category + "&size=3");
-        return new ModelAndView(PRODUCTS, modelMap);
+        if (page.isEmpty()) {
+            return new ModelAndView(REDIRECT_TO_ESHOP);
+        } else {
+            modelMap.addAttribute(PAGE, page);
+            modelMap.addAttribute(URL, "/products-page?category=" + category + "&size=3");
+            return new ModelAndView(PRODUCTS, modelMap);
+        }
     }
 
     @Override
@@ -48,14 +53,6 @@ public class ProductServiceImpl implements ProductService {
             modelMap = new ModelMap(Attributes.PRODUCT, productMapper.convertToProductDto(productOptional.get()));
         }
         return new ModelAndView(PRODUCT, modelMap);
-    }
-
-    @Override
-    public ProductDto getProductDto(Long id) {
-        Optional<Product> productOptional = productRepository.findById(id);
-        return productOptional
-                .map(productMapper::convertToProductDto)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
     }
 
     @Override
@@ -87,6 +84,14 @@ public class ProductServiceImpl implements ProductService {
     public void changePrice(ProductDto productDto) {
         Product product = productRepository.getReferenceById(productDto.getId());
         product.setPrice(productDto.getPrice());
+    }
+
+    @Override
+    public ProductDto getProductDto(Long id) {
+        Optional<Product> productOptional = productRepository.findById(id);
+        return productOptional
+                .map(productMapper::convertToProductDto)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
     }
 
     @Override

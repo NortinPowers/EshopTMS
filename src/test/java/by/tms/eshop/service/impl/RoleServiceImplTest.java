@@ -41,6 +41,7 @@ class RoleServiceImplTest {
 
         when(roleRepository.findRoleByRole(testRole)).thenReturn(Optional.of(role));
         when(roleMapper.convertToRoleDto(role)).thenReturn(roleDto);
+
         RoleDto foundRole = roleService.getRole(testRole);
 
         assertEquals(testRole, foundRole.getRole());

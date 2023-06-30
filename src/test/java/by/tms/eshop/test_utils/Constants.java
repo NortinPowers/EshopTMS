@@ -15,5 +15,5 @@ public class Constants {
     public static final String ROLE_USER = "ROLE_USER";
     public static final String SECRET_QWERTY = "secret qwerty";
     public static final String TV = "tv";
-
+    public static final String PHONE = "phone";
 }

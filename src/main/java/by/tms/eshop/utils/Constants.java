@@ -42,6 +42,7 @@ public class Constants {
         public static final String ERROR_403 = "error/error-403";
         public static final String SOME_ERROR = "error/some-error";
         public static final String REDIRECT_TO_CART = "redirect:/cart";
+        public static final String REDIRECT_TO_ESHOP = "redirect:/eshop";
         public static final String REDIRECT_TO_ADMIN = "redirect:/admin";
         public static final String REDIRECT_TO_ACCOUNT = "redirect:/account";
         public static final String REDIRECT_TO_ERROR_500 = "redirect:/error-500";
@@ -49,7 +50,7 @@ public class Constants {
         public static final String REDIRECT_TO_FAVORITES = "redirect:/favorites";
         public static final String REDIRECT_TO_SEARCH_RESULT_SAVE = "redirect:/search?result=save";
         public static final String REDIRECT_TO_SEARCH_FILTER_TRUE_RESULT_SAVE = "redirect:/search?filter=true&result=save";
-        public static final String REDIRECT_TO_PRODUCT_WITH_PARAM = "redirect:/product/";
+        public static final String REDIRECT_TO_PRODUCT = "redirect:/product/";
         public static final String REDIRECT_TO_PRODUCTS_PAGE_CATEGORY_WITH_PARAM = "redirect:/products-page?category=";
     }
 

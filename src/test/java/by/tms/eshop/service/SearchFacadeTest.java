@@ -84,6 +84,7 @@ class SearchFacadeTest {
             Set<ProductDto> products = Set.of(productDto);
 
             when(productService.getFoundedProducts(searchCondition)).thenReturn(products);
+
             doProductsPageBySearchCondition();
 
             assertEquals(products, session.getAttribute(FOUND_PRODUCTS));
@@ -133,6 +134,7 @@ class SearchFacadeTest {
             ((MockHttpServletRequest) request).setSession(session);
 
             when(productService.selectProductsFromCategoryByFilter(category, minPrice, maxPrice)).thenReturn(products);
+
             doSearchFilterResultPagePath(category);
 
             assertEquals(products, session.getAttribute(FOUND_PRODUCTS));
@@ -147,6 +149,7 @@ class SearchFacadeTest {
             ((MockHttpServletRequest) request).setSession(session);
 
             when(productService.selectAllProductsByFilter(minPrice, maxPrice)).thenReturn(products);
+
             doSearchFilterResultPagePath(category);
 
             assertEquals(products, session.getAttribute(FOUND_PRODUCTS));
@@ -158,6 +161,14 @@ class SearchFacadeTest {
     class Pagination {
 
         private final Pageable pageable = PageRequest.of(0, 3);
+
+        private void doPagination() {
+            searchFacade.setPagination(session, pageable, modelAndView);
+        }
+
+        private int getSize(ModelAndView modelAndView) {
+            return ((Page<ProductDto>) modelAndView.getModel().get(PAGE)).getContent().size();
+        }
 
         @Test
         void test_setPagination_NullSessionAttribute() {
@@ -232,14 +243,6 @@ class SearchFacadeTest {
             assertEquals(filterFoundProducts.size(), getSize(modelAndView));
             assertNull(modelAndView.getModelMap().get(URL));
         }
-
-        private void doPagination() {
-            searchFacade.setPagination(session, pageable, modelAndView);
-        }
-
-        private int getSize(ModelAndView modelAndView) {
-            return ((Page<ProductDto>) modelAndView.getModel().get(PAGE)).getContent().size();
-        }
     }
 
     @Nested
@@ -247,6 +250,10 @@ class SearchFacadeTest {
 
         private String filterFlag = SAVE;
         private String filter = "false";
+
+        private void doFilter() {
+            searchFacade.processFilter(session, filterFlag, filter);
+        }
 
         @Test
         void test_processFilter_filterFlagSaveTrue() {
@@ -284,10 +291,6 @@ class SearchFacadeTest {
             assertEquals(foundProducts, session.getAttribute(FOUND_PRODUCTS));
             assertEquals(filterFoundProducts, session.getAttribute(FILTER_FOUND_PRODUCTS));
             assertNotNull(session.getAttribute(FILTER));
-        }
-
-        private void doFilter() {
-            searchFacade.processFilter(session, filterFlag, filter);
         }
     }
 }

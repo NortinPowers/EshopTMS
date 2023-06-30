@@ -20,8 +20,8 @@ import static by.tms.eshop.utils.Constants.MappingPath.EDIT;
 import static by.tms.eshop.utils.Constants.MappingPath.ESHOP;
 import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_CART;
 import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_FAVORITES;
+import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_PRODUCT;
 import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_PRODUCTS_PAGE_CATEGORY_WITH_PARAM;
-import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_PRODUCT_WITH_PARAM;
 import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_SEARCH_RESULT_SAVE;
 import static by.tms.eshop.utils.Constants.MappingPath.SUCCESS_BUY;
 import static by.tms.eshop.utils.Constants.PRODUCT_PAGE_SIZE;
@@ -150,10 +150,10 @@ class ShopFacadeTest {
         when(roleService.getRole(ROLE_USER)).thenReturn(RoleDto.builder().role(ROLE_USER).build());
         when(userMapper.convetrToUser(userFormDto)).thenReturn(user);
         doNothing().when(userService).addUser(user);
+
         shopFacade.createUser(userFormDto);
 
         verify(userMapper).convetrToUser(captor.capture());
-
         UserFormDto value = captor.getValue();
         assertEquals(ROLE_USER, value.getRoleDto().getRole());
         assertEquals(SECRET_QWERTY, value.getPassword());
@@ -166,6 +166,7 @@ class ShopFacadeTest {
         when(securityContext.getAuthentication()).thenReturn(authentication);
         when(authentication.getPrincipal()).thenReturn(customUserDetail);
         when(customUserDetail.getUser()).thenReturn(userMock);
+
         shopFacade.editUser(userFormDto);
 
         verify(userMock).setName(userFormDto.getName());
@@ -184,6 +185,7 @@ class ShopFacadeTest {
         when(cartService.getPurchasedProducts(userId, location)).thenReturn(productsDto);
         doNothing().when(orderService).saveUserOrder(userId, productsDto);
         doNothing().when(cartService).deleteCartProductsAfterBuy(userId);
+
         shopFacade.carriesPurchase(userId);
 
         verify(cartService, atLeastOnce()).getPurchasedProducts(userId, location);
@@ -199,6 +201,7 @@ class ShopFacadeTest {
         Integer page = null;
 
         when(productService.getProductCategoryValue(any())).thenReturn(category);
+
         shopFacade.getPathFromAddFavoriteByParameters(productId, currentLocation, category, page);
 
         modelAndView = shopFacade.getModelAndViewByParams(productId, currentLocation, page);
@@ -210,6 +213,7 @@ class ShopFacadeTest {
         List<String> productCategories = List.of("tv", "phone");
 
         when(productCategoryService.getProductCategories()).thenReturn(productCategories);
+
         shopFacade.getEshopView(modelAndView);
 
         assertEquals(productCategories, modelAndView.getModel().get(PRODUCT_CATEGORIES));
@@ -228,6 +232,7 @@ class ShopFacadeTest {
         when(cartService.getMostFavorite()).thenReturn(mostFavorites);
         when(productService.getProductDto(any())).thenReturn(productDtoOne);
         when(productService.getCount(any())).thenReturn(productOneCount);
+
         shopFacade.getAdminPage(modelAndView);
 
         assertEquals(productsWithCount, modelAndView.getModel().get(PRODUCTS));
@@ -272,12 +277,12 @@ class ShopFacadeTest {
 
         @Test
         void test_getPathFromAddCartByParameters_toProduct_pageNull() {
-            assertEquals(REDIRECT_TO_PRODUCT_WITH_PARAM + PRODUCT_ID, shopFacade.getPathFromAddCartByParameters(PRODUCT_ID, shopFlagElse, PRODUCT_PAGE, null));
+            assertEquals(REDIRECT_TO_PRODUCT + PRODUCT_ID, shopFacade.getPathFromAddCartByParameters(PRODUCT_ID, shopFlagElse, PRODUCT_PAGE, null));
         }
 
         @Test
         void test_getPathFromAddCartByParameters_toProduct_pageNotNull() {
-            assertEquals(REDIRECT_TO_PRODUCT_WITH_PARAM + PRODUCT_ID + EXTENSION_PATH, shopFacade.getPathFromAddCartByParameters(PRODUCT_ID, shopFlagElse, PRODUCT_PAGE, PAGE));
+            assertEquals(REDIRECT_TO_PRODUCT + PRODUCT_ID + EXTENSION_PATH, shopFacade.getPathFromAddCartByParameters(PRODUCT_ID, shopFlagElse, PRODUCT_PAGE, PAGE));
         }
 
         @Test
@@ -312,12 +317,12 @@ class ShopFacadeTest {
 
         @Test
         void test_getPathFromAddFavoriteByParameters_toProduct_pageNull() {
-            assertEquals(REDIRECT_TO_PRODUCT_WITH_PARAM + PRODUCT_ID, shopFacade.getPathFromAddFavoriteByParameters(PRODUCT_ID, PRODUCT_PAGE, PRODUCT_CATEGORY, null));
+            assertEquals(REDIRECT_TO_PRODUCT + PRODUCT_ID, shopFacade.getPathFromAddFavoriteByParameters(PRODUCT_ID, PRODUCT_PAGE, PRODUCT_CATEGORY, null));
         }
 
         @Test
         void test_getPathFromAddFavoriteByParameters_toProduct_pageNotNull() {
-            assertEquals(REDIRECT_TO_PRODUCT_WITH_PARAM + PRODUCT_ID + EXTENSION_PATH, shopFacade.getPathFromAddFavoriteByParameters(PRODUCT_ID, PRODUCT_PAGE, PRODUCT_CATEGORY, PAGE));
+            assertEquals(REDIRECT_TO_PRODUCT + PRODUCT_ID + EXTENSION_PATH, shopFacade.getPathFromAddFavoriteByParameters(PRODUCT_ID, PRODUCT_PAGE, PRODUCT_CATEGORY, PAGE));
         }
 
         @Test
@@ -345,6 +350,7 @@ class ShopFacadeTest {
             when(customUserDetail.getUser()).thenReturn(userMock);
 
             shopFacade.getPageByParam(param, modelAndView);
+
             assertEquals(SUCCESS_BUY, modelAndView.getViewName());
 
             SecurityContextHolder.clearContext();
@@ -361,6 +367,7 @@ class ShopFacadeTest {
             when(customUserDetail.getUser()).thenReturn(userMock);
 
             shopFacade.getPageByParam(param, modelAndView);
+
             assertEquals(REDIRECT_TO_CART, modelAndView.getViewName());
 
             SecurityContextHolder.clearContext();
@@ -380,6 +387,7 @@ class ShopFacadeTest {
 
             when(userService.getUserById(userId)).thenReturn(Optional.of(user));
             when(userMapper.convetrToUserFormDto(user)).thenReturn(userFormDto);
+
             shopFacade.getUserEditForm(userId, modelAndView);
 
             assertEquals(userFormDto, modelAndView.getModel().get(USER));
@@ -391,6 +399,7 @@ class ShopFacadeTest {
             Long userId = 1L;
 
             when(userService.getUserById(userId)).thenReturn(Optional.empty());
+
             shopFacade.getUserEditForm(userId, modelAndView);
 
             assertEquals(ACCOUNT, modelAndView.getViewName());
@@ -409,6 +418,7 @@ class ShopFacadeTest {
                                               .build();
 
             doNothing().when(productService).changePrice(productDto);
+
             shopFacade.setPriceAndRedirectAttributes(productDto, attr);
 
             assertTrue(attr.getFlashAttributes().containsKey(SUCCESS));
@@ -422,6 +432,7 @@ class ShopFacadeTest {
                                               .build();
 
             doNothing().when(productService).changePrice(productDto);
+
             shopFacade.setPriceAndRedirectAttributes(productDto, attr);
 
             assertTrue(attr.getFlashAttributes().containsKey(ERROR));

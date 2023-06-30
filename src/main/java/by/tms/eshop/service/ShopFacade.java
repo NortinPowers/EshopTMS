@@ -14,8 +14,8 @@ import static by.tms.eshop.utils.Constants.MappingPath.EDIT;
 import static by.tms.eshop.utils.Constants.MappingPath.ESHOP;
 import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_CART;
 import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_FAVORITES;
+import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_PRODUCT;
 import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_PRODUCTS_PAGE_CATEGORY_WITH_PARAM;
-import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_PRODUCT_WITH_PARAM;
 import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_SEARCH_RESULT_SAVE;
 import static by.tms.eshop.utils.Constants.MappingPath.SUCCESS_BUY;
 import static by.tms.eshop.utils.Constants.PRODUCT_ID;
@@ -75,7 +75,7 @@ public class ShopFacade {
         } else if (Objects.equals(location, SEARCH)) {
             path = REDIRECT_TO_SEARCH_RESULT_SAVE;
         } else if (Objects.equals(location, PRODUCT_PAGE)) {
-            path = REDIRECT_TO_PRODUCT_WITH_PARAM + productId;
+            path = REDIRECT_TO_PRODUCT + productId;
         } else {
             String productCategory = productService.getProductCategoryValue(productId);
             path = REDIRECT_TO_PRODUCTS_PAGE_CATEGORY_WITH_PARAM + productCategory + AND_SIZE + PRODUCT_PAGE_SIZE;
@@ -88,7 +88,7 @@ public class ShopFacade {
         if (Objects.equals(location, SEARCH)) {
             path = REDIRECT_TO_SEARCH_RESULT_SAVE;
         } else if (Objects.equals(location, PRODUCT_PAGE)) {
-            path = REDIRECT_TO_PRODUCT_WITH_PARAM + productId;
+            path = REDIRECT_TO_PRODUCT + productId;
         } else {
             path = REDIRECT_TO_PRODUCTS_PAGE_CATEGORY_WITH_PARAM + productCategory + AND_SIZE + PRODUCT_PAGE_SIZE;
         }
@@ -154,7 +154,6 @@ public class ShopFacade {
                                                                      .map(mostFavorite -> {
                                                                          Map<ProductDto, Long> productWithCount = new HashMap<>();
                                                                          productWithCount.put(productService.getProductDto(mostFavorite.get(PRODUCT_ID)), productService.getCount(mostFavorite.get(COUNT)));
-//                                                                         productWithCount.put(productService.getProductDto(mostFavorite.get(PRODUCT_ID)), mostFavorite.get(COUNT));
                                                                          return productWithCount;
                                                                      })
                                                                      .toList();

@@ -31,6 +31,7 @@ class UserRepositoryTest {
             user.setLogin(login);
 
             when(userRepository.findUserByLogin(login)).thenReturn(Optional.of(user));
+
             foundUser = userRepository.findUserByLogin(login);
 
             assertEquals(user, foundUser.get());
@@ -42,6 +43,7 @@ class UserRepositoryTest {
             login = "nonExistentUser";
 
             when(userRepository.findUserByLogin(login)).thenReturn(Optional.empty());
+
             foundUser = userRepository.findUserByLogin(login);
 
             assertFalse(foundUser.isPresent());
@@ -57,6 +59,7 @@ class UserRepositoryTest {
             user.setId(id);
 
             when(userRepository.findUserById(id)).thenReturn(Optional.of(user));
+
             foundUser = userRepository.findUserById(id);
 
             assertEquals(user, foundUser.get());
@@ -66,6 +69,7 @@ class UserRepositoryTest {
         @Test
         void test_findUserById_isNotPresent() {
             when(userRepository.findUserById(any())).thenReturn(Optional.empty());
+
             foundUser = userRepository.findUserById(any());
 
             assertFalse(foundUser.isPresent());
@@ -83,6 +87,7 @@ class UserRepositoryTest {
             user.setEmail(email);
 
             when(userRepository.findUserByLoginOrEmail(login, email)).thenReturn(Optional.of(user));
+
             foundUser = userRepository.findUserByLoginOrEmail(login, email);
 
             assertEquals(user, foundUser.get());
@@ -95,6 +100,7 @@ class UserRepositoryTest {
             user.setEmail(email);
 
             when(userRepository.findUserByLoginOrEmail(login, email)).thenReturn(Optional.of(user));
+
             foundUser = userRepository.findUserByLoginOrEmail(login, email);
 
             assertEquals(user, foundUser.get());
@@ -109,6 +115,7 @@ class UserRepositoryTest {
             user.setEmail(email);
 
             when(userRepository.findUserByLoginOrEmail(login, email)).thenReturn(Optional.empty());
+
             foundUser = userRepository.findUserByLoginOrEmail(login, email);
 
             assertFalse(foundUser.isPresent());
