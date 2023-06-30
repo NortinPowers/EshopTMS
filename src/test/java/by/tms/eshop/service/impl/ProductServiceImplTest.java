@@ -107,9 +107,9 @@ class ProductServiceImplTest {
         when(productMapper.convertToProductDto(productTwo)).thenReturn(productDtoTwo);
         when(productMapper.convertToProductDto(productThree)).thenReturn(productDtoThree);
 
-        Set<ProductDto> foundedProducts = productService.getFoundedProducts(condition);
+        Set<ProductDto> foundProducts = productService.getFoundedProducts(condition);
 
-        assertEquals(result, foundedProducts);
+        assertEquals(result, foundProducts);
         verify(productRepository, atLeastOnce()).getProductsByConditionInName(condition);
         verify(productRepository, atLeastOnce()).getProductsByConditionInInfo(condition);
     }
@@ -123,9 +123,9 @@ class ProductServiceImplTest {
         when(productMapper.convertToProductDto(productOne)).thenReturn(productDtoOne);
         when(productMapper.convertToProductDto(productThree)).thenReturn(productDtoThree);
 
-        Set<ProductDto> foundedProducts = productService.selectAllProductsByFilter(minPrice, maxPrice);
+        Set<ProductDto> foundProducts = productService.selectAllProductsByFilter(minPrice, maxPrice);
 
-        assertEquals(productDtos, foundedProducts);
+        assertEquals(productDtos, foundProducts);
         verify(productRepository, atLeastOnce()).selectAllProductsByFilter(minPrice, maxPrice);
         verify(productMapper, atLeastOnce()).convertToProductDto(productOne);
         verify(productMapper, atLeastOnce()).convertToProductDto(productThree);
@@ -140,9 +140,9 @@ class ProductServiceImplTest {
         when(productRepository.selectProductsFromCategoryByFilter(category, minPrice, maxPrice)).thenReturn(products);
         when(productMapper.convertToProductDto(productOne)).thenReturn(productDtoOne);
 
-        Set<ProductDto> foundedProducts = productService.selectProductsFromCategoryByFilter(category, minPrice, maxPrice);
+        Set<ProductDto> foundProducts = productService.selectProductsFromCategoryByFilter(category, minPrice, maxPrice);
 
-        assertEquals(productDtos, foundedProducts);
+        assertEquals(productDtos, foundProducts);
         verify(productRepository, atLeastOnce()).selectProductsFromCategoryByFilter(category, minPrice, maxPrice);
         verify(productMapper, atLeastOnce()).convertToProductDto(productOne);
     }

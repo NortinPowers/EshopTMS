@@ -116,10 +116,10 @@ class SearchFacadeTest {
 
         @Test
         void test_getSearchFilterResultPagePath_foundProductsNotEmpty() {
-            request.setAttribute(MIN_PRICE, minPrice);
-            request.setAttribute(MAX_PRICE, maxPrice);
-            session.setAttribute(FOUND_PRODUCTS, products);
+            ((MockHttpServletRequest) request).setParameter(MIN_PRICE, String.valueOf(minPrice));
+            ((MockHttpServletRequest) request).setParameter(MAX_PRICE, String.valueOf(maxPrice));
             ((MockHttpServletRequest) request).setSession(session);
+            session.setAttribute(FOUND_PRODUCTS, products);
 
             doSearchFilterResultPagePath(category);
 
@@ -129,8 +129,8 @@ class SearchFacadeTest {
 
         @Test
         void test_getSearchFilterResultPagePath_foundProductsEmpty_allCategories() {
-            request.setAttribute(MIN_PRICE, minPrice);
-            request.setAttribute(MAX_PRICE, maxPrice);
+            ((MockHttpServletRequest) request).setParameter(MIN_PRICE, String.valueOf(minPrice));
+            ((MockHttpServletRequest) request).setParameter(MAX_PRICE, String.valueOf(maxPrice));
             ((MockHttpServletRequest) request).setSession(session);
 
             when(productService.selectProductsFromCategoryByFilter(category, minPrice, maxPrice)).thenReturn(products);
@@ -144,8 +144,8 @@ class SearchFacadeTest {
         @Test
         void test_getSearchFilterResultPagePath_foundProductsEmpty_currentCategory() {
             String category = ALL;
-            request.setAttribute(MIN_PRICE, minPrice);
-            request.setAttribute(MAX_PRICE, maxPrice);
+            ((MockHttpServletRequest) request).setParameter(MIN_PRICE, String.valueOf(minPrice));
+            ((MockHttpServletRequest) request).setParameter(MAX_PRICE, String.valueOf(maxPrice));
             ((MockHttpServletRequest) request).setSession(session);
 
             when(productService.selectAllProductsByFilter(minPrice, maxPrice)).thenReturn(products);

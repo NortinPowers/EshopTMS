@@ -37,8 +37,10 @@ public class OrderServiceImpl implements OrderService {
                                      .id(id)
                                      .build())
                            .build();
-        orderRepository.save(order);
-        return order.getId();
+//        orderRepository.save(order);
+        Order orderWithId = orderRepository.save(order);
+        return orderWithId.getId();
+//        return order.getId();
     }
 
     @Override

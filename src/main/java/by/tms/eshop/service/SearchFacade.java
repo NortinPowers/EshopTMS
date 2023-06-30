@@ -127,7 +127,7 @@ public class SearchFacade {
     }
 
     private BigDecimal getPrice(HttpServletRequest request, String param, BigDecimal defaultValue) {
-        String value = request.getAttribute(param).toString();
+        String value = request.getParameter(param);
         return StringUtils.isNotBlank(value) ? new BigDecimal(value) : defaultValue;
     }
 
