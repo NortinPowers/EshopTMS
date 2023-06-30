@@ -29,7 +29,7 @@ class UserServiceImplTest {
                             .build();
 
     @Test
-    void getUserByLogin() {
+    void test_getUserByLogin() {
         String login = user.getLogin();
 
         when(userRepository.findUserByLogin(login)).thenReturn(Optional.of(user));
@@ -40,7 +40,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void addUser() {
+    void test_addUser() {
         when(userRepository.saveAndFlush(user)).thenReturn(user);
         userService.addUser(user);
 
@@ -48,7 +48,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void getVerifyUser() {
+    void test_getVerifyUser() {
         String login = user.getLogin();
         String email = user.getEmail();
 
@@ -60,7 +60,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void getUserById() {
+    void test_getUserById() {
         Long id = user.getId();
 
         when(userRepository.findUserById(id)).thenReturn(Optional.of(user));
