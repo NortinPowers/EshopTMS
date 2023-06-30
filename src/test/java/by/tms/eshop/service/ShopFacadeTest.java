@@ -148,12 +148,12 @@ class ShopFacadeTest {
 
         when(passwordEncoder.encode(userFormDto.getPassword())).thenReturn(SECRET_QWERTY);
         when(roleService.getRole(ROLE_USER)).thenReturn(RoleDto.builder().role(ROLE_USER).build());
-        when(userMapper.convetrToUser(userFormDto)).thenReturn(user);
+        when(userMapper.convertToUser(userFormDto)).thenReturn(user);
         doNothing().when(userService).addUser(user);
 
         shopFacade.createUser(userFormDto);
 
-        verify(userMapper).convetrToUser(captor.capture());
+        verify(userMapper).convertToUser(captor.capture());
         UserFormDto value = captor.getValue();
         assertEquals(ROLE_USER, value.getRoleDto().getRole());
         assertEquals(SECRET_QWERTY, value.getPassword());
@@ -386,7 +386,7 @@ class ShopFacadeTest {
             userFormDto.setName(user.getName());
 
             when(userService.getUserById(userId)).thenReturn(Optional.of(user));
-            when(userMapper.convetrToUserFormDto(user)).thenReturn(userFormDto);
+            when(userMapper.convertToUserFormDto(user)).thenReturn(userFormDto);
 
             shopFacade.getUserEditForm(userId, modelAndView);
 

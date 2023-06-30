@@ -119,7 +119,7 @@ public class ShopFacade {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         RoleDto roleUser = roleService.getRole("ROLE_USER");
         user.setRoleDto(roleUser);
-        User userEntity = userMapper.convetrToUser(user);
+        User userEntity = userMapper.convertToUser(user);
         userService.addUser(userEntity);
     }
 
@@ -140,7 +140,7 @@ public class ShopFacade {
     public void getUserEditForm(Long id, ModelAndView modelAndView) {
         if (userService.getUserById(id).isPresent()) {
             User user = userService.getUserById(id).get();
-            UserFormDto userFormDto = userMapper.convetrToUserFormDto(user);
+            UserFormDto userFormDto = userMapper.convertToUserFormDto(user);
             modelAndView.addObject(USER, userFormDto);
             modelAndView.setViewName(EDIT);
         } else {
