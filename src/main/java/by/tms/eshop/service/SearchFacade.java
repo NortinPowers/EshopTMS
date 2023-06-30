@@ -127,21 +127,20 @@ public class SearchFacade {
     }
 
     private BigDecimal getPrice(HttpServletRequest request, String param, BigDecimal defaultValue) {
-//        String value = request.getParameter(param);
         String value = request.getAttribute(param).toString();
         return StringUtils.isNotBlank(value) ? new BigDecimal(value) : defaultValue;
-    }
-
-    private void setFilterAttribute(HttpSession session, String filter) {
-        if (TRUE.equals(filter)) {
-            session.setAttribute(FILTER, new Object());
-        }
     }
 
     private void removeUnsavedAttribute(HttpSession session, String filterFlag) {
         if (!SAVE.equals(filterFlag)) {
             session.removeAttribute(FOUND_PRODUCTS);
             session.removeAttribute(FILTER_FOUND_PRODUCTS);
+        }
+    }
+
+    private void setFilterAttribute(HttpSession session, String filter) {
+        if (TRUE.equals(filter)) {
+            session.setAttribute(FILTER, new Object());
         }
     }
 

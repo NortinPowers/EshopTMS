@@ -108,70 +108,13 @@ class ShopFacadeTest {
 
     private final User user = User.builder().build();
     private final UserFormDto userFormDto = UserFormDto.builder().build();
+
     private ModelAndView modelAndView = new ModelAndView();
 
-    @Nested
-    class PathFromAddCart {
-
-        private final String shopFlagElse = "someFlag";
-        private final String shopFlagTrue = TRUE;
-
-        @Test
-        void test_getPathFromAddCartByParameters_toCart_pageNull() {
-            assertEquals(REDIRECT_TO_CART, shopFacade.getPathFromAddCartByParameters(PRODUCT_ID, shopFlagTrue, LOCATION, null));
-        }
-
-        @Test
-        void test_getPathFromAddCartByParameters_toCart_pageNotNull() {
-            assertEquals(REDIRECT_TO_CART + EXTENSION_PATH, shopFacade.getPathFromAddCartByParameters(PRODUCT_ID, shopFlagTrue, LOCATION, PAGE));
-        }
-
-        @Test
-        void test_getPathFromAddCartByParameters_toFavorites_pageNull() {
-            assertEquals(REDIRECT_TO_FAVORITES, shopFacade.getPathFromAddCartByParameters(PRODUCT_ID, shopFlagElse, FAVORITE, null));
-        }
-
-        @Test
-        void test_getPathFromAddCartByParameters_toFavorites_pageNotNull() {
-            assertEquals(REDIRECT_TO_FAVORITES + EXTENSION_PATH, shopFacade.getPathFromAddCartByParameters(PRODUCT_ID, shopFlagElse, FAVORITE, PAGE));
-        }
-
-        @Test
-        void test_getPathFromAddCartByParameters_toSearch_pageNull() {
-            assertEquals(REDIRECT_TO_SEARCH_RESULT_SAVE, shopFacade.getPathFromAddCartByParameters(PRODUCT_ID, shopFlagElse, SEARCH, null));
-        }
-
-        @Test
-        void test_getPathFromAddCartByParameters_toSearch_pageNotNull() {
-            assertEquals(REDIRECT_TO_SEARCH_RESULT_SAVE + EXTENSION_PATH, shopFacade.getPathFromAddCartByParameters(PRODUCT_ID, shopFlagElse, SEARCH, PAGE));
-        }
-
-        @Test
-        void test_getPathFromAddCartByParameters_toProduct_pageNull() {
-            assertEquals(REDIRECT_TO_PRODUCT_WITH_PARAM + PRODUCT_ID, shopFacade.getPathFromAddCartByParameters(PRODUCT_ID, shopFlagElse, PRODUCT_PAGE, null));
-        }
-
-        @Test
-        void test_getPathFromAddCartByParameters_toProduct_pageNotNull() {
-            assertEquals(REDIRECT_TO_PRODUCT_WITH_PARAM + PRODUCT_ID + EXTENSION_PATH, shopFacade.getPathFromAddCartByParameters(PRODUCT_ID, shopFlagElse, PRODUCT_PAGE, PAGE));
-        }
-
-
-        @Test
-        void test_getPathFromAddCartByParameters_toProducts_pageNull() {
-            when(productService.getProductCategoryValue(PRODUCT_ID)).thenReturn(PRODUCT_CATEGORY);
-
-            assertEquals(REDIRECT_TO_PRODUCTS_PAGE_CATEGORY_WITH_PARAM + PRODUCT_CATEGORY + AND_SIZE + PRODUCT_PAGE_SIZE, shopFacade.getPathFromAddCartByParameters(PRODUCT_ID, shopFlagElse, LOCATION, null));
-            verify(productService, atLeastOnce()).getProductCategoryValue(any());
-        }
-
-        @Test
-        void test_getPathFromAddCartByParameters_toProducts_pageNotNull() {
-            when(productService.getProductCategoryValue(PRODUCT_ID)).thenReturn(PRODUCT_CATEGORY);
-
-            assertEquals(REDIRECT_TO_PRODUCTS_PAGE_CATEGORY_WITH_PARAM + PRODUCT_CATEGORY + AND_SIZE + PRODUCT_PAGE_SIZE + EXTENSION_PATH, shopFacade.getPathFromAddCartByParameters(PRODUCT_ID, shopFlagElse, LOCATION, PAGE));
-            verify(productService, atLeastOnce()).getProductCategoryValue(any());
-        }
+    private static ProductDto getProductDto(Long id) {
+        return ProductDto.builder()
+                         .id(id)
+                         .build();
     }
 
     @Test
@@ -248,6 +191,112 @@ class ShopFacadeTest {
         verify(cartService, atLeastOnce()).deleteCartProductsAfterBuy(userId);
     }
 
+    @Test
+    void test_getModelAndViewByParams_setViewName() {
+        Long productId = PRODUCT_ID;
+        String category = PRODUCT_CATEGORY;
+        String currentLocation = SEARCH;
+        Integer page = null;
+
+        when(productService.getProductCategoryValue(any())).thenReturn(category);
+        shopFacade.getPathFromAddFavoriteByParameters(productId, currentLocation, category, page);
+
+        modelAndView = shopFacade.getModelAndViewByParams(productId, currentLocation, page);
+        assertEquals(REDIRECT_TO_SEARCH_RESULT_SAVE, modelAndView.getViewName());
+    }
+
+    @Test
+    void test_getEshopView() {
+        List<String> productCategories = List.of("tv", "phone");
+
+        when(productCategoryService.getProductCategories()).thenReturn(productCategories);
+        shopFacade.getEshopView(modelAndView);
+
+        assertEquals(productCategories, modelAndView.getModel().get(PRODUCT_CATEGORIES));
+        assertEquals(ESHOP, modelAndView.getViewName());
+    }
+
+    @Test
+    void test_getAdminPage() {
+        Long productOneId = 1L;
+        Long productOneCount = 3L;
+        Map<Long, Long> mostFavoriteOne = Map.of(productOneId, productOneCount);
+        List<Map<Long, Long>> mostFavorites = List.of(mostFavoriteOne);
+        ProductDto productDtoOne = getProductDto(productOneId);
+        List<Map<ProductDto, Long>> productsWithCount = List.of(Map.of(productDtoOne, productOneCount));
+
+        when(cartService.getMostFavorite()).thenReturn(mostFavorites);
+        when(productService.getProductDto(any())).thenReturn(productDtoOne);
+        when(productService.getCount(any())).thenReturn(productOneCount);
+        shopFacade.getAdminPage(modelAndView);
+
+        assertEquals(productsWithCount, modelAndView.getModel().get(PRODUCTS));
+        assertEquals(ADMIN_INFO, modelAndView.getViewName());
+    }
+
+    @Nested
+    class PathFromAddCart {
+
+        private final String shopFlagElse = "someFlag";
+        private final String shopFlagTrue = TRUE;
+
+        @Test
+        void test_getPathFromAddCartByParameters_toCart_pageNull() {
+            assertEquals(REDIRECT_TO_CART, shopFacade.getPathFromAddCartByParameters(PRODUCT_ID, shopFlagTrue, LOCATION, null));
+        }
+
+        @Test
+        void test_getPathFromAddCartByParameters_toCart_pageNotNull() {
+            assertEquals(REDIRECT_TO_CART + EXTENSION_PATH, shopFacade.getPathFromAddCartByParameters(PRODUCT_ID, shopFlagTrue, LOCATION, PAGE));
+        }
+
+        @Test
+        void test_getPathFromAddCartByParameters_toFavorites_pageNull() {
+            assertEquals(REDIRECT_TO_FAVORITES, shopFacade.getPathFromAddCartByParameters(PRODUCT_ID, shopFlagElse, FAVORITE, null));
+        }
+
+        @Test
+        void test_getPathFromAddCartByParameters_toFavorites_pageNotNull() {
+            assertEquals(REDIRECT_TO_FAVORITES + EXTENSION_PATH, shopFacade.getPathFromAddCartByParameters(PRODUCT_ID, shopFlagElse, FAVORITE, PAGE));
+        }
+
+        @Test
+        void test_getPathFromAddCartByParameters_toSearch_pageNull() {
+            assertEquals(REDIRECT_TO_SEARCH_RESULT_SAVE, shopFacade.getPathFromAddCartByParameters(PRODUCT_ID, shopFlagElse, SEARCH, null));
+        }
+
+        @Test
+        void test_getPathFromAddCartByParameters_toSearch_pageNotNull() {
+            assertEquals(REDIRECT_TO_SEARCH_RESULT_SAVE + EXTENSION_PATH, shopFacade.getPathFromAddCartByParameters(PRODUCT_ID, shopFlagElse, SEARCH, PAGE));
+        }
+
+        @Test
+        void test_getPathFromAddCartByParameters_toProduct_pageNull() {
+            assertEquals(REDIRECT_TO_PRODUCT_WITH_PARAM + PRODUCT_ID, shopFacade.getPathFromAddCartByParameters(PRODUCT_ID, shopFlagElse, PRODUCT_PAGE, null));
+        }
+
+        @Test
+        void test_getPathFromAddCartByParameters_toProduct_pageNotNull() {
+            assertEquals(REDIRECT_TO_PRODUCT_WITH_PARAM + PRODUCT_ID + EXTENSION_PATH, shopFacade.getPathFromAddCartByParameters(PRODUCT_ID, shopFlagElse, PRODUCT_PAGE, PAGE));
+        }
+
+        @Test
+        void test_getPathFromAddCartByParameters_toProducts_pageNull() {
+            when(productService.getProductCategoryValue(PRODUCT_ID)).thenReturn(PRODUCT_CATEGORY);
+
+            assertEquals(REDIRECT_TO_PRODUCTS_PAGE_CATEGORY_WITH_PARAM + PRODUCT_CATEGORY + AND_SIZE + PRODUCT_PAGE_SIZE, shopFacade.getPathFromAddCartByParameters(PRODUCT_ID, shopFlagElse, LOCATION, null));
+            verify(productService, atLeastOnce()).getProductCategoryValue(any());
+        }
+
+        @Test
+        void test_getPathFromAddCartByParameters_toProducts_pageNotNull() {
+            when(productService.getProductCategoryValue(PRODUCT_ID)).thenReturn(PRODUCT_CATEGORY);
+
+            assertEquals(REDIRECT_TO_PRODUCTS_PAGE_CATEGORY_WITH_PARAM + PRODUCT_CATEGORY + AND_SIZE + PRODUCT_PAGE_SIZE + EXTENSION_PATH, shopFacade.getPathFromAddCartByParameters(PRODUCT_ID, shopFlagElse, LOCATION, PAGE));
+            verify(productService, atLeastOnce()).getProductCategoryValue(any());
+        }
+    }
+
     @Nested
     class PathFromAddFavorite {
 
@@ -280,20 +329,6 @@ class ShopFacadeTest {
         void test_getPathFromAddFavoriteByParameters_toProducts_pageNotNull() {
             assertEquals(REDIRECT_TO_PRODUCTS_PAGE_CATEGORY_WITH_PARAM + PRODUCT_CATEGORY + AND_SIZE + PRODUCT_PAGE_SIZE + EXTENSION_PATH, shopFacade.getPathFromAddFavoriteByParameters(PRODUCT_ID, LOCATION, PRODUCT_CATEGORY, PAGE));
         }
-    }
-
-    @Test
-    void test_getModelAndViewByParams_setViewName() {
-        Long productId = PRODUCT_ID;
-        String category = PRODUCT_CATEGORY;
-        String currentLocation = SEARCH;
-        Integer page = null;
-
-        when(productService.getProductCategoryValue(any())).thenReturn(category);
-        shopFacade.getPathFromAddFavoriteByParameters(productId, currentLocation, category, page);
-
-        modelAndView = shopFacade.getModelAndViewByParams(productId, currentLocation, page);
-        assertEquals(REDIRECT_TO_SEARCH_RESULT_SAVE, modelAndView.getViewName());
     }
 
     @Nested
@@ -332,17 +367,6 @@ class ShopFacadeTest {
         }
     }
 
-    @Test
-    void test_getEshopView() {
-        List<String> productCategories = List.of("tv", "phone");
-
-        when(productCategoryService.getProductCategories()).thenReturn(productCategories);
-        shopFacade.getEshopView(modelAndView);
-
-        assertEquals(productCategories, modelAndView.getModel().get(PRODUCT_CATEGORIES));
-        assertEquals(ESHOP, modelAndView.getViewName());
-    }
-
     @Nested
     class UserEditForm {
 
@@ -371,24 +395,6 @@ class ShopFacadeTest {
 
             assertEquals(ACCOUNT, modelAndView.getViewName());
         }
-    }
-
-    @Test
-    void test_getAdminPage() {
-        Long productOneId = 1L;
-        Long productOneCount = 3L;
-        Map<Long, Long> mostFavoriteOne = Map.of(productOneId, productOneCount);
-        List<Map<Long, Long>> mostFavorites = List.of(mostFavoriteOne);
-        ProductDto productDtoOne = getProductDto(productOneId);
-        List<Map<ProductDto, Long>> productsWithCount = List.of(Map.of(productDtoOne, productOneCount));
-
-        when(cartService.getMostFavorite()).thenReturn(mostFavorites);
-        when(productService.getProductDto(any())).thenReturn(productDtoOne);
-        when(productService.getCount(any())).thenReturn(productOneCount);
-        shopFacade.getAdminPage(modelAndView);
-
-        assertEquals(productsWithCount, modelAndView.getModel().get(PRODUCTS));
-        assertEquals(ADMIN_INFO, modelAndView.getViewName());
     }
 
     @Nested
@@ -421,11 +427,5 @@ class ShopFacadeTest {
             assertTrue(attr.getFlashAttributes().containsKey(ERROR));
             verify(productService, never()).changePrice(productDto);
         }
-    }
-
-    private static ProductDto getProductDto(Long id) {
-        return ProductDto.builder()
-                         .id(id)
-                         .build();
     }
 }
