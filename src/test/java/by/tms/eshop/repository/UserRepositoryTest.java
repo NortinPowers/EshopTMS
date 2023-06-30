@@ -21,13 +21,13 @@ class UserRepositoryTest {
     private final User user = User.builder().build();
 
     private Optional<User> foundUser;
+    private String login = "testLogin";
 
     @Nested
     class UserByLogin {
 
         @Test
         void test_findUserByLogin_isPresent() {
-            String login = "testLogin";
             user.setLogin(login);
 
             when(userRepository.findUserByLogin(login)).thenReturn(Optional.of(user));
@@ -39,7 +39,7 @@ class UserRepositoryTest {
 
         @Test
         void test_findUserByLogin_isNotPresent() {
-            String login = "nonExistentUser";
+            login = "nonExistentUser";
 
             when(userRepository.findUserByLogin(login)).thenReturn(Optional.empty());
             foundUser = userRepository.findUserByLogin(login);
@@ -75,7 +75,6 @@ class UserRepositoryTest {
     @Nested
     class UserByLoginOrEmail {
 
-        private String login = "testLogin";
         private String email = "testEmail";
 
         @Test

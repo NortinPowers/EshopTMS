@@ -49,9 +49,24 @@ class UserServiceImplTest {
 
     @Test
     void getVerifyUser() {
+        String login = user.getLogin();
+        String email = user.getEmail();
+
+        when(userRepository.findUserByLoginOrEmail(login, email)).thenReturn(Optional.of(user));
+        Optional<User> verifyUser = userService.getVerifyUser(login, email);
+
+        verify(userRepository, atLeastOnce()).findUserByLoginOrEmail(login, email);
+        assertEquals(user.getId(), verifyUser.get().getId());
     }
 
     @Test
     void getUserById() {
+        Long id = user.getId();
+
+        when(userRepository.findUserById(id)).thenReturn(Optional.of(user));
+        Optional<User> userByLogin = userService.getUserById(id);
+
+        verify(userRepository, atLeastOnce()).findUserById(id);
+        assertEquals(user.getLogin(), userByLogin.get().getLogin());
     }
 }
