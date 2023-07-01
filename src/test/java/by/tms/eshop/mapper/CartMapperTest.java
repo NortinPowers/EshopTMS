@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import by.tms.eshop.domain.Cart;
 import by.tms.eshop.dto.CartDto;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -36,16 +37,20 @@ class CartMapperTest {
                                            .cart(true)
                                            .favorite(false)
                                            .build();
+    private final List<Cart> carts = List.of(cart, cart);
+    private final List<CartDto> cartDtos = List.of(cartDto, cartDto);
 
     @Test
-    void convertToCartDto() {
+    void test_convertToCartDto() {
         CartDto convertedCart = cartMapper.convertToCartDto(cart);
 
         assertEquals(cartDto, convertedCart);
     }
 
     @Test
-    void convertToCartDtos() {
-//        cartMapper.convertToCartDtos()
+    void test_convertToCartDtos() {
+        List<CartDto> convertedCartDtos = cartMapper.convertToCartDtos(carts);
+
+        assertEquals(cartDtos, convertedCartDtos);
     }
 }

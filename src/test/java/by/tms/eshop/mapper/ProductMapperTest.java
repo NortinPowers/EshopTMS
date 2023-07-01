@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import by.tms.eshop.domain.Product;
 import by.tms.eshop.dto.ProductDto;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,13 +24,10 @@ class ProductMapperTest {
     }
 
     @Test
-    @Disabled
-//  ? EqualsAndHashCode ProductCategory
     void test_convertToProduct() {
         Product convertedProduct = productMapper.convertToProduct(PRODUCT_DTO);
 
         assertEquals(PRODUCT.getProductCategory(), convertedProduct.getProductCategory());
-
-//        assertEquals(PRODUCT, convertedProduct);
+        assertEquals(PRODUCT, convertedProduct);
     }
 }
