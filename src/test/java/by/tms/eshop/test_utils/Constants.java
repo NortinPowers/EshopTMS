@@ -22,9 +22,11 @@ public class Constants {
     public static final String LOCATION = "someLocation";
     public static final String PRODUCT_CATEGORY = "someCategory";
     public static final String ROLE_USER = "ROLE_USER";
+    public static final String ROLE_ADMIN = "ROLE_ADMIN";
     public static final String SECRET_QWERTY = "secret qwerty";
     public static final String TV = "tv";
     public static final String PHONE = "phone";
+    public static final String TEST_PROPERTY_SOURCE_LOCATIONS = "classpath:application-test.properties";
 
     @UtilityClass
     public class MapperConstants {

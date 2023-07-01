@@ -33,7 +33,6 @@ public class Constants {
         public static final String CREATE_USER = "auth/create-user";
         public static final String SUCCESS_REGISTER = "auth/success-register";
         public static final String ACCOUNT = "account/account";
-        public static final String ADMIN_INFO = "/admin/info";
         public static final String SEARCH_PATH = "search/search";
         public static final String SHOPPING_CART = "cart/shopping-cart";
         public static final String FAVORITES = "favorite/favorites";
@@ -59,6 +58,7 @@ public class Constants {
         public static final String ESHOP = "/eshop";
         public static final String ROOT = "/";
         public static final String ADMIN = "/admin";
+        public static final String ADMIN_INFO = "/admin/info";
         public static final String SEARCH = "/search";
         public static final String SEARCH_FILTER = "/search-filter";
         public static final String SEARCH_PARAM = "/search-param";

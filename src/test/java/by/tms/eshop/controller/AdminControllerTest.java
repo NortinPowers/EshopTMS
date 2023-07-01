@@ -1,5 +1,9 @@
 package by.tms.eshop.controller;
 
+import static by.tms.eshop.test_utils.Constants.TEST_PROPERTY_SOURCE_LOCATIONS;
+import static by.tms.eshop.utils.Constants.ControllerMappingPath.ADMIN_INFO;
+import static by.tms.eshop.utils.Constants.ControllerMappingPath.ERROR_403;
+import static by.tms.eshop.utils.Constants.ControllerMappingPath.LOGIN;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
@@ -21,7 +25,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@TestPropertySource(locations = "classpath:application-test.properties")
+@TestPropertySource(locations = TEST_PROPERTY_SOURCE_LOCATIONS)
 class AdminControllerTest {
 
     @Autowired
@@ -38,7 +42,7 @@ class AdminControllerTest {
     void test_showAdminPage_anonymous_denied() throws Exception {
         mockMvc.perform(get("/admin"))
                .andExpect(status().is3xxRedirection())
-               .andExpect(redirectedUrl(baseUrl + "/login"));
+               .andExpect(redirectedUrl(baseUrl + LOGIN));
 
     }
 
@@ -47,7 +51,7 @@ class AdminControllerTest {
     void test_showAdminPage_roleUser_denied() throws Exception {
         mockMvc.perform(get("/admin"))
                .andExpect(status().is3xxRedirection())
-               .andExpect(redirectedUrl("/error-403"));
+               .andExpect(redirectedUrl(ERROR_403));
 
     }
 
@@ -58,6 +62,6 @@ class AdminControllerTest {
 
         mockMvc.perform(get("/admin"))
                .andExpect(status().isOk())
-               .andExpect(view().name("/admin/info"));
+               .andExpect(view().name(ADMIN_INFO));
     }
 }
