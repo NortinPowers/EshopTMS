@@ -1,12 +1,18 @@
 package by.tms.eshop.mapper;
 
+import static by.tms.eshop.test_utils.Constants.MapperConstants.ROLE_DTO;
+import static by.tms.eshop.test_utils.Constants.MapperConstants.USER;
+import static by.tms.eshop.test_utils.Constants.MapperConstants.USER_BIRTHDAY;
+import static by.tms.eshop.test_utils.Constants.MapperConstants.USER_EMAIL;
+import static by.tms.eshop.test_utils.Constants.MapperConstants.USER_ID;
+import static by.tms.eshop.test_utils.Constants.MapperConstants.USER_LOGIN;
+import static by.tms.eshop.test_utils.Constants.MapperConstants.USER_NAME;
+import static by.tms.eshop.test_utils.Constants.MapperConstants.USER_PASSWORD;
+import static by.tms.eshop.test_utils.Constants.MapperConstants.USER_SURNAME;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import by.tms.eshop.domain.Role;
 import by.tms.eshop.domain.User;
-import by.tms.eshop.dto.RoleDto;
 import by.tms.eshop.dto.UserFormDto;
-import java.time.LocalDate;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,57 +23,30 @@ class UserMapperTest {
     @Autowired
     private UserMapper userMapper;
 
-    private final Long userId = 1L;
-    private final Long roleId = 1L;
-    private final String login = "login";
-    private final String password = "password";
-    private final String name = "name";
-    private final String surname = "surname";
-    private final String email = "test@email.com";
-    private final LocalDate birthday = LocalDate.of(2000, 1, 1);
-    private final String userRole = "role";
-    private final RoleDto roleDto = RoleDto.builder()
-                                           .id(roleId)
-                                           .role(userRole)
-                                           .build();
-    private final Role role = Role.builder()
-                                  .id(roleId)
-                                  .role(userRole)
-                                  .build();
     private final UserFormDto userFormDto = UserFormDto.builder()
-                                                       .id(userId)
-                                                       .login(login)
-                                                       .password(password)
-                                                       .name(name)
-                                                       .surname(surname)
-                                                       .email(email)
-                                                       .birthday(birthday)
-                                                       .roleDto(roleDto)
+                                                       .id(USER_ID)
+                                                       .login(USER_LOGIN)
+                                                       .password(USER_PASSWORD)
+                                                       .name(USER_NAME)
+                                                       .surname(USER_SURNAME)
+                                                       .email(USER_EMAIL)
+                                                       .birthday(USER_BIRTHDAY)
+                                                       .roleDto(ROLE_DTO)
                                                        .build();
-    private final User user = User.builder()
-                                  .id(userId)
-                                  .login(login)
-                                  .password(password)
-                                  .name(name)
-                                  .surname(surname)
-                                  .email(email)
-                                  .birthday(birthday)
-                                  .role(role)
-                                  .build();
 
     @Test
     void test_convertToUser() {
-        String verifyPassword = "password";
+        String verifyPassword = USER_PASSWORD;
         userFormDto.setVerifyPassword(verifyPassword);
 
         User convertUser = userMapper.convertToUser(userFormDto);
 
-        assertEquals(user, convertUser);
+        assertEquals(USER, convertUser);
     }
 
     @Test
     void test_convertToUserFormDto() {
-        UserFormDto convertUser = userMapper.convertToUserFormDto(user);
+        UserFormDto convertUser = userMapper.convertToUserFormDto(USER);
 
         assertEquals(userFormDto, convertUser);
     }

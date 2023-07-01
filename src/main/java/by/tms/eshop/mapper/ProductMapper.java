@@ -2,6 +2,7 @@ package by.tms.eshop.mapper;
 
 import by.tms.eshop.domain.Product;
 import by.tms.eshop.dto.ProductDto;
+import java.util.List;
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -15,4 +16,6 @@ public interface ProductMapper {
     @InheritInverseConfiguration
     @Mapping(target = "productCategory", expression = "java(new ProductCategory(dto.getCategory()))")
     Product convertToProduct(ProductDto productDto);
+
+    List<ProductDto> convertToProductDtos(List<Product> products);
 }
