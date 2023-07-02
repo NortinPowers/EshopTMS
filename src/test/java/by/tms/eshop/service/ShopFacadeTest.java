@@ -2,6 +2,7 @@ package by.tms.eshop.service;
 
 import static by.tms.eshop.test_utils.Constants.EXTENSION_PATH;
 import static by.tms.eshop.test_utils.Constants.LOCATION;
+import static by.tms.eshop.test_utils.Constants.MapperConstants.USER_ID;
 import static by.tms.eshop.test_utils.Constants.PAGE;
 import static by.tms.eshop.test_utils.Constants.PRODUCT_CATEGORY;
 import static by.tms.eshop.test_utils.Constants.PRODUCT_ID;
@@ -349,7 +350,7 @@ class ShopFacadeTest {
             when(authentication.getPrincipal()).thenReturn(customUserDetail);
             when(customUserDetail.getUser()).thenReturn(userMock);
 
-            shopFacade.getPageByParam(param, modelAndView);
+            modelAndView = shopFacade.getPageByParam(param);
 
             assertEquals(SUCCESS_BUY, modelAndView.getViewName());
 
@@ -366,7 +367,7 @@ class ShopFacadeTest {
             when(authentication.getPrincipal()).thenReturn(customUserDetail);
             when(customUserDetail.getUser()).thenReturn(userMock);
 
-            shopFacade.getPageByParam(param, modelAndView);
+            modelAndView = shopFacade.getPageByParam(param);
 
             assertEquals(REDIRECT_TO_CART, modelAndView.getViewName());
 
@@ -379,7 +380,7 @@ class ShopFacadeTest {
 
         @Test
         void test_getUserEditForm_userIsPresent() {
-            Long userId = 1L;
+            Long userId = USER_ID;
             user.setId(userId);
             user.setName("name");
             userFormDto.setId(userId);
@@ -396,7 +397,7 @@ class ShopFacadeTest {
 
         @Test
         void test_getUserEditForm_userIsNotPresent() {
-            Long userId = 1L;
+            Long userId = USER_ID;
 
             when(userService.getUserById(userId)).thenReturn(Optional.empty());
 

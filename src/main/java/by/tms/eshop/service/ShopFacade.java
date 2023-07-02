@@ -99,7 +99,8 @@ public class ShopFacade {
         return new ModelAndView(getPathFromAddFavoriteByParameters(productId, location, productService.getProductCategoryValue(productId), page));
     }
 
-    public ModelAndView getPageByParam(String param, ModelAndView modelAndView) {
+    public ModelAndView getPageByParam(String param) {
+        ModelAndView modelAndView = new ModelAndView();
         if (param.equalsIgnoreCase(BUY)) {
             carriesPurchase(getAuthenticationUserId());
             modelAndView.setViewName(SUCCESS_BUY);

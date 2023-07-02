@@ -9,7 +9,6 @@ import static by.tms.eshop.utils.Constants.AND_PAGE;
 import static by.tms.eshop.utils.Constants.Attributes.CART_PRODUCTS;
 import static by.tms.eshop.utils.Constants.Attributes.FULL_PRICE;
 import static by.tms.eshop.utils.Constants.BUY;
-import static by.tms.eshop.utils.Constants.ControllerMappingPath.ERROR_403;
 import static by.tms.eshop.utils.Constants.ControllerMappingPath.LOGIN;
 import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_CART;
 import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_SOME_ERROR;
@@ -24,6 +23,7 @@ import static by.tms.eshop.utils.ControllerUtils.getProductsPrice;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -41,7 +41,6 @@ import by.tms.eshop.service.ShopFacade;
 import by.tms.eshop.utils.Constants;
 import java.math.BigDecimal;
 import java.util.List;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +51,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.servlet.ModelAndView;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -118,48 +118,22 @@ class CartControllerTest {
         }
     }
 
-    /*
-     if (param.equalsIgnoreCase(BUY)) {
-            carriesPurchase(getAuthenticationUserId());
-            modelAndView.setViewName(SUCCESS_BUY);
-        } else {
-            modelAndView.setViewName(REDIRECT_TO_CART);
-     */
-    //post?
     @Nested
-    @Disabled
     class TestShowCartProcessingPage {
 
         @Test
         @WithAnonymousUser
         void test_showCartProcessingPage_anonymous_denied() throws Exception {
             mockMvc.perform(post("/cart-processing")
+                                    .with(csrf())
                                     .param(BUY, BUY))
                    .andExpect(status().is3xxRedirection())
-                   .andExpect(redirectedUrl(ERROR_403));
+                   .andExpect(redirectedUrl(baseUrl + LOGIN));
         }
 
         @Test
         void test_showCartProcessingPage_roleUser_allowed_paramBuy() throws Exception {
-//            MvcResult result = mockMvc.perform(post("/cart-processing")
-//                                                       .with(user(customUserDetailRoleUser))
-//                                                       .with(csrf()))
-//                                      .andReturn();
-//            Authentication authentication = (Authentication) result.getRequest().getUserPrincipal();
-//            CustomUserDetail userDetail = (CustomUserDetail) authentication.getPrincipal();
-//            assertEquals(customUserDetailRoleUser.getUsername(), userDetail.getUsername());
-
             inspectShowCartProcessingPageByRole(customUserDetailRoleUser);
-
-//            Authentication authentication = new UsernamePasswordAuthenticationToken(customUserDetailRoleUser, null, customUserDetailRoleUser.getAuthorities());
-//            SecurityContextHolder.getContext().setAuthentication(authentication);
-//
-//            doNothing().when(shopFacade).carriesPurchase(customUserDetailRoleUser.getUser().getId());
-//
-//            mockMvc.perform(post("/cart-processing")
-//                                    .param(BUY, BUY))
-//                   .andExpect(status().isOk())
-//                   .andExpect(view().name(SUCCESS_BUY));
         }
 
         @Test
@@ -168,29 +142,30 @@ class CartControllerTest {
         }
 
         @Test
-        void test_showCartProcessingPage_roleUser_allowed_paramNotBuy() throws Exception {
-            inspectShowCartProcessingPageByRoleNoParam(customUserDetailRoleUser);
+        void test_showCartProcessingPage_roleUser_allowed_WithoutParam() throws Exception {
+            inspectShowCartProcessingPageByRoleWithoutParam(customUserDetailRoleUser);
         }
 
         @Test
-        void test_showCartProcessingPage_roleAdmin_allowed_paramNotBuy() throws Exception {
-            inspectShowCartProcessingPageByRoleNoParam(customUserDetailRoleAdmin);
+        void test_showCartProcessingPage_roleAdmin_allowed__WithoutParam() throws Exception {
+            inspectShowCartProcessingPageByRoleWithoutParam(customUserDetailRoleAdmin);
         }
 
-        private void inspectShowCartProcessingPageByRoleNoParam(CustomUserDetail customUserDetail) throws Exception {
-            doNothing().when(shopFacade).carriesPurchase(customUserDetail.getUser().getId());
-
+        private void inspectShowCartProcessingPageByRoleWithoutParam(CustomUserDetail customUserDetail) throws Exception {
             mockMvc.perform(post("/cart-processing")
-                                    .with(user(customUserDetail)))
+                                    .with(user(customUserDetail))
+                                    .with(csrf()))
                    .andExpect(status().is3xxRedirection())
-                   .andExpect(view().name(REDIRECT_TO_CART));
+                   .andExpect(view().name(REDIRECT_TO_SOME_ERROR));
         }
 
         private void inspectShowCartProcessingPageByRole(CustomUserDetail customUserDetail) throws Exception {
-            doNothing().when(shopFacade).carriesPurchase(customUserDetail.getUser().getId());
+            ModelAndView modelAndView = new ModelAndView(SUCCESS_BUY);
+            when(shopFacade.getPageByParam(BUY)).thenReturn(modelAndView);
 
             mockMvc.perform(post("/cart-processing")
                                     .with(user(customUserDetail))
+                                    .with(csrf())
                                     .param(BUY, BUY))
                    .andExpect(status().isOk())
                    .andExpect(view().name(SUCCESS_BUY));

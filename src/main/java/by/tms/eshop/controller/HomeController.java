@@ -21,7 +21,7 @@ public class HomeController {
         return modelAndView;
     }
 
-    @PostMapping("/")
+    @PostMapping(value = {"/", "/eshop"})
     public ModelAndView entersToEshop(ModelAndView modelAndView) {
         shopFacade.getEshopView(modelAndView);
         return modelAndView;
