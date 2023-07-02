@@ -149,7 +149,7 @@ class CartControllerTest {
 //            CustomUserDetail userDetail = (CustomUserDetail) authentication.getPrincipal();
 //            assertEquals(customUserDetailRoleUser.getUsername(), userDetail.getUsername());
 
-            inspectShowCartProcessingPageByUserRole(customUserDetailRoleUser);
+            inspectShowCartProcessingPageByRole(customUserDetailRoleUser);
 
 //            Authentication authentication = new UsernamePasswordAuthenticationToken(customUserDetailRoleUser, null, customUserDetailRoleUser.getAuthorities());
 //            SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -164,20 +164,20 @@ class CartControllerTest {
 
         @Test
         void test_showCartProcessingPage_roleAdmin_allowed_paramBuy() throws Exception {
-            inspectShowCartProcessingPageByUserRole(customUserDetailRoleAdmin);
+            inspectShowCartProcessingPageByRole(customUserDetailRoleAdmin);
         }
 
         @Test
         void test_showCartProcessingPage_roleUser_allowed_paramNotBuy() throws Exception {
-            inspectShowCartProcessingPageByUserRoleNoParam(customUserDetailRoleUser);
+            inspectShowCartProcessingPageByRoleNoParam(customUserDetailRoleUser);
         }
 
         @Test
         void test_showCartProcessingPage_roleAdmin_allowed_paramNotBuy() throws Exception {
-            inspectShowCartProcessingPageByUserRoleNoParam(customUserDetailRoleAdmin);
+            inspectShowCartProcessingPageByRoleNoParam(customUserDetailRoleAdmin);
         }
 
-        private void inspectShowCartProcessingPageByUserRoleNoParam(CustomUserDetail customUserDetail) throws Exception {
+        private void inspectShowCartProcessingPageByRoleNoParam(CustomUserDetail customUserDetail) throws Exception {
             doNothing().when(shopFacade).carriesPurchase(customUserDetail.getUser().getId());
 
             mockMvc.perform(post("/cart-processing")
@@ -186,7 +186,7 @@ class CartControllerTest {
                    .andExpect(view().name(REDIRECT_TO_CART));
         }
 
-        private void inspectShowCartProcessingPageByUserRole(CustomUserDetail customUserDetail) throws Exception {
+        private void inspectShowCartProcessingPageByRole(CustomUserDetail customUserDetail) throws Exception {
             doNothing().when(shopFacade).carriesPurchase(customUserDetail.getUser().getId());
 
             mockMvc.perform(post("/cart-processing")
@@ -219,22 +219,22 @@ class CartControllerTest {
         }
 
         @Test
-        void test_addProductToCart_roleUser_allowed_AllRequiredParam() throws Exception {
+        void test_addProductToCart_roleUser_allowed_allRequiredParam() throws Exception {
             inspectAddProductToCartByRoleWithAllRequiredParam(customUserDetailRoleUser);
         }
 
         @Test
-        void test_addProductToCart_roleUser_roleAdmin_allowed_AllRequiredParam() throws Exception {
+        void test_addProductToCart_roleUser_roleAdmin_allowed_allRequiredParam() throws Exception {
             inspectAddProductToCartByRoleWithAllRequiredParam(customUserDetailRoleAdmin);
         }
 
         @Test
-        void test_addProductToCart_roleUser_allowed_NotAllRequiredParam() throws Exception {
+        void test_addProductToCart_roleUser_allowed_notAllRequiredParam() throws Exception {
             inspectAddProductToCartByRoleWithNotAllRequiredParam(customUserDetailRoleUser);
         }
 
         @Test
-        void test_addProductToCart_roleAdmin_allowed_NotAllRequiredParam() throws Exception {
+        void test_addProductToCart_roleAdmin_allowed_notAllRequiredParam() throws Exception {
             inspectAddProductToCartByRoleWithNotAllRequiredParam(customUserDetailRoleAdmin);
         }
 
@@ -287,7 +287,7 @@ class CartControllerTest {
         }
 
         @Test
-        void test_deleteProductFromCart_roleUser_allowed_AllRequiredParam() throws Exception {
+        void test_deleteProductFromCart_roleUser_allowed_allRequiredParam() throws Exception {
             inspectDeleteProductFromCartByRoleWithAllRequiredParam(customUserDetailRoleUser);
         }
 
@@ -297,12 +297,12 @@ class CartControllerTest {
         }
 
         @Test
-        void test_deleteProductFromCart_roleUser_allowed_NotAllRequiredParam() throws Exception {
+        void test_deleteProductFromCart_roleUser_allowed_notAllRequiredParam() throws Exception {
             inspectDeleteProductFromCartByRoleWithNotAllRequiredParam(customUserDetailRoleUser);
         }
 
         @Test
-        void test_deleteProductFromCart_roleAdmin_allowed_NotAllRequiredParam() throws Exception {
+        void test_deleteProductFromCart_roleAdmin_allowed_notAllRequiredParam() throws Exception {
             inspectDeleteProductFromCartByRoleWithNotAllRequiredParam(customUserDetailRoleAdmin);
         }
 
