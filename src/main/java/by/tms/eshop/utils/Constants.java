@@ -68,7 +68,6 @@ public class Constants {
         public static final String REGISTRATION = "/create-user";
         public static final String LOGIN = "/login";
         public static final String ERROR_403 = "/error-403";
-
     }
 
     @UtilityClass
@@ -83,7 +82,6 @@ public class Constants {
         public static final String FILTER_FOUND_PRODUCTS = "filterFoundProducts";
         public static final String CART_PRODUCTS = "cartProducts";
         public static final String FULL_PRICE = "fullPrice";
-        public static final String MODELS = "models";
         public static final String PRODUCT_CATEGORIES = "productCategories";
         public static final String START_TIME = "startTime";
         public static final String URL = "url";

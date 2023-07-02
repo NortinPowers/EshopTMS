@@ -1,14 +1,24 @@
 package by.tms.eshop.controller;
 
+import static by.tms.eshop.test_utils.Constants.PAGE;
+import static by.tms.eshop.test_utils.Constants.PRODUCT_ID;
 import static by.tms.eshop.test_utils.Constants.TEST_PROPERTY_SOURCE_LOCATIONS;
 import static by.tms.eshop.test_utils.ControllerUtils.getCustomUserDetailRoleAdmin;
 import static by.tms.eshop.test_utils.ControllerUtils.getCustomUserDetailRoleUser;
+import static by.tms.eshop.utils.Constants.AND_PAGE;
 import static by.tms.eshop.utils.Constants.Attributes.CART_PRODUCTS;
 import static by.tms.eshop.utils.Constants.Attributes.FULL_PRICE;
 import static by.tms.eshop.utils.Constants.BUY;
 import static by.tms.eshop.utils.Constants.ControllerMappingPath.ERROR_403;
+import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_CART;
+import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_SOME_ERROR;
 import static by.tms.eshop.utils.Constants.MappingPath.SHOPPING_CART;
 import static by.tms.eshop.utils.Constants.MappingPath.SUCCESS_BUY;
+import static by.tms.eshop.utils.Constants.RequestParameters.FAVORITE;
+import static by.tms.eshop.utils.Constants.RequestParameters.ID;
+import static by.tms.eshop.utils.Constants.RequestParameters.LOCATION;
+import static by.tms.eshop.utils.Constants.RequestParameters.SHOP;
+import static by.tms.eshop.utils.Constants.TRUE;
 import static by.tms.eshop.utils.ControllerUtils.getProductsPrice;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Mockito.doNothing;
@@ -27,6 +37,7 @@ import by.tms.eshop.model.Location;
 import by.tms.eshop.security.CustomUserDetail;
 import by.tms.eshop.service.CartService;
 import by.tms.eshop.service.ShopFacade;
+import by.tms.eshop.utils.Constants;
 import java.math.BigDecimal;
 import java.util.List;
 import org.junit.jupiter.api.Nested;
@@ -57,6 +68,9 @@ class CartControllerTest {
     @MockBean
     private ShopFacade shopFacade;
 
+    private final CustomUserDetail customUserDetailRoleAdmin = getCustomUserDetailRoleAdmin();
+    private final CustomUserDetail customUserDetailRoleUser = getCustomUserDetailRoleUser();
+
     @Nested
     class TestShowCardPage {
 
@@ -70,14 +84,12 @@ class CartControllerTest {
 
         @Test
         void test_showCardPage_roleUser_allowed() throws Exception {
-            CustomUserDetail customUserDetail = getCustomUserDetailRoleUser();
-            inspectShowCardPageByUserRole(customUserDetail);
+            inspectShowCardPageByUserRole(customUserDetailRoleUser);
         }
 
         @Test
         void test_showCardPage_roleAdmin_allowed() throws Exception {
-            CustomUserDetail customUserDetail = getCustomUserDetailRoleAdmin();
-            inspectShowCardPageByUserRole(customUserDetail);
+            inspectShowCardPageByUserRole(customUserDetailRoleAdmin);
         }
 
         private void inspectShowCardPageByUserRole(CustomUserDetail customUserDetail) throws Exception {
@@ -111,6 +123,7 @@ class CartControllerTest {
         } else {
             modelAndView.setViewName(REDIRECT_TO_CART);
      */
+    //post?
     @Nested
     class TestShowCartProcessingPage {
 
@@ -124,14 +137,31 @@ class CartControllerTest {
 
         @Test
         void test_showCartProcessingPage_roleUser_allowed_paramBuy() throws Exception {
-            CustomUserDetail customUserDetail = getCustomUserDetailRoleUser();
-            inspectShowCartProcessingPageByUserRole(customUserDetail);
+            inspectShowCartProcessingPageByUserRole(customUserDetailRoleUser);
         }
 
         @Test
         void test_showCartProcessingPage_roleAdmin_allowed_paramBuy() throws Exception {
-            CustomUserDetail customUserDetail = getCustomUserDetailRoleAdmin();
-            inspectShowCartProcessingPageByUserRole(customUserDetail);
+            inspectShowCartProcessingPageByUserRole(customUserDetailRoleAdmin);
+        }
+
+        @Test
+        void test_showCartProcessingPage_roleUser_allowed_paramNotBuy() throws Exception {
+            inspectShowCartProcessingPageByUserRoleNoParam(customUserDetailRoleUser);
+        }
+
+        @Test
+        void test_showCartProcessingPage_roleAdmin_allowed_paramNotBuy() throws Exception {
+            inspectShowCartProcessingPageByUserRoleNoParam(customUserDetailRoleAdmin);
+        }
+
+        private void inspectShowCartProcessingPageByUserRoleNoParam(CustomUserDetail customUserDetail) throws Exception {
+            doNothing().when(shopFacade).carriesPurchase(customUserDetail.getUser().getId());
+
+            mockMvc.perform(post("/cart-processing")
+                                    .with(user(customUserDetail)))
+                   .andExpect(status().isOk())
+                   .andExpect(view().name(REDIRECT_TO_CART));
         }
 
         private void inspectShowCartProcessingPageByUserRole(CustomUserDetail customUserDetail) throws Exception {
@@ -145,8 +175,82 @@ class CartControllerTest {
         }
     }
 
-    @Test
-    void addProductToCart() {
+    @Nested
+    class TestAddProductToCart {
+
+        @Test
+        @WithAnonymousUser
+        void test_addProductToCart_anonymous_denied() throws Exception {
+            mockMvc.perform(get("/add-cart"))
+                   .andExpect(status().is3xxRedirection())
+                   .andExpect(redirectedUrl(baseUrl + "/login"));
+        }
+
+        @Test
+        void test_addProductToCart_roleUser_allowed_allParam() throws Exception {
+            inspectAddProductToCartByRoleWithAllParam(customUserDetailRoleUser);
+        }
+
+        @Test
+        void test_addProductToCart_roleAdmin_allowed_allParam() throws Exception {
+            inspectAddProductToCartByRoleWithAllParam(customUserDetailRoleAdmin);
+        }
+
+        @Test
+        void test_addProductToCart_roleUser_allowed_AllRequiredParam() throws Exception {
+            inspectAddProductToCartByRoleWithAllRequiredParam(customUserDetailRoleUser);
+        }
+
+        @Test
+        void test_addProductToCart_roleUser_roleAdmin_allowed__AllRequiredParam() throws Exception {
+            inspectAddProductToCartByRoleWithAllRequiredParam(customUserDetailRoleAdmin);
+        }
+
+        @Test
+        void test_addProductToCart_roleUser_allowed_NotAllRequiredParam() throws Exception {
+            inspectAddProductToCartByRoleWithNotAllRequiredParam(customUserDetailRoleUser);
+        }
+
+        @Test
+        void test_addProductToCart_roleAdmin_allowed_NotAllRequiredParam() throws Exception {
+            inspectAddProductToCartByRoleWithNotAllRequiredParam(customUserDetailRoleAdmin);
+        }
+
+        private void inspectAddProductToCartByRoleWithAllParam(CustomUserDetail customUserDetail) throws Exception {
+            doNothing().when(cartService).addSelectedProduct(customUserDetail.getUser().getId(), PRODUCT_ID, Location.CART);
+            when(shopFacade.getPathFromAddCartByParameters(PRODUCT_ID, TRUE, FAVORITE, PAGE)).thenReturn(REDIRECT_TO_CART + AND_PAGE + PAGE);
+
+            mockMvc.perform(get("/add-cart")
+                                    .with(user(customUserDetail))
+                                    .param(ID, PRODUCT_ID.toString())
+                                    .param(SHOP, TRUE)
+                                    .param(LOCATION, FAVORITE)
+                                    .param(Constants.PAGE, PAGE.toString()))
+                   .andExpect(status().is3xxRedirection())
+                   .andExpect(view().name(REDIRECT_TO_CART + AND_PAGE + PAGE));
+        }
+
+        private void inspectAddProductToCartByRoleWithAllRequiredParam(CustomUserDetail customUserDetail) throws Exception {
+            doNothing().when(cartService).addSelectedProduct(customUserDetail.getUser().getId(), PRODUCT_ID, Location.CART);
+            when(shopFacade.getPathFromAddCartByParameters(PRODUCT_ID, TRUE, FAVORITE, null)).thenReturn(REDIRECT_TO_CART);
+
+            mockMvc.perform(get("/add-cart")
+                                    .with(user(customUserDetail))
+                                    .param(ID, PRODUCT_ID.toString())
+                                    .param(SHOP, TRUE)
+                                    .param(LOCATION, FAVORITE))
+                   .andExpect(status().is3xxRedirection())
+                   .andExpect(view().name(REDIRECT_TO_CART));
+        }
+
+        private void inspectAddProductToCartByRoleWithNotAllRequiredParam(CustomUserDetail customUserDetail) throws Exception {
+            mockMvc.perform(get("/add-cart")
+                                    .with(user(customUserDetail))
+                                    .param(SHOP, TRUE)
+                                    .param(LOCATION, FAVORITE))
+                   .andExpect(status().is3xxRedirection())
+                   .andExpect(view().name(REDIRECT_TO_SOME_ERROR));
+        }
     }
 
     @Test
