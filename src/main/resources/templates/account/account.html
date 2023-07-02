@@ -42,17 +42,12 @@
     <h2 style="color: #333; text-shadow: #ff1500 1px 0 2px">Order history:</h2>
   </div>
 </div>
-<!--<div th:if="${models.userOrder.size == 0}" class="card text-center" style="background: #ffffff">-->
-<!--<div th:if="${userOrder.size == 0}" class="card text-center" style="background: #ffffff">-->
 <div th:if="${userOrder.isEmpty()}" class="card text-center" style="background: #ffffff">
   <div class="card-header text-center">
     <h4 style="color: #333; text-shadow: #ff1500 1px 0 2px">The order history is empty</h4>
   </div>
 </div>
-<!--<div th:unless="${models.userOrder.size == 0}" class="accordion" id="accordionPanelsStayOpenExample">-->
 <div th:unless="${userOrder.isEmpty()}" class="accordion" id="accordionPanelsStayOpenExample">
-<!--<div th:unless="${userOrder.size == 0}" class="accordion" id="accordionPanelsStayOpenExample">-->
-<!--  <div th:each="order : ${models.userOrder}" class="accordion-item" style="background: #e6e6e6">-->
   <div th:each="order : ${userOrder}" class="accordion-item" style="background: #e6e6e6">
     <h2 class="accordion-header" id="panelsStayOpen-heading" style="background: #f2f2f2">
       <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
