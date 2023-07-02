@@ -42,17 +42,16 @@ class HomeControllerTest {
         @Test
         @WithAnonymousUser
         void test_redirectToEshopPage_anonymous_allowed() throws Exception {
-            when(productCategoryService.getProductCategories()).thenReturn(productCategories);
-
-            mockMvc.perform(get("/eshop"))
-                   .andExpect(status().isOk())
-                   .andExpect(model().attribute(PRODUCT_CATEGORIES, productCategories))
-                   .andExpect(view().name(ESHOP));
+            inspectRedirectToEshopPage();
         }
 
         @Test
         @WithMockUser(roles = {"USER", "ADMIN"})
         void test_redirectToEshopPage_userWithRole_allowed() throws Exception {
+            inspectRedirectToEshopPage();
+        }
+
+        private void inspectRedirectToEshopPage() throws Exception {
             when(productCategoryService.getProductCategories()).thenReturn(productCategories);
 
             mockMvc.perform(get("/eshop"))
@@ -68,18 +67,16 @@ class HomeControllerTest {
         @Test
         @WithAnonymousUser
         void test_entersToEshop_anonymous_allowed() throws Exception {
-            when(productCategoryService.getProductCategories()).thenReturn(productCategories);
-
-            mockMvc.perform(post("/eshop")
-                                    .with(csrf()))
-                   .andExpect(status().isOk())
-                   .andExpect(model().attribute(PRODUCT_CATEGORIES, productCategories))
-                   .andExpect(view().name(ESHOP));
+            inspectEntersToEshop();
         }
 
         @Test
         @WithMockUser(roles = {"USER", "ADMIN"})
         void test_entersToEshop_userWithRole_allowed() throws Exception {
+            inspectEntersToEshop();
+        }
+
+        private void inspectEntersToEshop() throws Exception {
             when(productCategoryService.getProductCategories()).thenReturn(productCategories);
 
             mockMvc.perform(post("/eshop")
