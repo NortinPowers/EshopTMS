@@ -9,6 +9,7 @@ import static by.tms.eshop.utils.Constants.AND_PAGE;
 import static by.tms.eshop.utils.Constants.Attributes.CART_PRODUCTS;
 import static by.tms.eshop.utils.Constants.Attributes.FULL_PRICE;
 import static by.tms.eshop.utils.Constants.BUY;
+import static by.tms.eshop.utils.Constants.ControllerMappingPath.ERROR_403;
 import static by.tms.eshop.utils.Constants.ControllerMappingPath.LOGIN;
 import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_CART;
 import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_SOME_ERROR;
@@ -120,6 +121,15 @@ class CartControllerTest {
 
     @Nested
     class TestShowCartProcessingPage {
+
+        @Test
+        @WithAnonymousUser
+        void test_showCartProcessingPage_anonymous_csrfNotContained() throws Exception {
+            mockMvc.perform(post("/cart-processing")
+                                    .param(BUY, BUY))
+                   .andExpect(status().is3xxRedirection())
+                   .andExpect(redirectedUrl(ERROR_403));
+        }
 
         @Test
         @WithAnonymousUser
