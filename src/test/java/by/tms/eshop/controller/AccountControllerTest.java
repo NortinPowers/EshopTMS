@@ -4,6 +4,7 @@ import static by.tms.eshop.test_utils.Constants.TEST_PROPERTY_SOURCE_LOCATIONS;
 import static by.tms.eshop.test_utils.ControllerUtils.getCustomUserDetailRoleAdmin;
 import static by.tms.eshop.test_utils.ControllerUtils.getCustomUserDetailRoleUser;
 import static by.tms.eshop.utils.Constants.Attributes.USER_ORDER;
+import static by.tms.eshop.utils.Constants.ControllerMappingPath.LOGIN;
 import static by.tms.eshop.utils.Constants.MappingPath.ACCOUNT;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
@@ -47,7 +48,7 @@ class AccountControllerTest {
     void test_showAccountPage_anonymous_denied() throws Exception {
         mockMvc.perform(get("/account"))
                .andExpect(status().is3xxRedirection())
-               .andExpect(redirectedUrl(baseUrl + "/login"));
+               .andExpect(redirectedUrl(baseUrl + LOGIN));
     }
 
     @Test

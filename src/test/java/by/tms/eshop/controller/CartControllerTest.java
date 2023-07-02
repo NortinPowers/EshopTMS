@@ -10,6 +10,7 @@ import static by.tms.eshop.utils.Constants.Attributes.CART_PRODUCTS;
 import static by.tms.eshop.utils.Constants.Attributes.FULL_PRICE;
 import static by.tms.eshop.utils.Constants.BUY;
 import static by.tms.eshop.utils.Constants.ControllerMappingPath.ERROR_403;
+import static by.tms.eshop.utils.Constants.ControllerMappingPath.LOGIN;
 import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_CART;
 import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_SOME_ERROR;
 import static by.tms.eshop.utils.Constants.MappingPath.SHOPPING_CART;
@@ -79,7 +80,7 @@ class CartControllerTest {
         void test_showCardPage_anonymous_denied() throws Exception {
             mockMvc.perform(get("/cart"))
                    .andExpect(status().is3xxRedirection())
-                   .andExpect(redirectedUrl(baseUrl + "/login"));
+                   .andExpect(redirectedUrl(baseUrl + LOGIN));
         }
 
         @Test
@@ -202,7 +203,7 @@ class CartControllerTest {
         }
 
         @Test
-        void test_addProductToCart_roleUser_roleAdmin_allowed__AllRequiredParam() throws Exception {
+        void test_addProductToCart_roleUser_roleAdmin_allowed_AllRequiredParam() throws Exception {
             inspectAddProductToCartByRoleWithAllRequiredParam(customUserDetailRoleAdmin);
         }
 
@@ -253,7 +254,52 @@ class CartControllerTest {
         }
     }
 
-    @Test
-    void deleteProductFromCart() {
+    @Nested
+    class TestDeleteProductFromCart {
+
+        @Test
+        @WithAnonymousUser
+        void test_deleteProductFromCart_anonymous_denied() throws Exception {
+            mockMvc.perform(get("/delete-cart"))
+                   .andExpect(status().is3xxRedirection())
+                   .andExpect(redirectedUrl(baseUrl + LOGIN));
+        }
+
+        @Test
+        void test_deleteProductFromCart_roleUser_allowed_AllRequiredParam() throws Exception {
+            inspectDeleteProductFromCartByRoleWithAllRequiredParam(customUserDetailRoleUser);
+        }
+
+        @Test
+        void test_deleteProductFromCart_roleUser_roleAdmin_allowed_AllRequiredParam() throws Exception {
+            inspectDeleteProductFromCartByRoleWithAllRequiredParam(customUserDetailRoleAdmin);
+        }
+
+        @Test
+        void test_deleteProductFromCart_roleUser_allowed_NotAllRequiredParam() throws Exception {
+            inspectDeleteProductFromCartByRoleWithNotAllRequiredParam(customUserDetailRoleUser);
+        }
+
+        @Test
+        void test_deleteProductFromCart_roleAdmin_allowed_NotAllRequiredParam() throws Exception {
+            inspectDeleteProductFromCartByRoleWithNotAllRequiredParam(customUserDetailRoleAdmin);
+        }
+
+        private void inspectDeleteProductFromCartByRoleWithAllRequiredParam(CustomUserDetail customUserDetail) throws Exception {
+            doNothing().when(cartService).deleteProduct(customUserDetail.getUser().getId(), PRODUCT_ID, Location.CART);
+
+            mockMvc.perform(get("/delete-cart")
+                                    .with(user(customUserDetail))
+                                    .param(ID, PRODUCT_ID.toString()))
+                   .andExpect(status().is3xxRedirection())
+                   .andExpect(view().name(REDIRECT_TO_CART));
+        }
+
+        private void inspectDeleteProductFromCartByRoleWithNotAllRequiredParam(CustomUserDetail customUserDetail) throws Exception {
+            mockMvc.perform(get("/delete-cart")
+                                    .with(user(customUserDetail)))
+                   .andExpect(status().is3xxRedirection())
+                   .andExpect(view().name(REDIRECT_TO_SOME_ERROR));
+        }
     }
 }
