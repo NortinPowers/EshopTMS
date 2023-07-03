@@ -26,6 +26,8 @@ public class Constants {
     public static final String SECRET_QWERTY = "secret qwerty";
     public static final String TV = "tv";
     public static final String PHONE = "phone";
+    public static final String SIZE = "size";
+    public static final String RESULT = "result";
     public static final String TEST_PROPERTY_SOURCE_LOCATIONS = "classpath:application-test.properties";
 
     @UtilityClass

@@ -1,11 +1,13 @@
 package by.tms.eshop.controller;
 
 import static by.tms.eshop.test_utils.Constants.PRODUCT_ID;
+import static by.tms.eshop.test_utils.Constants.SIZE;
 import static by.tms.eshop.test_utils.Constants.TV;
 import static by.tms.eshop.utils.Constants.CATEGORY;
 import static by.tms.eshop.utils.Constants.ControllerMappingPath.ESHOP;
 import static by.tms.eshop.utils.Constants.MappingPath.PRODUCT;
 import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_ESHOP;
+import static by.tms.eshop.utils.Constants.PAGE;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
@@ -63,8 +65,8 @@ class ProductsControllerTest {
 
             mockMvc.perform(get("/products-page")
                                     .param(CATEGORY, category)
-                                    .param("page", "0")
-                                    .param("size", "5"))
+                                    .param(PAGE, "0")
+                                    .param(SIZE, "5"))
                    .andExpect(status().is3xxRedirection())
                    .andExpect(redirectedUrl(ESHOP));
         }
@@ -72,6 +74,8 @@ class ProductsControllerTest {
 
     @Nested
     class TestShowProductPage {
+
+        private final String url = "/product/{id}";
 
         @Test
         @WithAnonymousUser
@@ -83,6 +87,17 @@ class ProductsControllerTest {
         @WithMockUser(roles = {"USER", "ADMIN"})
         void test_showProductPage_userWithRole_withPathVariable() throws Exception {
             inspectShowProductPageWithPathVariable();
+        }
+
+        private void inspectShowProductPageWithPathVariable() throws Exception {
+            productId = PRODUCT_ID;
+            expectedModelAndView = new ModelAndView(PRODUCT);
+
+            when(productService.getViewProduct(productId)).thenReturn(expectedModelAndView);
+
+            mockMvc.perform(get(url, productId))
+                   .andExpect(status().isOk())
+                   .andExpect(view().name(PRODUCT));
         }
 
         @Test
@@ -97,19 +112,8 @@ class ProductsControllerTest {
             inspectShowProductPageWithoutPathVariable();
         }
 
-        private void inspectShowProductPageWithPathVariable() throws Exception {
-            productId = PRODUCT_ID;
-            expectedModelAndView = new ModelAndView(PRODUCT);
-
-            when(productService.getViewProduct(productId)).thenReturn(expectedModelAndView);
-
-            mockMvc.perform(get("/product/{id}", productId))
-                   .andExpect(status().isOk())
-                   .andExpect(view().name(PRODUCT));
-        }
-
         private void inspectShowProductPageWithoutPathVariable() throws Exception {
-            mockMvc.perform(get("/product/{id}", productId))
+            mockMvc.perform(get(url, productId))
                    .andExpect(status().is4xxClientError());
         }
     }

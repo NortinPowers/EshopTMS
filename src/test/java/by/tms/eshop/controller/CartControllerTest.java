@@ -77,10 +77,12 @@ class CartControllerTest {
     @Nested
     class TestShowCardPage {
 
+        private final String url = "/cart";
+
         @Test
         @WithAnonymousUser
         void test_showCardPage_anonymous_denied() throws Exception {
-            mockMvc.perform(get("/cart"))
+            mockMvc.perform(get(url))
                    .andExpect(status().is3xxRedirection())
                    .andExpect(redirectedUrl(baseUrl + LOGIN));
         }
@@ -110,7 +112,7 @@ class CartControllerTest {
 
             when(cartService.getSelectedProducts(customUserDetail.getUser().getId(), Location.CART)).thenReturn(cartDtos);
 
-            mockMvc.perform(get("/cart").with(user(customUserDetail)))
+            mockMvc.perform(get(url).with(user(customUserDetail)))
                    .andExpect(status().isOk())
                    .andExpect(model().attribute(CART_PRODUCTS, cartDtos))
                    .andExpect(model().attribute(FULL_PRICE, productsPrice))
@@ -122,10 +124,12 @@ class CartControllerTest {
     @Nested
     class TestShowCartProcessingPage {
 
+        private final String url = "/cart-processing";
+
         @Test
         @WithAnonymousUser
         void test_showCartProcessingPage_anonymous_csrfNotContained() throws Exception {
-            mockMvc.perform(post("/cart-processing")
+            mockMvc.perform(post(url)
                                     .param(BUY, BUY))
                    .andExpect(status().is3xxRedirection())
                    .andExpect(redirectedUrl(ERROR_403));
@@ -134,7 +138,7 @@ class CartControllerTest {
         @Test
         @WithAnonymousUser
         void test_showCartProcessingPage_anonymous_denied() throws Exception {
-            mockMvc.perform(post("/cart-processing")
+            mockMvc.perform(post(url)
                                     .with(csrf())
                                     .param(BUY, BUY))
                    .andExpect(status().is3xxRedirection())
@@ -151,6 +155,18 @@ class CartControllerTest {
             inspectShowCartProcessingPageByRole(customUserDetailRoleAdmin);
         }
 
+        private void inspectShowCartProcessingPageByRole(CustomUserDetail customUserDetail) throws Exception {
+            ModelAndView modelAndView = new ModelAndView(SUCCESS_BUY);
+            when(shopFacade.getPageByParam(BUY)).thenReturn(modelAndView);
+
+            mockMvc.perform(post(url)
+                                    .with(user(customUserDetail))
+                                    .with(csrf())
+                                    .param(BUY, BUY))
+                   .andExpect(status().isOk())
+                   .andExpect(view().name(SUCCESS_BUY));
+        }
+
         @Test
         void test_showCartProcessingPage_roleUser_allowed_WithoutParam() throws Exception {
             inspectShowCartProcessingPageByRoleWithoutParam(customUserDetailRoleUser);
@@ -162,72 +178,42 @@ class CartControllerTest {
         }
 
         private void inspectShowCartProcessingPageByRoleWithoutParam(CustomUserDetail customUserDetail) throws Exception {
-            mockMvc.perform(post("/cart-processing")
+            mockMvc.perform(post(url)
                                     .with(user(customUserDetail))
                                     .with(csrf()))
                    .andExpect(status().is3xxRedirection())
                    .andExpect(view().name(REDIRECT_TO_SOME_ERROR));
-        }
-
-        private void inspectShowCartProcessingPageByRole(CustomUserDetail customUserDetail) throws Exception {
-            ModelAndView modelAndView = new ModelAndView(SUCCESS_BUY);
-            when(shopFacade.getPageByParam(BUY)).thenReturn(modelAndView);
-
-            mockMvc.perform(post("/cart-processing")
-                                    .with(user(customUserDetail))
-                                    .with(csrf())
-                                    .param(BUY, BUY))
-                   .andExpect(status().isOk())
-                   .andExpect(view().name(SUCCESS_BUY));
         }
     }
 
     @Nested
     class TestAddProductToCart {
 
+        private final String url = "/add-cart";
+
         @Test
         @WithAnonymousUser
         void test_addProductToCart_anonymous_denied() throws Exception {
-            mockMvc.perform(get("/add-cart"))
+            mockMvc.perform(get(url))
                    .andExpect(status().is3xxRedirection())
                    .andExpect(redirectedUrl(baseUrl + LOGIN));
         }
 
         @Test
-        void test_addProductToCart_roleUser_allowed_allParam() throws Exception {
-            inspectAddProductToCartByRoleWithAllParam(customUserDetailRoleUser);
+        void test_addProductToCart_roleUser_allowed_allParams() throws Exception {
+            inspectAddProductToCartByRoleWithAllParams(customUserDetailRoleUser);
         }
 
         @Test
         void test_addProductToCart_roleAdmin_allowed_allParam() throws Exception {
-            inspectAddProductToCartByRoleWithAllParam(customUserDetailRoleAdmin);
+            inspectAddProductToCartByRoleWithAllParams(customUserDetailRoleAdmin);
         }
 
-        @Test
-        void test_addProductToCart_roleUser_allowed_allRequiredParam() throws Exception {
-            inspectAddProductToCartByRoleWithAllRequiredParam(customUserDetailRoleUser);
-        }
-
-        @Test
-        void test_addProductToCart_roleUser_roleAdmin_allowed_allRequiredParam() throws Exception {
-            inspectAddProductToCartByRoleWithAllRequiredParam(customUserDetailRoleAdmin);
-        }
-
-        @Test
-        void test_addProductToCart_roleUser_allowed_notAllRequiredParam() throws Exception {
-            inspectAddProductToCartByRoleWithNotAllRequiredParam(customUserDetailRoleUser);
-        }
-
-        @Test
-        void test_addProductToCart_roleAdmin_allowed_notAllRequiredParam() throws Exception {
-            inspectAddProductToCartByRoleWithNotAllRequiredParam(customUserDetailRoleAdmin);
-        }
-
-        private void inspectAddProductToCartByRoleWithAllParam(CustomUserDetail customUserDetail) throws Exception {
+        private void inspectAddProductToCartByRoleWithAllParams(CustomUserDetail customUserDetail) throws Exception {
             doNothing().when(cartService).addSelectedProduct(customUserDetail.getUser().getId(), PRODUCT_ID, Location.CART);
             when(shopFacade.getPathFromAddCartByParameters(PRODUCT_ID, TRUE, FAVORITE, PAGE)).thenReturn(REDIRECT_TO_CART + AND_PAGE + PAGE);
 
-            mockMvc.perform(get("/add-cart")
+            mockMvc.perform(get(url)
                                     .with(user(customUserDetail))
                                     .param(ID, PRODUCT_ID.toString())
                                     .param(SHOP, TRUE)
@@ -237,11 +223,21 @@ class CartControllerTest {
                    .andExpect(view().name(REDIRECT_TO_CART + AND_PAGE + PAGE));
         }
 
-        private void inspectAddProductToCartByRoleWithAllRequiredParam(CustomUserDetail customUserDetail) throws Exception {
+        @Test
+        void test_addProductToCart_roleUser_allowed_allRequiredParams() throws Exception {
+            inspectAddProductToCartByRoleWithAllRequiredParams(customUserDetailRoleUser);
+        }
+
+        @Test
+        void test_addProductToCart_roleUser_roleAdmin_allowed_allRequiredParams() throws Exception {
+            inspectAddProductToCartByRoleWithAllRequiredParams(customUserDetailRoleAdmin);
+        }
+
+        private void inspectAddProductToCartByRoleWithAllRequiredParams(CustomUserDetail customUserDetail) throws Exception {
             doNothing().when(cartService).addSelectedProduct(customUserDetail.getUser().getId(), PRODUCT_ID, Location.CART);
             when(shopFacade.getPathFromAddCartByParameters(PRODUCT_ID, TRUE, FAVORITE, null)).thenReturn(REDIRECT_TO_CART);
 
-            mockMvc.perform(get("/add-cart")
+            mockMvc.perform(get(url)
                                     .with(user(customUserDetail))
                                     .param(ID, PRODUCT_ID.toString())
                                     .param(SHOP, TRUE)
@@ -250,8 +246,18 @@ class CartControllerTest {
                    .andExpect(view().name(REDIRECT_TO_CART));
         }
 
-        private void inspectAddProductToCartByRoleWithNotAllRequiredParam(CustomUserDetail customUserDetail) throws Exception {
-            mockMvc.perform(get("/add-cart")
+        @Test
+        void test_addProductToCart_roleUser_allowed_notAllRequiredParams() throws Exception {
+            inspectAddProductToCartByRoleWithNotAllRequiredParams(customUserDetailRoleUser);
+        }
+
+        @Test
+        void test_addProductToCart_roleAdmin_allowed_notAllRequiredParams() throws Exception {
+            inspectAddProductToCartByRoleWithNotAllRequiredParams(customUserDetailRoleAdmin);
+        }
+
+        private void inspectAddProductToCartByRoleWithNotAllRequiredParams(CustomUserDetail customUserDetail) throws Exception {
+            mockMvc.perform(get(url)
                                     .with(user(customUserDetail))
                                     .param(SHOP, TRUE)
                                     .param(LOCATION, FAVORITE))
@@ -263,46 +269,48 @@ class CartControllerTest {
     @Nested
     class TestDeleteProductFromCart {
 
+        private final String url = "/delete-cart";
+
         @Test
         @WithAnonymousUser
         void test_deleteProductFromCart_anonymous_denied() throws Exception {
-            mockMvc.perform(get("/delete-cart"))
+            mockMvc.perform(get(url))
                    .andExpect(status().is3xxRedirection())
                    .andExpect(redirectedUrl(baseUrl + LOGIN));
         }
 
         @Test
-        void test_deleteProductFromCart_roleUser_allowed_allRequiredParam() throws Exception {
-            inspectDeleteProductFromCartByRoleWithAllRequiredParam(customUserDetailRoleUser);
+        void test_deleteProductFromCart_roleUser_allowed_allRequiredParams() throws Exception {
+            inspectDeleteProductFromCartByRoleWithAllRequiredParams(customUserDetailRoleUser);
         }
 
         @Test
-        void test_deleteProductFromCart_roleUser_roleAdmin_allowed_AllRequiredParam() throws Exception {
-            inspectDeleteProductFromCartByRoleWithAllRequiredParam(customUserDetailRoleAdmin);
+        void test_deleteProductFromCart_roleUser_roleAdmin_allowed_AllRequiredParams() throws Exception {
+            inspectDeleteProductFromCartByRoleWithAllRequiredParams(customUserDetailRoleAdmin);
         }
 
-        @Test
-        void test_deleteProductFromCart_roleUser_allowed_notAllRequiredParam() throws Exception {
-            inspectDeleteProductFromCartByRoleWithNotAllRequiredParam(customUserDetailRoleUser);
-        }
-
-        @Test
-        void test_deleteProductFromCart_roleAdmin_allowed_notAllRequiredParam() throws Exception {
-            inspectDeleteProductFromCartByRoleWithNotAllRequiredParam(customUserDetailRoleAdmin);
-        }
-
-        private void inspectDeleteProductFromCartByRoleWithAllRequiredParam(CustomUserDetail customUserDetail) throws Exception {
+        private void inspectDeleteProductFromCartByRoleWithAllRequiredParams(CustomUserDetail customUserDetail) throws Exception {
             doNothing().when(cartService).deleteProduct(customUserDetail.getUser().getId(), PRODUCT_ID, Location.CART);
 
-            mockMvc.perform(get("/delete-cart")
+            mockMvc.perform(get(url)
                                     .with(user(customUserDetail))
                                     .param(ID, PRODUCT_ID.toString()))
                    .andExpect(status().is3xxRedirection())
                    .andExpect(view().name(REDIRECT_TO_CART));
         }
 
-        private void inspectDeleteProductFromCartByRoleWithNotAllRequiredParam(CustomUserDetail customUserDetail) throws Exception {
-            mockMvc.perform(get("/delete-cart")
+        @Test
+        void test_deleteProductFromCart_roleUser_allowed_notAllRequiredParams() throws Exception {
+            inspectDeleteProductFromCartByRoleWithNotAllRequiredParams(customUserDetailRoleUser);
+        }
+
+        @Test
+        void test_deleteProductFromCart_roleAdmin_allowed_notAllRequiredParams() throws Exception {
+            inspectDeleteProductFromCartByRoleWithNotAllRequiredParams(customUserDetailRoleAdmin);
+        }
+
+        private void inspectDeleteProductFromCartByRoleWithNotAllRequiredParams(CustomUserDetail customUserDetail) throws Exception {
+            mockMvc.perform(get(url)
                                     .with(user(customUserDetail)))
                    .andExpect(status().is3xxRedirection())
                    .andExpect(view().name(REDIRECT_TO_SOME_ERROR));

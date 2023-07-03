@@ -37,10 +37,12 @@ class AdminControllerTest {
     @MockBean
     private CartService cartService;
 
+    private final String url = "/admin";
+
     @Test
     @WithAnonymousUser
     void test_showAdminPage_anonymous_denied() throws Exception {
-        mockMvc.perform(get("/admin"))
+        mockMvc.perform(get(url))
                .andExpect(status().is3xxRedirection())
                .andExpect(redirectedUrl(baseUrl + LOGIN));
 
@@ -49,7 +51,7 @@ class AdminControllerTest {
     @Test
     @WithMockUser(username = "user", roles = "USER")
     void test_showAdminPage_roleUser_denied() throws Exception {
-        mockMvc.perform(get("/admin"))
+        mockMvc.perform(get(url))
                .andExpect(status().is3xxRedirection())
                .andExpect(redirectedUrl(ERROR_403));
 
@@ -60,7 +62,7 @@ class AdminControllerTest {
     public void test_showAdminPage_roleAdmin_allowed() throws Exception {
         when(cartService.getMostFavorite()).thenReturn(Collections.emptyList());
 
-        mockMvc.perform(get("/admin"))
+        mockMvc.perform(get(url))
                .andExpect(status().isOk())
                .andExpect(view().name(ADMIN_INFO));
     }

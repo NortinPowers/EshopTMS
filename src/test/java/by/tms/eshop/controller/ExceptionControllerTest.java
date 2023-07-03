@@ -41,17 +41,19 @@ class ExceptionControllerTest {
     @Nested
     class TestShowError500Page {
 
+        private final String url = "/error-500";
+
         @Test
         @WithAnonymousUser
         void test_showError500Page_anonymous_denied() throws Exception {
-            mockMvc.perform(get("/error-500"))
+            mockMvc.perform(get(url))
                    .andExpect(status().is3xxRedirection())
                    .andExpect(redirectedUrl(baseUrl + LOGIN));
         }
 
         @Test
         void test_showError500Page_roleUser_allowed() throws Exception {
-            mockMvc.perform(get("/error-500")
+            mockMvc.perform(get(url)
                                     .with(user(customUserDetailRoleUser)))
                    .andExpect(status().isOk())
                    .andExpect(view().name(ERROR_500));
@@ -59,7 +61,7 @@ class ExceptionControllerTest {
 
         @Test
         void test_showError500Page_roleAdmin_allowed() throws Exception {
-            mockMvc.perform(get("/error-500")
+            mockMvc.perform(get(url)
                                     .with(user(customUserDetailRoleAdmin)))
                    .andExpect(status().isOk())
                    .andExpect(view().name(ERROR_500));
@@ -69,17 +71,19 @@ class ExceptionControllerTest {
     @Nested
     class TestShowSomeErrorPage {
 
+        private final String url = "/some-error";
+
         @Test
         @WithAnonymousUser
         void test_showSomeErrorPage_anonymous_denied() throws Exception {
-            mockMvc.perform(get("/some-error"))
+            mockMvc.perform(get(url))
                    .andExpect(status().is3xxRedirection())
                    .andExpect(redirectedUrl(baseUrl + LOGIN));
         }
 
         @Test
         void test_showSomeErrorPage_roleUser_allowed() throws Exception {
-            mockMvc.perform(get("/some-error")
+            mockMvc.perform(get(url)
                                     .with(user(customUserDetailRoleUser)))
                    .andExpect(status().isOk())
                    .andExpect(view().name(SOME_ERROR));
@@ -87,7 +91,7 @@ class ExceptionControllerTest {
 
         @Test
         void test_showSomeErrorPage_roleAdmin_allowed() throws Exception {
-            mockMvc.perform(get("/some-error")
+            mockMvc.perform(get(url)
                                     .with(user(customUserDetailRoleAdmin)))
                    .andExpect(status().isOk())
                    .andExpect(view().name(SOME_ERROR));
@@ -97,16 +101,18 @@ class ExceptionControllerTest {
     @Nested
     class TestShowError403Page {
 
+        private final String url = "/error-403";
+
         @Test
         void test_showError403Page_anonymous_denied() throws Exception {
-            mockMvc.perform(get("/error-403"))
+            mockMvc.perform(get(url))
                    .andExpect(status().is3xxRedirection())
                    .andExpect(redirectedUrl(baseUrl + LOGIN));
         }
 
         @Test
         void test_showError403Page_roleUser_allowed() throws Exception {
-            mockMvc.perform(get("/error-403")
+            mockMvc.perform(get(url)
                                     .with(user(customUserDetailRoleUser)))
                    .andExpect(status().isOk())
                    .andExpect(view().name(ERROR_403));
@@ -114,7 +120,7 @@ class ExceptionControllerTest {
 
         @Test
         void test_showError403Page_roleAdmin_allowed() throws Exception {
-            mockMvc.perform(get("/error-403")
+            mockMvc.perform(get(url)
                                     .with(user(customUserDetailRoleAdmin)))
                    .andExpect(status().isOk())
                    .andExpect(view().name(ERROR_403));

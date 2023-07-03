@@ -37,6 +37,7 @@ class HomeControllerTest {
     private ProductCategoryService productCategoryService;
 
     private final List<String> productCategories = List.of(TV, PHONE);
+    private final String url = "/eshop";
 
     @Nested
     class TestRedirectToEshopPage {
@@ -56,7 +57,7 @@ class HomeControllerTest {
         private void inspectRedirectToEshopPage() throws Exception {
             when(productCategoryService.getProductCategories()).thenReturn(productCategories);
 
-            mockMvc.perform(get("/eshop"))
+            mockMvc.perform(get(url))
                    .andExpect(status().isOk())
                    .andExpect(model().attribute(PRODUCT_CATEGORIES, productCategories))
                    .andExpect(view().name(ESHOP));
@@ -75,7 +76,7 @@ class HomeControllerTest {
         @Test
         @WithAnonymousUser
         void test_entersToEshop_anonymous_csrfNotContained() throws Exception {
-            mockMvc.perform(post("/eshop"))
+            mockMvc.perform(post(url))
                    .andExpect(status().is3xxRedirection())
                    .andExpect(redirectedUrl(ERROR_403));
         }
@@ -89,7 +90,7 @@ class HomeControllerTest {
         private void inspectEntersToEshop() throws Exception {
             when(productCategoryService.getProductCategories()).thenReturn(productCategories);
 
-            mockMvc.perform(post("/eshop")
+            mockMvc.perform(post(url)
                                     .with(csrf()))
                    .andExpect(status().isOk())
                    .andExpect(model().attribute(PRODUCT_CATEGORIES, productCategories))

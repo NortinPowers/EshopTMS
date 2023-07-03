@@ -19,7 +19,6 @@ class UserRepositoryTest {
     private UserRepository userRepository;
 
     private final User user = User.builder().build();
-
     private Optional<User> foundUser;
     private String login = "testLogin";
 

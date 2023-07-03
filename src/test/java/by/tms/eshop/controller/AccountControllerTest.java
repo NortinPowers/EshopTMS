@@ -43,10 +43,12 @@ class AccountControllerTest {
     @MockBean
     private OrderService orderService;
 
+    private final String url = "/account";
+
     @Test
     @WithAnonymousUser
     void test_showAccountPage_anonymous_denied() throws Exception {
-        mockMvc.perform(get("/account"))
+        mockMvc.perform(get(url))
                .andExpect(status().is3xxRedirection())
                .andExpect(redirectedUrl(baseUrl + LOGIN));
     }
@@ -68,7 +70,7 @@ class AccountControllerTest {
 
         when(orderService.getOrdersById(customUserDetail.getUser().getId())).thenReturn(orders);
 
-        mockMvc.perform(get("/account")
+        mockMvc.perform(get(url)
                                 .with(user(customUserDetail)))
                .andExpect(status().isOk())
                .andExpect(model().attribute(USER_ORDER, orders))

@@ -67,10 +67,12 @@ class FavoriteControllerTest {
     @Nested
     class TestShowFavoritesPage {
 
+        private final String url = "/favorites";
+
         @Test
         @WithAnonymousUser
         void test_showFavoritesPage_anonymous_denied() throws Exception {
-            mockMvc.perform(get("/favorites"))
+            mockMvc.perform(get(url))
                    .andExpect(status().is3xxRedirection())
                    .andExpect(redirectedUrl(baseUrl + LOGIN));
         }
@@ -91,7 +93,7 @@ class FavoriteControllerTest {
 
             when(shopFacade.getFavoriteProducts(customUserDetail.getUser().getId())).thenReturn(products);
 
-            mockMvc.perform(get("/favorites")
+            mockMvc.perform(get(url)
                                     .with(user(customUserDetail)))
                    .andExpect(status().isOk())
                    .andExpect(model().attribute(FAVORITE_PRODUCTS, products))
@@ -102,42 +104,34 @@ class FavoriteControllerTest {
     @Nested
     class TestAddProductToFavorite {
 
+        private final String url = "/add-favorite";
+
         @Test
         @WithAnonymousUser
         void test_addProductToFavorite_anonymous_denied() throws Exception {
-            mockMvc.perform(get("/add-favorite"))
+            mockMvc.perform(get(url))
                    .andExpect(status().is3xxRedirection())
                    .andExpect(redirectedUrl(baseUrl + LOGIN));
         }
 
         @Test
-        void test_addProductToFavorite_roleUser_allowed_allRequiredParam() throws Exception {
-            inspectAddProductToFavoriteByRoleWithAllRequiredParam(customUserDetailRoleUser);
+        void test_addProductToFavorite_roleUser_allowed_allRequiredParams() throws Exception {
+            inspectAddProductToFavoriteByRoleWithAllRequiredParams(customUserDetailRoleUser);
         }
 
         @Test
-        void test_addProductToFavorite_roleAdmin_allowed_allRequiredParam() throws Exception {
-            inspectAddProductToFavoriteByRoleWithAllRequiredParam(customUserDetailRoleAdmin);
+        void test_addProductToFavorite_roleAdmin_allowed_allRequiredParams() throws Exception {
+            inspectAddProductToFavoriteByRoleWithAllRequiredParams(customUserDetailRoleAdmin);
         }
 
-        @Test
-        void test_addProductToFavorite_roleUser_allowed_notAllRequiredParam() throws Exception {
-            inspectAddProductToFavoriteByRoleWithNotAllRequiredParam(customUserDetailRoleUser);
-        }
-
-        @Test
-        void test_addProductToFavorite_roleAdmin_allowed_notAllRequiredParam() throws Exception {
-            inspectAddProductToFavoriteByRoleWithNotAllRequiredParam(customUserDetailRoleAdmin);
-        }
-
-        private void inspectAddProductToFavoriteByRoleWithAllRequiredParam(CustomUserDetail customUserDetail) throws Exception {
+        private void inspectAddProductToFavoriteByRoleWithAllRequiredParams(CustomUserDetail customUserDetail) throws Exception {
             String path = REDIRECT_TO_SEARCH_RESULT_SAVE + AND_PAGE + PAGE;
             ModelAndView modelAndView = new ModelAndView(path);
 
             doNothing().when(cartService).addSelectedProduct(customUserDetail.getUser().getId(), PRODUCT_ID, Location.FAVORITE);
             when(shopFacade.getModelAndViewByParams(PRODUCT_ID, FAVORITE, PAGE)).thenReturn(modelAndView);
 
-            mockMvc.perform(get("/add-favorite")
+            mockMvc.perform(get(url)
                                     .with(user(customUserDetail))
                                     .param(ID, PRODUCT_ID.toString())
                                     .param(LOCATION, FAVORITE)
@@ -146,8 +140,18 @@ class FavoriteControllerTest {
                    .andExpect(view().name(path));
         }
 
-        private void inspectAddProductToFavoriteByRoleWithNotAllRequiredParam(CustomUserDetail customUserDetail) throws Exception {
-            mockMvc.perform(get("/add-favorite")
+        @Test
+        void test_addProductToFavorite_roleUser_allowed_notAllRequiredParams() throws Exception {
+            inspectAddProductToFavoriteByRoleWithNotAllRequiredParams(customUserDetailRoleUser);
+        }
+
+        @Test
+        void test_addProductToFavorite_roleAdmin_allowed_notAllRequiredParams() throws Exception {
+            inspectAddProductToFavoriteByRoleWithNotAllRequiredParams(customUserDetailRoleAdmin);
+        }
+
+        private void inspectAddProductToFavoriteByRoleWithNotAllRequiredParams(CustomUserDetail customUserDetail) throws Exception {
+            mockMvc.perform(get(url)
                                     .with(user(customUserDetail))
                                     .param(LOCATION, FAVORITE)
                                     .param(Constants.PAGE, PAGE.toString()))
@@ -159,46 +163,48 @@ class FavoriteControllerTest {
     @Nested
     class TestDeleteProductFromFavorite {
 
+        private final String url = "/delete-favorite";
+
         @Test
         @WithAnonymousUser
         void test_deleteProductFromFavorite_anonymous_denied() throws Exception {
-            mockMvc.perform(get("/delete-favorite"))
+            mockMvc.perform(get(url))
                    .andExpect(status().is3xxRedirection())
                    .andExpect(redirectedUrl(baseUrl + LOGIN));
         }
 
         @Test
-        void test_addProductToFavorite_roleUser_allowed_allRequiredParam() throws Exception {
-            inspectDeleteProductFromFavoriteByRoleWithAllRequiredParam(customUserDetailRoleUser);
+        void test_addProductToFavorite_roleUser_allowed_allRequiredParams() throws Exception {
+            inspectDeleteProductFromFavoriteByRoleWithAllRequiredParams(customUserDetailRoleUser);
         }
 
         @Test
-        void test_addProductToFavorite_roleAdmin_allowed_allRequiredParam() throws Exception {
-            inspectDeleteProductFromFavoriteByRoleWithAllRequiredParam(customUserDetailRoleAdmin);
+        void test_addProductToFavorite_roleAdmin_allowed_allRequiredParams() throws Exception {
+            inspectDeleteProductFromFavoriteByRoleWithAllRequiredParams(customUserDetailRoleAdmin);
         }
 
-        @Test
-        void test_addProductToFavorite_roleUser_allowed_notAllRequiredParam() throws Exception {
-            inspectDeleteProductFromFavoriteByRoleWithNotAllRequiredParam(customUserDetailRoleUser);
-        }
-
-        @Test
-        void test_addProductToFavorite_roleAdmin_allowed_notAllRequiredParam() throws Exception {
-            inspectDeleteProductFromFavoriteByRoleWithNotAllRequiredParam(customUserDetailRoleAdmin);
-        }
-
-        private void inspectDeleteProductFromFavoriteByRoleWithAllRequiredParam(CustomUserDetail customUserDetail) throws Exception {
+        private void inspectDeleteProductFromFavoriteByRoleWithAllRequiredParams(CustomUserDetail customUserDetail) throws Exception {
             doNothing().when(cartService).deleteProduct(customUserDetail.getUser().getId(), PRODUCT_ID, Location.FAVORITE);
 
-            mockMvc.perform(get("/delete-favorite")
+            mockMvc.perform(get(url)
                                     .with(user(customUserDetail))
                                     .param(ID, PRODUCT_ID.toString()))
                    .andExpect(status().is3xxRedirection())
                    .andExpect(view().name(REDIRECT_TO_FAVORITES));
         }
 
-        private void inspectDeleteProductFromFavoriteByRoleWithNotAllRequiredParam(CustomUserDetail customUserDetail) throws Exception {
-            mockMvc.perform(get("/delete-favorite")
+        @Test
+        void test_addProductToFavorite_roleUser_allowed_notAllRequiredParams() throws Exception {
+            inspectDeleteProductFromFavoriteByRoleWithNotAllRequiredParams(customUserDetailRoleUser);
+        }
+
+        @Test
+        void test_addProductToFavorite_roleAdmin_allowed_notAllRequiredParamss() throws Exception {
+            inspectDeleteProductFromFavoriteByRoleWithNotAllRequiredParams(customUserDetailRoleAdmin);
+        }
+
+        private void inspectDeleteProductFromFavoriteByRoleWithNotAllRequiredParams(CustomUserDetail customUserDetail) throws Exception {
+            mockMvc.perform(get(url)
                                     .with(user(customUserDetail)))
                    .andExpect(status().is3xxRedirection())
                    .andExpect(view().name(REDIRECT_TO_SOME_ERROR));

@@ -109,7 +109,6 @@ class ShopFacadeTest {
 
     private final User user = User.builder().build();
     private final UserFormDto userFormDto = UserFormDto.builder().build();
-
     private ModelAndView modelAndView = new ModelAndView();
 
     private static ProductDto getProductDto(Long id) {

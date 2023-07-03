@@ -56,7 +56,6 @@ class SearchFacadeTest {
     private final ProductDto productDtoOne = getProductDto(TV, 600L);
     private final ProductDto productDtoTwo = getProductDto("phone", 600L);
     private final ProductDto productDtoThree = getProductDto(TV, 300L);
-
     private ModelAndView modelAndView = new ModelAndView();
     private Set<ProductDto> foundProducts = Set.of(productDtoOne, productDtoTwo, productDtoThree);
     private Set<ProductDto> filterFoundProducts = Set.of(productDtoOne, productDtoTwo, productDtoThree);
@@ -107,8 +106,8 @@ class SearchFacadeTest {
 
         private final BigDecimal minPrice = new BigDecimal("500");
         private final BigDecimal maxPrice = new BigDecimal("1000");
-        private final String category = TV;
         private final Set<ProductDto> products = Set.of(productDtoOne, productDtoTwo, productDtoThree);
+        private String category = TV;
 
         private void doSearchFilterResultPagePath(String category) {
             modelAndView = searchFacade.getSearchFilterResultPagePath(request, category);
@@ -143,7 +142,7 @@ class SearchFacadeTest {
 
         @Test
         void test_getSearchFilterResultPagePath_foundProductsEmpty_currentCategory() {
-            String category = ALL;
+            category = ALL;
             ((MockHttpServletRequest) request).setParameter(MIN_PRICE, String.valueOf(minPrice));
             ((MockHttpServletRequest) request).setParameter(MAX_PRICE, String.valueOf(maxPrice));
             ((MockHttpServletRequest) request).setSession(session);
