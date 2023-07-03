@@ -138,7 +138,8 @@ public class ShopFacade {
                        .collect(Collectors.toList());
     }
 
-    public void getUserEditForm(Long id, ModelAndView modelAndView) {
+    public ModelAndView getUserEditForm(Long id) {
+        ModelAndView modelAndView = new ModelAndView();
         if (userService.getUserById(id).isPresent()) {
             User user = userService.getUserById(id).get();
             UserFormDto userFormDto = userMapper.convertToUserFormDto(user);
@@ -147,6 +148,7 @@ public class ShopFacade {
         } else {
             modelAndView.setViewName(ACCOUNT);
         }
+        return modelAndView;
     }
 
     public ModelAndView getAdminPage(ModelAndView modelAndView) {

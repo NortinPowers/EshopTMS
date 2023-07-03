@@ -388,10 +388,10 @@ class ShopFacadeTest {
             when(userService.getUserById(userId)).thenReturn(Optional.of(user));
             when(userMapper.convertToUserFormDto(user)).thenReturn(userFormDto);
 
-            shopFacade.getUserEditForm(userId, modelAndView);
+            ModelAndView result = shopFacade.getUserEditForm(userId);
 
-            assertEquals(userFormDto, modelAndView.getModel().get(USER));
-            assertEquals(EDIT, modelAndView.getViewName());
+            assertEquals(userFormDto, result.getModel().get(USER));
+            assertEquals(EDIT, result.getViewName());
         }
 
         @Test
@@ -400,9 +400,9 @@ class ShopFacadeTest {
 
             when(userService.getUserById(userId)).thenReturn(Optional.empty());
 
-            shopFacade.getUserEditForm(userId, modelAndView);
+            ModelAndView result = shopFacade.getUserEditForm(userId);
 
-            assertEquals(ACCOUNT, modelAndView.getViewName());
+            assertEquals(ACCOUNT, result.getViewName());
         }
     }
 
