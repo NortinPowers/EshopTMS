@@ -3,12 +3,14 @@ package by.tms.eshop.controller;
 import static by.tms.eshop.test_utils.Constants.PHONE;
 import static by.tms.eshop.test_utils.Constants.TV;
 import static by.tms.eshop.utils.Constants.Attributes.PRODUCT_CATEGORIES;
+import static by.tms.eshop.utils.Constants.ControllerMappingPath.ERROR_403;
 import static by.tms.eshop.utils.Constants.MappingPath.ESHOP;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
@@ -68,6 +70,14 @@ class HomeControllerTest {
         @WithAnonymousUser
         void test_entersToEshop_anonymous_allowed() throws Exception {
             inspectEntersToEshop();
+        }
+
+        @Test
+        @WithAnonymousUser
+        void test_entersToEshop_anonymous_csrfNotContained() throws Exception {
+            mockMvc.perform(post("/eshop"))
+                   .andExpect(status().is3xxRedirection())
+                   .andExpect(redirectedUrl(ERROR_403));
         }
 
         @Test
