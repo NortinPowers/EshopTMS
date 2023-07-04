@@ -20,11 +20,7 @@ public class AccountController {
 
     @GetMapping("/account")
     public ModelAndView showAccountPage(ModelAndView modelAndView) {
-//    public ModelAndView showAccountPage() {
         List<OrderDto> orders = orderService.getOrdersById(getAuthenticationUserId());
-//        Map<String, Object> models = new HashMap<>();
-//        models.put(USER_ORDER, orders);
-//        return new ModelAndView(ACCOUNT, MODELS, models);
         modelAndView.addObject(USER_ORDER, orders);
         modelAndView.setViewName(ACCOUNT);
         return modelAndView;

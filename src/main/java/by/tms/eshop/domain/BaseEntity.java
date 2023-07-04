@@ -18,6 +18,7 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @EqualsAndHashCode
 public class BaseEntity {
+
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;

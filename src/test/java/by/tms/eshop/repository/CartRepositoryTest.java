@@ -13,13 +13,15 @@ import java.util.Optional;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.Sql.ExecutionPhase;
 import org.springframework.transaction.annotation.Transactional;
 
-@SpringBootTest
+@DataJpaTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestPropertySource(locations = TEST_PROPERTY_SOURCE_LOCATIONS)
 @Sql(value = "classpath:sql/cart/cart-repository-before.sql", executionPhase = ExecutionPhase.BEFORE_TEST_METHOD)
 @Sql(value = "classpath:sql/cart/cart-repository-after.sql", executionPhase = ExecutionPhase.AFTER_TEST_METHOD)
@@ -32,15 +34,6 @@ class CartRepositoryTest {
     private Long productId;
     private Integer count;
     private Integer expectedSize;
-
-    @Test
-    @Transactional
-    void test_deleteCartByUserIdAndCart() {
-        cartRepository.deleteCartByUserIdAndCart(userId, true);
-        List<Cart> cartProducts = cartRepository.getCartProducts(userId);
-
-        assertTrue(cartProducts.isEmpty());
-    }
 
     @Test
     void test_getMostFavorite() {
@@ -75,6 +68,7 @@ class CartRepositoryTest {
 
             assertFalse(cart.isPresent());
         }
+
     }
 
     @Nested
@@ -100,6 +94,7 @@ class CartRepositoryTest {
 
             assertFalse(cart.isPresent());
         }
+
     }
 
     @Nested
@@ -146,5 +141,14 @@ class CartRepositoryTest {
 
             assertTrue(cartProducts.isEmpty());
         }
+    }
+
+    @Test
+    @Transactional
+    void test_deleteCartByUserIdAndCart() {
+        cartRepository.deleteCartByUserIdAndCart(userId, true);
+        List<Cart> cartProducts = cartRepository.getCartProducts(userId);
+
+        assertTrue(cartProducts.isEmpty());
     }
 }

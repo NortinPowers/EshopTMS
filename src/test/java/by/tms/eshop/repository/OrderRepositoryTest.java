@@ -13,12 +13,14 @@ import java.util.List;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.Sql.ExecutionPhase;
 
-@SpringBootTest
+@DataJpaTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestPropertySource(locations = TEST_PROPERTY_SOURCE_LOCATIONS)
 @Sql(value = "classpath:sql/order/order-repository-before.sql", executionPhase = ExecutionPhase.BEFORE_TEST_METHOD)
 @Sql(value = "classpath:sql/order/order-repository-after.sql", executionPhase = ExecutionPhase.AFTER_TEST_METHOD)

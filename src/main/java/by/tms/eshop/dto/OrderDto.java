@@ -15,9 +15,7 @@ public class OrderDto {
     private Long id;
     private String name;
     private LocalDate date;
-//    private User user;
     private UserDto userDto;
-//    private List<Product> products;
     private List<ProductDto> productDtos;
 
     public List<ProductDto> getProductDtos() {

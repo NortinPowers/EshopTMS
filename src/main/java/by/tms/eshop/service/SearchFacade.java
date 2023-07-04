@@ -161,5 +161,4 @@ public class SearchFacade {
         }
         return productsByType;
     }
-
 }
