@@ -50,20 +50,20 @@ class ProductServiceImplTest {
     @MockBean
     private ProductMapper productMapper;
 
-    private String category = "someCategory";
     private final BigDecimal minPrice = BigDecimal.valueOf(250);
     private final BigDecimal maxPrice = BigDecimal.valueOf(450);
     private final Long productOnePrice = 300L;
-    private Product productOne = getProduct(PRODUCT_ID, productOnePrice, TV);
-    private ProductDto productDtoOne = getProductDto(PRODUCT_ID, productOnePrice, TV);
     private final Long productTwoId = 2L;
     private final Long productTwoPrice = 500L;
-    private Product productTwo = getProduct(productTwoId, productTwoPrice, TV);
-    private ProductDto productDtoTwo = getProductDto(productTwoId, productTwoPrice, TV);
     private final Long productThreeId = 3L;
     private final Long productThreePrice = 400L;
     private final Product productThree = getProduct(productThreeId, productThreePrice, PHONE);
     private final ProductDto productDtoThree = getProductDto(productThreeId, productThreePrice, PHONE);
+    private String category = "someCategory";
+    private Product productOne = getProduct(PRODUCT_ID, productOnePrice, TV);
+    private ProductDto productDtoOne = getProductDto(PRODUCT_ID, productOnePrice, TV);
+    private Product productTwo = getProduct(productTwoId, productTwoPrice, TV);
+    private ProductDto productDtoTwo = getProductDto(productTwoId, productTwoPrice, TV);
     private ModelAndView modelAndView = new ModelAndView();
 
     private Product getProduct(Long id, Long price, String category) {

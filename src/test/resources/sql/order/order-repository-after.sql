@@ -1,0 +1,10 @@
+truncate test.public.product_category cascade;
+select setval('test.public.product_category_id_seq', 1, false);
+truncate test.public.products cascade;
+select setval('test.public.products_id_seq', 1, false);
+truncate test.public.users cascade;
+select setval('test.public.users_id_seq', 1, false);
+truncate test.public.orders cascade;
+select setval('test.public.orders_id_seq', 1, false);
+truncate test.public.order_product cascade;
+select setval('test.public.order_product_id_seq', 1, false);

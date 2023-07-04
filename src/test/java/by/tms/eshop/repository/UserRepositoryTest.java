@@ -1,47 +1,50 @@
 package by.tms.eshop.repository;
 
+import static by.tms.eshop.test_utils.Constants.MapperConstants.USER_EMAIL;
+import static by.tms.eshop.test_utils.Constants.MapperConstants.USER_ID;
+import static by.tms.eshop.test_utils.Constants.MapperConstants.USER_LOGIN;
+import static by.tms.eshop.test_utils.Constants.MapperConstants.USER_NAME;
+import static by.tms.eshop.test_utils.Constants.TEST_PROPERTY_SOURCE_LOCATIONS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import by.tms.eshop.domain.User;
 import java.util.Optional;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.jdbc.Sql.ExecutionPhase;
 
 @SpringBootTest
+@TestPropertySource(locations = TEST_PROPERTY_SOURCE_LOCATIONS)
+@Sql(value = "classpath:sql/user/user-repository-before.sql", executionPhase = ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(value = "classpath:sql/user/user-repository-after.sql", executionPhase = ExecutionPhase.AFTER_TEST_METHOD)
 class UserRepositoryTest {
 
-    @MockBean
+    @Autowired
     private UserRepository userRepository;
 
-    private final User user = User.builder().build();
+    private final String name = USER_NAME;
     private Optional<User> foundUser;
-    private String login = "testLogin";
 
     @Nested
     class UserByLogin {
 
         @Test
         void test_findUserByLogin_isPresent() {
-            user.setLogin(login);
+            foundUser = userRepository.findUserByLogin(USER_LOGIN);
 
-            when(userRepository.findUserByLogin(login)).thenReturn(Optional.of(user));
-
-            foundUser = userRepository.findUserByLogin(login);
-
-            assertEquals(user, foundUser.get());
-            assertEquals(login, foundUser.get().getLogin());
+            assertTrue(foundUser.isPresent());
+            assertEquals(name, foundUser.get().getName());
         }
 
         @Test
         void test_findUserByLogin_isNotPresent() {
-            login = "nonExistentUser";
-
-            when(userRepository.findUserByLogin(login)).thenReturn(Optional.empty());
+            String login = "nonExistUser";
 
             foundUser = userRepository.findUserByLogin(login);
 
@@ -54,22 +57,18 @@ class UserRepositoryTest {
 
         @Test
         void test_findUserById_isPresent() {
-            Long id = 1L;
-            user.setId(id);
 
-            when(userRepository.findUserById(id)).thenReturn(Optional.of(user));
+            foundUser = userRepository.findUserById(USER_ID);
 
-            foundUser = userRepository.findUserById(id);
-
-            assertEquals(user, foundUser.get());
-            assertEquals(id, foundUser.get().getId());
+            assertTrue(foundUser.isPresent());
+            assertEquals(name, foundUser.get().getName());
         }
 
         @Test
         void test_findUserById_isNotPresent() {
-            when(userRepository.findUserById(any())).thenReturn(Optional.empty());
+            Long id = 0L;
 
-            foundUser = userRepository.findUserById(any());
+            foundUser = userRepository.findUserById(id);
 
             assertFalse(foundUser.isPresent());
         }
@@ -78,43 +77,31 @@ class UserRepositoryTest {
     @Nested
     class UserByLoginOrEmail {
 
-        private String email = "testEmail";
+        private String login = "some";
+        private String email = "some";
 
         @Test
         void test_findUserByLoginOrEmail_isPresentByLogin() {
-            user.setLogin(login);
-            user.setEmail(email);
-
-            when(userRepository.findUserByLoginOrEmail(login, email)).thenReturn(Optional.of(user));
+            login = USER_LOGIN;
 
             foundUser = userRepository.findUserByLoginOrEmail(login, email);
 
-            assertEquals(user, foundUser.get());
-            assertEquals(login, foundUser.get().getLogin());
+            assertTrue(foundUser.isPresent());
+            assertEquals(name, foundUser.get().getName());
         }
 
         @Test
         void test_findUserByLoginOrEmail_isPresentByEmail() {
-            user.setLogin(login);
-            user.setEmail(email);
-
-            when(userRepository.findUserByLoginOrEmail(login, email)).thenReturn(Optional.of(user));
+            email = USER_EMAIL;
 
             foundUser = userRepository.findUserByLoginOrEmail(login, email);
 
-            assertEquals(user, foundUser.get());
-            assertEquals(email, foundUser.get().getEmail());
+            assertTrue(foundUser.isPresent());
+            assertEquals(name, foundUser.get().getName());
         }
 
         @Test
         void test_findUserByLoginOrEmail_isNotPresent() {
-            login = "incorrectTestLogin";
-            user.setLogin(login);
-            email = "incorrectTestEmail";
-            user.setEmail(email);
-
-            when(userRepository.findUserByLoginOrEmail(login, email)).thenReturn(Optional.empty());
-
             foundUser = userRepository.findUserByLoginOrEmail(login, email);
 
             assertFalse(foundUser.isPresent());
