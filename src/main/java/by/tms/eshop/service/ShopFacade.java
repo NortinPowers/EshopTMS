@@ -8,26 +8,25 @@ import static by.tms.eshop.utils.Constants.Attributes.SUCCESS;
 import static by.tms.eshop.utils.Constants.Attributes.USER;
 import static by.tms.eshop.utils.Constants.BUY;
 import static by.tms.eshop.utils.Constants.COUNT;
+import static by.tms.eshop.utils.Constants.ControllerMappingPath.ADMIN_INFO;
 import static by.tms.eshop.utils.Constants.MappingPath.ACCOUNT;
-import static by.tms.eshop.utils.Constants.MappingPath.ADMIN_INFO;
 import static by.tms.eshop.utils.Constants.MappingPath.EDIT;
 import static by.tms.eshop.utils.Constants.MappingPath.ESHOP;
 import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_CART;
 import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_FAVORITES;
+import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_PRODUCT;
 import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_PRODUCTS_PAGE_CATEGORY_WITH_PARAM;
-import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_PRODUCT_WITH_PARAM;
 import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_SEARCH_RESULT_SAVE;
 import static by.tms.eshop.utils.Constants.MappingPath.SUCCESS_BUY;
 import static by.tms.eshop.utils.Constants.PRODUCT_ID;
+import static by.tms.eshop.utils.Constants.PRODUCT_PAGE_SIZE;
 import static by.tms.eshop.utils.Constants.RequestParameters.FAVORITE;
 import static by.tms.eshop.utils.Constants.RequestParameters.PRODUCT_PAGE;
 import static by.tms.eshop.utils.Constants.RequestParameters.SEARCH;
-import static by.tms.eshop.utils.Constants.SIZE_3;
 import static by.tms.eshop.utils.Constants.TRUE;
 import static by.tms.eshop.utils.ControllerUtils.getAuthenticationUser;
 import static by.tms.eshop.utils.ControllerUtils.getAuthenticationUserId;
 import static by.tms.eshop.utils.ControllerUtils.getPathByPagination;
-import static by.tms.eshop.utils.ControllerUtils.getPathFromAddFavoriteByParameters;
 
 import by.tms.eshop.domain.User;
 import by.tms.eshop.dto.CartDto;
@@ -76,10 +75,22 @@ public class ShopFacade {
         } else if (Objects.equals(location, SEARCH)) {
             path = REDIRECT_TO_SEARCH_RESULT_SAVE;
         } else if (Objects.equals(location, PRODUCT_PAGE)) {
-            path = REDIRECT_TO_PRODUCT_WITH_PARAM + productId;
+            path = REDIRECT_TO_PRODUCT + productId;
         } else {
             String productCategory = productService.getProductCategoryValue(productId);
-            path = REDIRECT_TO_PRODUCTS_PAGE_CATEGORY_WITH_PARAM + productCategory + AND_SIZE + SIZE_3;
+            path = REDIRECT_TO_PRODUCTS_PAGE_CATEGORY_WITH_PARAM + productCategory + AND_SIZE + PRODUCT_PAGE_SIZE;
+        }
+        return getPathByPagination(page, path);
+    }
+
+    public String getPathFromAddFavoriteByParameters(Long productId, String location, String productCategory, Integer page) {
+        String path;
+        if (Objects.equals(location, SEARCH)) {
+            path = REDIRECT_TO_SEARCH_RESULT_SAVE;
+        } else if (Objects.equals(location, PRODUCT_PAGE)) {
+            path = REDIRECT_TO_PRODUCT + productId;
+        } else {
+            path = REDIRECT_TO_PRODUCTS_PAGE_CATEGORY_WITH_PARAM + productCategory + AND_SIZE + PRODUCT_PAGE_SIZE;
         }
         return getPathByPagination(page, path);
     }
@@ -88,7 +99,8 @@ public class ShopFacade {
         return new ModelAndView(getPathFromAddFavoriteByParameters(productId, location, productService.getProductCategoryValue(productId), page));
     }
 
-    public ModelAndView getPageByParam(String param, ModelAndView modelAndView) {
+    public ModelAndView getPageByParam(String param) {
+        ModelAndView modelAndView = new ModelAndView();
         if (param.equalsIgnoreCase(BUY)) {
             carriesPurchase(getAuthenticationUserId());
             modelAndView.setViewName(SUCCESS_BUY);
@@ -108,7 +120,7 @@ public class ShopFacade {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         RoleDto roleUser = roleService.getRole("ROLE_USER");
         user.setRoleDto(roleUser);
-        User userEntity = userMapper.convetrToUser(user);
+        User userEntity = userMapper.convertToUser(user);
         userService.addUser(userEntity);
     }
 
@@ -126,15 +138,17 @@ public class ShopFacade {
                        .collect(Collectors.toList());
     }
 
-    public void getUserEditForm(Long id, ModelAndView modelAndView) {
+    public ModelAndView getUserEditForm(Long id) {
+        ModelAndView modelAndView = new ModelAndView();
         if (userService.getUserById(id).isPresent()) {
             User user = userService.getUserById(id).get();
-            UserFormDto userFormDto = userMapper.convetrToUserFormDto(user);
+            UserFormDto userFormDto = userMapper.convertToUserFormDto(user);
             modelAndView.addObject(USER, userFormDto);
             modelAndView.setViewName(EDIT);
         } else {
             modelAndView.setViewName(ACCOUNT);
         }
+        return modelAndView;
     }
 
     public ModelAndView getAdminPage(ModelAndView modelAndView) {
@@ -142,7 +156,7 @@ public class ShopFacade {
         List<Map<ProductDto, Long>> productsWithCount = mostFavorites.stream()
                                                                      .map(mostFavorite -> {
                                                                          Map<ProductDto, Long> productWithCount = new HashMap<>();
-                                                                         productWithCount.put(productService.getProductDto(mostFavorite.get(PRODUCT_ID)), mostFavorite.get(COUNT));
+                                                                         productWithCount.put(productService.getProductDto(mostFavorite.get(PRODUCT_ID)), productService.getCount(mostFavorite.get(COUNT)));
                                                                          return productWithCount;
                                                                      })
                                                                      .toList();

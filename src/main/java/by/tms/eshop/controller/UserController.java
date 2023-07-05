@@ -58,10 +58,8 @@ public class UserController {
     }
 
     @GetMapping("/edit-user/{id}")
-    public ModelAndView edit(@PathVariable(ID) Long id,
-                             ModelAndView modelAndView) {
-        shopFacade.getUserEditForm(id, modelAndView);
-        return modelAndView;
+    public ModelAndView edit(@PathVariable(ID) Long id) {
+        return shopFacade.getUserEditForm(id);
     }
 
     @PostMapping("/edit-user/{id}")

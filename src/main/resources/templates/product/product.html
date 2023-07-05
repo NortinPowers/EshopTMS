@@ -3,37 +3,44 @@
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
   <meta charset="UTF-8">
-  <title th:text="${product.name}"></title>
+  <th:block th:if="${product != null}">
+    <title th:text="${product.name}"></title>
+  </th:block>
   <th:block th:insert="~{/include/bootstrap}"/>
 </head>
 <body>
 <th:block th:insert="~{/include/navigate}"/>
-<div class="d-flex justify-content-center">
-  <div class="card mr-5 ml-5 mt-2 shadow bg-body-tertiary rounded" style="max-width: 14rem">
-    <th:block th:insert="~{/include/one-product-card.html}"/>
-    <th:block>
-      <div sec:authorize="isAuthenticated()">
-        <div class="btn-group btn-group-fill">
-          <a th:href="@{/add-cart(id=${product.id}, shop=true, location='none')}"
-             class="btn btn-success active" style="min-width: 8.8rem"
-             aria-current="page">Buy</a>
-          <a th:href="@{/add-cart(id=${product.id}, shop='none', location='product-page')}"
-             class="btn btn-success">
-            <div class="text-center mt-1">
-              <i class="bi bi-cart-plus"></i>
-            </div>
-          </a>
-          <a th:href="@{/add-favorite(id=${product.id}, shop='none', location='product-page')}"
-             class="btn btn-success">
-            <div class="text-center mt-1">
-              <i class="bi bi-heart"></i>
-            </div>
-          </a>
+<th:block th:if="${product != null}">
+  <div class="d-flex justify-content-center">
+    <div class="card mr-5 ml-5 mt-2 shadow bg-body-tertiary rounded" style="max-width: 14rem">
+      <th:block th:insert="~{/include/one-product-card.html}"/>
+      <th:block>
+        <div sec:authorize="isAuthenticated()">
+          <div class="btn-group btn-group-fill">
+            <a th:href="@{/add-cart(id=${product.id}, shop=true, location='none')}"
+               class="btn btn-success active" style="min-width: 8.8rem"
+               aria-current="page">Buy</a>
+            <a th:href="@{/add-cart(id=${product.id}, shop='none', location='product-page')}"
+               class="btn btn-success">
+              <div class="text-center mt-1">
+                <i class="bi bi-cart-plus"></i>
+              </div>
+            </a>
+            <a th:href="@{/add-favorite(id=${product.id}, shop='none', location='product-page')}"
+               class="btn btn-success">
+              <div class="text-center mt-1">
+                <i class="bi bi-heart"></i>
+              </div>
+            </a>
+          </div>
         </div>
-      </div>
-    </th:block>
+      </th:block>
+    </div>
   </div>
-</div>
+</th:block>
+<th:block th:if="${product == null}">
+  <h1 class="text-center mt-5">Product not found!</h1>
+</th:block>
 <th:block th:insert="~{/include/contact-info}"/>
 </body>
 </html>

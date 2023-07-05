@@ -279,7 +279,6 @@
                         </goals>
                         <configuration>
                             <includes>**/*</includes>
-<!--                            <resourceIncludes>**/*</resourceIncludes>-->
                             <configLocation>config/checkstyle/checkstyle.xml</configLocation>
                             <suppressionsLocation>config/checkstyle/suppressions.xml</suppressionsLocation>
                             <inputEncoding>UTF-8</inputEncoding>

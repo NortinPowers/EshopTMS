@@ -40,9 +40,8 @@ public class CartController {
     }
 
     @PostMapping("/cart-processing")
-    public ModelAndView showCartProcessingPage(@RequestParam String buy,
-                                               ModelAndView modelAndView) {
-        return shopFacade.getPageByParam(buy, modelAndView);
+    public ModelAndView showCartProcessingPage(@RequestParam String buy) {
+        return shopFacade.getPageByParam(buy);
     }
 
     @GetMapping("/add-cart")

@@ -1,4 +1,4 @@
-package by.tms.eshop.config;
+package by.tms.eshop.handler;
 
 import static by.tms.eshop.utils.Constants.CONVERSATION;
 import static by.tms.eshop.utils.Constants.ControllerMappingPath.ESHOP;

@@ -9,8 +9,8 @@ import org.mapstruct.Mapping;
 public interface UserMapper {
 
     @Mapping(source = "roleDto", target = "role")
-    User convetrToUser(UserFormDto user);
+    User convertToUser(UserFormDto user);
 
     @Mapping(source = "role", target = "roleDto")
-    UserFormDto convetrToUserFormDto(User user);
+    UserFormDto convertToUserFormDto(User user);
 }

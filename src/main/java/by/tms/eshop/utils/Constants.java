@@ -15,8 +15,8 @@ public class Constants {
     public static final String NAMES_PATTERN = "[a-zA-Z0-9]{3,30}";
     public static final String AND_PAGE = "&page=";
     public static final String AND_SIZE = "&size=";
-    public static final String AND_SIZE_5 = "&size=5";
-    public static final Integer SIZE_3 = 3;
+    public static final Integer PRODUCT_PAGE_SIZE = 3;
+    public static final Integer SEARCH_PAGE_SIZE = 5;
     public static final String PAGE = "page";
     public static final String PRODUCT_ID = "productId";
     public static final String COUNT = "count";
@@ -33,7 +33,6 @@ public class Constants {
         public static final String CREATE_USER = "auth/create-user";
         public static final String SUCCESS_REGISTER = "auth/success-register";
         public static final String ACCOUNT = "account/account";
-        public static final String ADMIN_INFO = "/admin/info";
         public static final String SEARCH_PATH = "search/search";
         public static final String SHOPPING_CART = "cart/shopping-cart";
         public static final String FAVORITES = "favorite/favorites";
@@ -42,6 +41,7 @@ public class Constants {
         public static final String ERROR_403 = "error/error-403";
         public static final String SOME_ERROR = "error/some-error";
         public static final String REDIRECT_TO_CART = "redirect:/cart";
+        public static final String REDIRECT_TO_ESHOP = "redirect:/eshop";
         public static final String REDIRECT_TO_ADMIN = "redirect:/admin";
         public static final String REDIRECT_TO_ACCOUNT = "redirect:/account";
         public static final String REDIRECT_TO_ERROR_500 = "redirect:/error-500";
@@ -49,7 +49,7 @@ public class Constants {
         public static final String REDIRECT_TO_FAVORITES = "redirect:/favorites";
         public static final String REDIRECT_TO_SEARCH_RESULT_SAVE = "redirect:/search?result=save";
         public static final String REDIRECT_TO_SEARCH_FILTER_TRUE_RESULT_SAVE = "redirect:/search?filter=true&result=save";
-        public static final String REDIRECT_TO_PRODUCT_WITH_PARAM = "redirect:/product/";
+        public static final String REDIRECT_TO_PRODUCT = "redirect:/product/";
         public static final String REDIRECT_TO_PRODUCTS_PAGE_CATEGORY_WITH_PARAM = "redirect:/products-page?category=";
     }
 
@@ -58,15 +58,16 @@ public class Constants {
         public static final String ESHOP = "/eshop";
         public static final String ROOT = "/";
         public static final String ADMIN = "/admin";
+        public static final String ADMIN_INFO = "/admin/info";
         public static final String SEARCH = "/search";
         public static final String SEARCH_FILTER = "/search-filter";
         public static final String SEARCH_PARAM = "/search-param";
+        public static final String SEARCH_PARAM_RESULT_PAGINATION = "/search?result=save&size=5&filter=true";
         public static final String PRODUCTS_PAGE = "/products-page";
         public static final String ANY_PRODUCT = "/product/*";
         public static final String REGISTRATION = "/create-user";
         public static final String LOGIN = "/login";
         public static final String ERROR_403 = "/error-403";
-
     }
 
     @UtilityClass
@@ -81,7 +82,6 @@ public class Constants {
         public static final String FILTER_FOUND_PRODUCTS = "filterFoundProducts";
         public static final String CART_PRODUCTS = "cartProducts";
         public static final String FULL_PRICE = "fullPrice";
-        public static final String MODELS = "models";
         public static final String PRODUCT_CATEGORIES = "productCategories";
         public static final String START_TIME = "startTime";
         public static final String URL = "url";

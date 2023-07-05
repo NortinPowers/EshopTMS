@@ -1,10 +1,11 @@
 package by.tms.eshop.service;
 
 import static by.tms.eshop.utils.Constants.ALL;
-import static by.tms.eshop.utils.Constants.AND_SIZE_5;
+import static by.tms.eshop.utils.Constants.AND_SIZE;
 import static by.tms.eshop.utils.Constants.Attributes.FILTER_FOUND_PRODUCTS;
 import static by.tms.eshop.utils.Constants.Attributes.FOUND_PRODUCTS;
 import static by.tms.eshop.utils.Constants.Attributes.URL;
+import static by.tms.eshop.utils.Constants.ControllerMappingPath.SEARCH_PARAM_RESULT_PAGINATION;
 import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_SEARCH_FILTER_TRUE_RESULT_SAVE;
 import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_SEARCH_RESULT_SAVE;
 import static by.tms.eshop.utils.Constants.PAGE;
@@ -12,6 +13,7 @@ import static by.tms.eshop.utils.Constants.RequestParameters.FILTER;
 import static by.tms.eshop.utils.Constants.RequestParameters.MAX_PRICE;
 import static by.tms.eshop.utils.Constants.RequestParameters.MIN_PRICE;
 import static by.tms.eshop.utils.Constants.SAVE;
+import static by.tms.eshop.utils.Constants.SEARCH_PAGE_SIZE;
 import static by.tms.eshop.utils.Constants.TRUE;
 
 import by.tms.eshop.dto.ProductDto;
@@ -45,7 +47,7 @@ public class SearchFacade {
             Set<ProductDto> products = productService.getFoundedProducts(searchCondition);
             session.setAttribute(FOUND_PRODUCTS, products);
         }
-        return new ModelAndView(REDIRECT_TO_SEARCH_RESULT_SAVE + AND_SIZE_5);
+        return new ModelAndView(REDIRECT_TO_SEARCH_RESULT_SAVE + AND_SIZE + SEARCH_PAGE_SIZE);
     }
 
     public ModelAndView getSearchFilterResultPagePath(HttpServletRequest request, String category) {
@@ -55,14 +57,14 @@ public class SearchFacade {
         HttpSession session = request.getSession(false);
         if (session.getAttribute(FOUND_PRODUCTS) != null) {
             session.setAttribute(FILTER_FOUND_PRODUCTS, getProductByFilter(session, category, minPrice, maxPrice));
-            modelAndView.setViewName(REDIRECT_TO_SEARCH_FILTER_TRUE_RESULT_SAVE + AND_SIZE_5);
+            modelAndView.setViewName(REDIRECT_TO_SEARCH_FILTER_TRUE_RESULT_SAVE + AND_SIZE + SEARCH_PAGE_SIZE);
         } else {
             if (!ALL.equals(category)) {
                 session.setAttribute(FOUND_PRODUCTS, productService.selectProductsFromCategoryByFilter(category, minPrice, maxPrice));
             } else {
                 session.setAttribute(FOUND_PRODUCTS, productService.selectAllProductsByFilter(minPrice, maxPrice));
             }
-            modelAndView.setViewName(REDIRECT_TO_SEARCH_RESULT_SAVE + AND_SIZE_5);
+            modelAndView.setViewName(REDIRECT_TO_SEARCH_RESULT_SAVE + AND_SIZE + SEARCH_PAGE_SIZE);
         }
         return modelAndView;
     }
@@ -78,10 +80,10 @@ public class SearchFacade {
                 endIndex = getEndIndex(pageable, products, startIndex);
                 Page<ProductDto> page = PageableExecutionUtils.getPage(products.subList(startIndex, endIndex), PageRequest.of(pageable.getPageNumber(), 5), products::size);
                 modelAndView.addObject(PAGE, page);
-                modelAndView.addObject(URL, "/search?result=save&size=5&filter=true");
+                modelAndView.addObject(URL, SEARCH_PARAM_RESULT_PAGINATION);
             } else {
                 Page<ProductDto> page = new PageImpl<>(Collections.emptyList());
-                modelAndView.addObject("page", page);
+                modelAndView.addObject(PAGE, page);
             }
         }
     }
@@ -113,7 +115,7 @@ public class SearchFacade {
     private int getEndIndex(Pageable pageable, List<ProductDto> products, int startIndex) {
         int endIndex;
         if (startIndex == 0) {
-            endIndex = 5;
+            endIndex = SEARCH_PAGE_SIZE;
         } else {
             endIndex = startIndex + pageable.getPageSize();
         }
@@ -129,16 +131,16 @@ public class SearchFacade {
         return StringUtils.isNotBlank(value) ? new BigDecimal(value) : defaultValue;
     }
 
-    private void setFilterAttribute(HttpSession session, String filter) {
-        if (TRUE.equals(filter)) {
-            session.setAttribute(FILTER, new Object());
-        }
-    }
-
     private void removeUnsavedAttribute(HttpSession session, String filterFlag) {
         if (!SAVE.equals(filterFlag)) {
             session.removeAttribute(FOUND_PRODUCTS);
             session.removeAttribute(FILTER_FOUND_PRODUCTS);
+        }
+    }
+
+    private void setFilterAttribute(HttpSession session, String filter) {
+        if (TRUE.equals(filter)) {
+            session.setAttribute(FILTER, new Object());
         }
     }
 
@@ -159,5 +161,4 @@ public class SearchFacade {
         }
         return productsByType;
     }
-
 }

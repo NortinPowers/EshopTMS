@@ -1,15 +1,16 @@
 package by.tms.eshop.dto;
 
-import by.tms.eshop.domain.User;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 @Getter
 @Builder
+@EqualsAndHashCode
 public class CartDto {
 
     private Long id;
-    private User user;
+    private UserDto userDto;
     private ProductDto productDto;
     private boolean cart;
     private boolean favorite;

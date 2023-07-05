@@ -23,4 +23,6 @@ public interface ProductService {
     Set<ProductDto> selectProductsFromCategoryByFilter(String category, BigDecimal minPrice, BigDecimal maxPrice);
 
     void changePrice(ProductDto productDto);
+
+    Long getCount(Long count);
 }

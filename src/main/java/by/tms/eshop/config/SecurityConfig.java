@@ -13,6 +13,9 @@ import static by.tms.eshop.utils.Constants.ControllerMappingPath.SEARCH_PARAM;
 import static by.tms.eshop.utils.Constants.MappingPath.SUCCESS_REGISTER;
 
 import by.tms.eshop.exception.GlobalExceptionHandler;
+import by.tms.eshop.handler.CustomAccessDeniedHandler;
+import by.tms.eshop.handler.CustomAuthenticationSuccessHandler;
+import by.tms.eshop.handler.CustomLogoutHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
