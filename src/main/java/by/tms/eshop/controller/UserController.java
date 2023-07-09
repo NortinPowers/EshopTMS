@@ -58,8 +58,7 @@ public class UserController {
 
     @GetMapping("/edit-user")
     public ModelAndView edit() {
-        Long authenticationUserId = getAuthenticationUserId();
-        return shopFacade.getUserEditForm(authenticationUserId);
+        return shopFacade.getUserEditForm(getAuthenticationUserId());
     }
 
     @PostMapping("/edit-user")
