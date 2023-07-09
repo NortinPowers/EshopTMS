@@ -6,7 +6,7 @@ import static by.tms.eshop.utils.Constants.MappingPath.EDIT;
 import static by.tms.eshop.utils.Constants.MappingPath.LOGIN;
 import static by.tms.eshop.utils.Constants.MappingPath.REDIRECT_TO_ACCOUNT;
 import static by.tms.eshop.utils.Constants.MappingPath.SUCCESS_REGISTER;
-import static by.tms.eshop.utils.Constants.RequestParameters.ID;
+import static by.tms.eshop.utils.ControllerUtils.getAuthenticationUserId;
 
 import by.tms.eshop.dto.UserFormDto;
 import by.tms.eshop.service.ShopFacade;
@@ -19,7 +19,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
@@ -57,12 +56,13 @@ public class UserController {
         return modelAndView;
     }
 
-    @GetMapping("/edit-user/{id}")
-    public ModelAndView edit(@PathVariable(ID) Long id) {
-        return shopFacade.getUserEditForm(id);
+    @GetMapping("/edit-user")
+    public ModelAndView edit() {
+        Long authenticationUserId = getAuthenticationUserId();
+        return shopFacade.getUserEditForm(authenticationUserId);
     }
 
-    @PostMapping("/edit-user/{id}")
+    @PostMapping("/edit-user")
     public ModelAndView editUser(@Validated(EditValidator.class) @ModelAttribute(USER) UserFormDto user,
                                  BindingResult bindingResult,
                                  ModelAndView modelAndView) {
