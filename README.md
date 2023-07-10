@@ -5,8 +5,10 @@
 <h2 align="center">[Full course](https://github.com/NortinPowers/c18onlTMS2022/) </h2>
 
 <h4>Used by:</h4>
-<p>Spring (Boot, Validator, Security), AOP, JPA, Flyway, Mapstruct, JUnit, Mockito, Thymeleaf, Bootstrap</p>
-<p>PostgreSQL DB, Flyway</p>
+<li>Spring (Boot, Data, Validator, Security), AOP, JPA, Mapstruct, JUnit, Mockito</li>
+<li>PostgreSQL DB, Flyway</li>
+<li>Thymeleaf, Bootstrap</li>
+<li>CheckStyle, PMD, SpotBugs</li>
 
 <h4>Project objectives:</h4>
 <p>Creating a full-featured web application (online store) that will allow users to view, select and buy products online</p>
