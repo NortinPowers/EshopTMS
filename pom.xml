@@ -18,7 +18,6 @@
         <java.version>20</java.version>
         <maven.compiler.version>20</maven.compiler.version>
         <aspectjweaver.version>1.9.19</aspectjweaver.version>
-        <checkstyle.version>10.9.3</checkstyle.version>
         <pmd.version>6.55.0</pmd.version>
         <maven-pmd-plugin.version>3.20.0</maven-pmd-plugin.version>
         <checkstyle.version>10.11.0</checkstyle.version>
@@ -172,9 +171,9 @@
                         </path>
                     </annotationProcessorPaths>
                     <compilerArgs>
-                        <compilerArg>
+                        <arg>
                             -Amapstruct.defaultComponentModel=spring
-                        </compilerArg>
+                        </arg>
                     </compilerArgs>
                 </configuration>
             </plugin>

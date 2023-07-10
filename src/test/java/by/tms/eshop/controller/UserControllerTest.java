@@ -2,12 +2,12 @@ package by.tms.eshop.controller;
 
 import static by.tms.eshop.test_utils.Constants.MapperConstants.USER_BIRTHDAY;
 import static by.tms.eshop.test_utils.Constants.MapperConstants.USER_EMAIL;
-import static by.tms.eshop.test_utils.Constants.MapperConstants.USER_ID;
 import static by.tms.eshop.test_utils.Constants.MapperConstants.USER_LOGIN;
 import static by.tms.eshop.test_utils.Constants.MapperConstants.USER_NAME;
 import static by.tms.eshop.test_utils.Constants.MapperConstants.USER_PASSWORD;
 import static by.tms.eshop.test_utils.Constants.MapperConstants.USER_SURNAME;
 import static by.tms.eshop.test_utils.Constants.TEST_PROPERTY_SOURCE_LOCATIONS;
+import static by.tms.eshop.test_utils.ControllerUtils.getCustomUserDetailRoleUser;
 import static by.tms.eshop.utils.Constants.Attributes.USER;
 import static by.tms.eshop.utils.Constants.ControllerMappingPath.ERROR_403;
 import static by.tms.eshop.utils.Constants.MappingPath.CREATE_USER;
@@ -20,6 +20,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
@@ -27,6 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import by.tms.eshop.dto.UserFormDto;
+import by.tms.eshop.security.CustomUserDetail;
 import by.tms.eshop.service.ShopFacade;
 import by.tms.eshop.utils.Constants.ControllerMappingPath;
 import by.tms.eshop.utils.Constants.MappingPath;
@@ -39,7 +41,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithAnonymousUser;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.validation.Errors;
@@ -138,35 +139,27 @@ class UserControllerTest {
     @Nested
     class TestEdit {
 
-        private final String url = "/edit-user/{id}";
-        private Long userId = USER_ID;
+        private final String url = "/edit-user";
 
         @Test
-        @WithMockUser(roles = {"USER", "ADMIN"})
         void test_edit_withPathVariable() throws Exception {
             ModelAndView modelAndView = new ModelAndView(EDIT);
             modelAndView.addObject(USER, userFormDto);
+            CustomUserDetail customUserDetail = getCustomUserDetailRoleUser();
 
-            when(shopFacade.getUserEditForm(userId)).thenReturn(modelAndView);
 
-            mockMvc.perform(get("/edit-user/{id}", userId))
+            when(shopFacade.getUserEditForm(customUserDetail.getUser().getId())).thenReturn(modelAndView);
+
+            mockMvc.perform(get(url)
+                                    .with(user(customUserDetail)))
                    .andExpect(status().isOk())
                    .andExpect(view().name(EDIT));
         }
 
         @Test
-        @WithMockUser(roles = {"USER", "ADMIN"})
-        void test_edit_withoutPathVariable() throws Exception {
-            userId = null;
-
-            mockMvc.perform(get(url, userId))
-                   .andExpect(status().is4xxClientError());
-        }
-
-        @Test
         @WithAnonymousUser
         void test_edit_anonymous_denied() throws Exception {
-            mockMvc.perform(get(url, userId))
+            mockMvc.perform(get(url))
                    .andExpect(status().is3xxRedirection())
                    .andExpect(redirectedUrl(baseUrl + ControllerMappingPath.LOGIN));
         }
@@ -175,17 +168,17 @@ class UserControllerTest {
     @Nested
     class TestEditUser {
 
-        private final String url = "/edit-user/{id}";
+        private final String url = "/edit-user";
         private final UserFormDto user = UserFormDto.builder()
                                                     .name(USER_NAME)
                                                     .surname(USER_SURNAME)
                                                     .build();
-        private Long userId = USER_ID;
+        private final CustomUserDetail customUserDetail = getCustomUserDetailRoleUser();
 
         @Test
         @WithAnonymousUser
         void test_editUser_anonymous_denied() throws Exception {
-            mockMvc.perform(post(url, userId)
+            mockMvc.perform(post(url)
                                     .with(csrf())
                                     .flashAttr(USER, user))
                    .andExpect(status().is3xxRedirection())
@@ -193,58 +186,47 @@ class UserControllerTest {
         }
 
         @Test
-        @WithMockUser(roles = {"USER", "ADMIN"})
         void test_editUser_csrfNotContained() throws Exception {
-            mockMvc.perform(post(url, userId)
+            mockMvc.perform(post(url)
+                                    .with(user(customUserDetail))
                                     .flashAttr(USER, user))
                    .andExpect(status().is3xxRedirection())
                    .andExpect(redirectedUrl(ERROR_403));
         }
 
         @Test
-        @WithMockUser(roles = {"USER", "ADMIN"})
         void test_editUser_success() throws Exception {
             doNothing().when(shopFacade).editUser(userFormDto);
 
-            mockMvc.perform(post(url, userId)
+            mockMvc.perform(post(url)
                                     .with(csrf())
+                                    .with(user(customUserDetail))
                                     .flashAttr(USER, userFormDto))
                    .andExpect(status().is3xxRedirection())
                    .andExpect(view().name(REDIRECT_TO_ACCOUNT));
         }
 
         @Test
-        @WithMockUser(roles = {"USER", "ADMIN"})
         void test_editUser_validateError() throws Exception {
             userFormDto.setName("No");
 
             doNothing().when(shopFacade).editUser(userFormDto);
 
-            mockMvc.perform(post(url, userId)
+            mockMvc.perform(post(url)
                                     .with(csrf())
+                                    .with(user(customUserDetail))
                                     .flashAttr(USER, userFormDto))
                    .andExpect(status().isOk())
                    .andExpect(view().name(EDIT));
         }
 
         @Test
-        @WithMockUser(roles = {"USER", "ADMIN"})
         void test_editUser_noAttr() throws Exception {
-            mockMvc.perform(post(url, userId)
-                                    .with(csrf()))
+            mockMvc.perform(post(url)
+                                    .with(csrf())
+                                    .with(user(customUserDetail)))
                    .andExpect(status().isOk())
                    .andExpect(view().name(EDIT));
-        }
-
-        @Test
-        @WithMockUser(roles = {"USER", "ADMIN"})
-        void test_editUser_withoutPathVariable() throws Exception {
-            userId = null;
-
-            mockMvc.perform(post(url, userId)
-                                    .with(csrf())
-                                    .flashAttr(USER, userFormDto))
-                   .andExpect(status().is4xxClientError());
         }
     }
 }

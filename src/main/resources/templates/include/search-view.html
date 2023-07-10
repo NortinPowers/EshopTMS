@@ -9,8 +9,8 @@
              style="min-width: 18rem">
           <div class="container text-center mb-2">
             <div class="row">
-              <div th:with="authorizedUser=${session.userAccessPermission}">
-                <div th:if="${authorizedUser == null}">
+              <th:block xmlns:sec="http://www.w3.org/1999/xhtml">
+                <div sec:authorize="!isAuthenticated()">
                   <div class="btn-group btn-group-fill" style="min-width: 17.3rem">
                     <a th:href="@{/product/__${product.id}__}"
                        class="text-light text-decoration-none btn btn-success btn-block w-auto"
@@ -19,7 +19,7 @@
                     </a>
                   </div>
                 </div>
-                <div th:if="${authorizedUser != null}">
+                <div sec:authorize="isAuthenticated()" }>
                   <div class="btn-group btn-group-fill">
                     <div class="btn btn-success p-2" style="min-width: 6rem">
                       <a th:href="@{/product/__${product.id}__}"
@@ -51,7 +51,7 @@
                     </div>
                   </div>
                 </div>
-              </div>
+              </th:block>
             </div>
           </div>
           <div class="row g-0">
