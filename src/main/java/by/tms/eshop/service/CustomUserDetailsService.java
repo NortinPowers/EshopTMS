@@ -2,7 +2,6 @@ package by.tms.eshop.service;
 
 import by.tms.eshop.domain.User;
 import by.tms.eshop.security.CustomUserDetail;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -17,13 +16,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        CustomUserDetail userDetails;
-        Optional<User> user = userService.getUserByLogin(username);
-        if (user.isPresent()) {
-            userDetails = new CustomUserDetail(user.get());
-        } else {
-            throw new UsernameNotFoundException("User wasn't found");
-        }
-        return userDetails;
+        User user = userService.getUserByLogin(username).orElseThrow(() -> new UsernameNotFoundException("User wasn't found"));
+        return new CustomUserDetail(user);
     }
 }
